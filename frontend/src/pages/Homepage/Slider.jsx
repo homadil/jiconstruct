@@ -23,7 +23,7 @@ import slider3 from "../../assets/images/dummy/download_3.jpg";
 export default function Slider() {
   const stylesheet = {
     width: "100%",
-    height: "600px",
+    height: "650px",
   };
   return (
     <Swiper
@@ -38,13 +38,13 @@ export default function Slider() {
       onSwiper={(swiper) => ""}
       onSlideChange={() => ""}
     >
-      <SwiperSlide>
+      <SwiperSlide className="d-flex justify-content-center align-items-center">
         <img src={slider1} alt="slide one" style={stylesheet} />
       </SwiperSlide>
-      <SwiperSlide>
+      <SwiperSlide className="d-flex justify-content-center align-items-center">
         <img src={slider2} alt="slide two" style={stylesheet} />
       </SwiperSlide>
-      <SwiperSlide>
+      <SwiperSlide className="d-flex justify-content-center align-items-center">
         <img src={slider3} alt="slide three" style={stylesheet} />
       </SwiperSlide>
     </Swiper>
