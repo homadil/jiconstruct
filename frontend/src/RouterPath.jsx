@@ -18,6 +18,7 @@ export default function RouterPath() {
   return (
     <Routes>
       <Route path="/" index element={<Homepage />} />
+      <Route path="/route" element={<DynamicRoute />} />
 
       {/* project paths */}
       <Route path="/project_detail" element={<Details />} />
@@ -29,13 +30,10 @@ export default function RouterPath() {
       <Route path="/page_about_us" element={<AboutUs />} />
       <Route path="/page_contact_us" element={<ContactUs />} />
 
-      {/* post paths */}
+      {/* blog path */}
       <Route path="/post_image" element={<Image />} />
       <Route path="/post_video" element={<Video />} />
       <Route path="/post_gallery" element={<Gallery />} />
-      <Route path="/route" element={<DynamicRoute />} />
-
-      {/* blog path */}
       <Route path="/blog" element={<Blog />} />
     </Routes>
   );

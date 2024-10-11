@@ -9,7 +9,7 @@ import postSix from "../../assets/images/dummy/download_8.jpg";
 import postSeven from "../../assets/images/dummy/download_9.webp";
 import postEight from "../../assets/images/dummy/download_10.jpg";
 import postNine from "../../assets/images/dummy/download_11.webp";
-
+import { Link } from "react-router-dom";
 export default function Grid() {
   const posts = [
     {
@@ -193,10 +193,19 @@ export default function Grid() {
                       <h4 class="wt-tilte text-white  m-b10 m-t0">
                         {item.title}
                       </h4>
+
                       <p>{item.desc}</p>
                     </div>
-                    <i></i>
-                    <a href="#"></a>
+
+                    <Link
+                      to={{
+                        pathname: "/route",
+                        search: `?type=project&id=${21}&service=Nothing`,
+                      }}
+                      class="text-white text-capitalize"
+                    >
+                      <i></i>
+                    </Link>
                   </div>
                 </div>
               );
