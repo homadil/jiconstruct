@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../index"); // Sequelize instance
+const bcrypt = require("bcryptjs"); // Import bcrypt
 
 // Define the User model
 const User = sequelize.define(
@@ -17,13 +18,15 @@ const User = sequelize.define(
         isEmail: true, // Ensures it's a valid email
       },
     },
+    googleId: DataTypes.STRING, // for Google authentication
+    facebookId: DataTypes.STRING, // for Facebook authentication
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     profile_image: {
       type: DataTypes.STRING,
-      allowNull: true, // Optional field for the user's profile image
+      allowNull: true,
     },
     role: {
       type: DataTypes.ENUM("admin", "user"),
@@ -31,11 +34,19 @@ const User = sequelize.define(
     },
     token: {
       type: DataTypes.TEXT,
-      allowNull: true, // Optional field for token
+      allowNull: true,
     },
     remember_token: {
       type: DataTypes.TEXT,
-      allowNull: true, // Optional field for remember token
+      allowNull: true,
+    },
+    resetToken: {
+      type: DataTypes.TEXT,
+      allowNull: true, // Optional field
+    },
+    resetTokenExpiry: {
+      type: DataTypes.DATE, // Use DATE type for Sequelize
+      allowNull: true, // Optional field
     },
     location_id: {
       type: DataTypes.INTEGER,
@@ -50,5 +61,13 @@ const User = sequelize.define(
     timestamps: true, // Automatically adds createdAt and updatedAt fields
   }
 );
+
+// Before saving the user, hash the password if it has been modified
+User.beforeSave(async (user, options) => {
+  if (user.changed("password")) {
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password, salt);
+  }
+});
 
 module.exports = User;

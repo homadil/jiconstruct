@@ -56,6 +56,8 @@ const dummyData = async () => {
       token: "token123",
       remember_token: "remember123",
       location_id: null,
+      googleId: null,
+      facebookId: null,
     },
     {
       name: "Jane Smith",
@@ -63,6 +65,8 @@ const dummyData = async () => {
       password: "password123",
       profile_image: "assets/images/team2.jpg",
       role: "user",
+      googleId: null,
+      facebookId: null,
     },
     {
       name: "Alice Johnson",
@@ -70,6 +74,8 @@ const dummyData = async () => {
       password: "password123",
       profile_image: "assets/images/team3.jpg",
       role: "user",
+      googleId: null,
+      facebookId: null,
     },
     {
       name: "Bob Brown",
@@ -77,6 +83,8 @@ const dummyData = async () => {
       password: "password123",
       profile_image: "assets/images/team4.jpg",
       role: "admin",
+      googleId: null,
+      facebookId: null,
     },
     {
       name: "Charlie White",
@@ -84,6 +92,8 @@ const dummyData = async () => {
       password: "password123",
       profile_image: "assets/images/team5.jpg",
       role: "user",
+      googleId: null,
+      facebookId: null,
     },
   ]);
 

@@ -4,13 +4,23 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const cors = require("cors");
+const passport = require("passport");
 const syncDatabase = require("./database/syncDatabase");
+require("dotenv").config();
 
 var app = express();
+
 // Allow all origins
 app.use(cors());
 app.use(logger("dev"));
+
+// Bodyparser Middleware
 app.use(express.json());
+
+// Passport Middleware
+require("./config/passport")(passport);
+app.use(passport.initialize());
+
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
@@ -20,6 +30,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // syncDatabase();
 
 // all routes
+app.use("/auth", require("./routes/auth"));
 app.use("/users", require("./routes/users"));
 app.use("/urls", require("./routes/urls"));
 app.use("/teams", require("./routes/teams"));
