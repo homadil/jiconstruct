@@ -31,5 +31,4 @@ const Location = sequelize.define(
     timestamps: true,
   }
 );
-
 module.exports = Location;

@@ -9,15 +9,6 @@ const Tag = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    type: {
-      type: DataTypes.ENUM("blog", "project", "both"),
-      defaultValue: "project",
-      allowNull: false,
-    },
-    parent_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true, // Can refer to either a blog or a project
-    },
   },
   {
     timestamps: true,

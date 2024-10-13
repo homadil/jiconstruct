@@ -9,15 +9,6 @@ const Category = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    type: {
-      type: DataTypes.ENUM("project", "blog", "both"),
-      allowNull: false,
-      defaultValue: "project",
-    },
-    parent_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false, // Parent can be either a project or a blog
-    },
   },
   {
     timestamps: true,

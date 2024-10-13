@@ -1,5 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../index"); // Sequelize instance
+const Blog = require("./Blog");
+const Project = require("./Project");
 
 // Define the Media model
 const Media = sequelize.define(
