@@ -46,7 +46,11 @@ exports.login = async (req, res) => {
       { expiresIn: "1h" }, // Token expires in 1 hour
       (err, token) => {
         if (err) throw err;
-        res.json({ user, token });
+        res.json({
+          user,
+          token,
+          msg: `${user.name} was logged in successfully`,
+        });
       }
     );
   } catch (err) {
@@ -88,7 +92,11 @@ exports.register = async (req, res) => {
       { expiresIn: "1h" }, // Token expires in 1 hour
       (err, token) => {
         if (err) throw err;
-        res.json({ user, token });
+        res.json({
+          user,
+          token,
+          msg: `${user.name} account has been Created`,
+        });
       }
     );
   } catch (err) {
@@ -239,9 +247,6 @@ exports.reset_email_confirm = async (req, res) => {
   const { reset_token, id } = req.query; // Get reset_token from params
   const { email } = req.body; // Get new email from body
 
-  console.log("Reset Token:", reset_token);
-  console.log("User ID:", id);
-
   if (!id) {
     return res.status(400).json({ msg: "User ID is required" });
   }
@@ -281,7 +286,7 @@ exports.third_party_auth = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    res.json({ token });
+    res.json({ token, msg: `${req.user.email} was logged in successfully` });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Something went wrong during authentication" });

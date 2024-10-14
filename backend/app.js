@@ -38,7 +38,7 @@ app.use("/auth", require("./routes/auth"));
 // app.use("/projects", require("./routes/projects"));
 // app.use("/partners", require("./routes/partners"));
 // app.use("/notifications", require("./routes/notifications"));
-// app.use("/medias", require("./routes/medias"));
+app.use("/medias", require("./routes/medias"));
 // app.use("/locations", require("./routes/locations"));
 // app.use("/comment", require("./routes/comments"));
 app.use("/category", require("./routes/category"));

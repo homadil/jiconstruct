@@ -111,6 +111,14 @@ export default function Navigation() {
                   <li>
                     <Link to={"/page_contact_us"}>Contact us</Link>
                   </li>
+
+                  <li>
+                    <Link to={"/sign_in"}>Login</Link>
+                  </li>
+
+                  <li>
+                    <Link to={"/sign_up"}>Register</Link>
+                  </li>
                 </ul>
               </div>
             </div>

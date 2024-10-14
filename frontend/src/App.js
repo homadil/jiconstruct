@@ -5,6 +5,8 @@ import Navigation from "./pages/Navigation";
 import Loader from "./components/Loader.jsx";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ScrollToHashElement() {
   const { hash } = useLocation();
@@ -22,12 +24,44 @@ function ScrollToHashElement() {
 }
 
 function App() {
+  const location = useLocation();
+  const isAdminPath = location.pathname.includes("/admin");
+
   return (
-    <div class="page-wraper">
-      <Navigation />
+    <div className="page-wrapper">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition="bounce"
+      />
+      {/* Same as */}
+      <ToastContainer />
+
+      {isAdminPath ? (
+        ""
+      ) : (
+        <>
+          <Navigation />
+        </>
+      )}
       <RouterPath />
       <Loader />
-      <Footer />
+
+      {isAdminPath ? (
+        ""
+      ) : (
+        <>
+          <Footer />
+        </>
+      )}
       <ScrollToHashElement />
     </div>
   );
