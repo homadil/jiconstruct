@@ -3,48 +3,51 @@ const router = express.Router();
 const Blogs = require("../controllers/BlogController"); // Import the Blog controller
 const { returnValidation } = require("../middleware/validations");
 const isAuth = require("../middleware/auth/isAuth");
+const isAdmin = require("../middleware/auth/isAdmin");
 const { blogValidationRules } = require("../middleware/validations/blog");
+const upload = require("../config/upload");
 
 // CREATE - Add a new blog
 router.post(
   "/",
-  isAuth,
+  isAdmin,
   blogValidationRules,
   returnValidation,
-  Blogs.createBlog
+  upload.array("media", 10),
+  Blogs.create
 );
 
 // READ - Get all blogs
-router.get("/", Blogs.getAllBlogs);
+router.get("/", Blogs.getAll);
 
 // READ - Get a single blog by ID
-router.get("/:id", Blogs.getBlogById);
+router.get("/:id", Blogs.getById);
 
 // UPDATE (PUT) - Update an entire blog by ID
 router.put(
   "/:id",
-  isAuth,
+  isAdmin,
   blogValidationRules,
   returnValidation,
-  Blogs.updateBlog
+  Blogs.update
 );
 
 // PARTIAL UPDATE (PATCH) - Partially update a blog by ID
 router.patch(
   "/:id",
-  isAuth,
+  isAdmin,
   blogValidationRules,
   returnValidation,
-  Blogs.partialUpdateBlog
+  Blogs.partialUpdate
 );
 
 // DELETE - Remove a blog by ID
 router.delete(
   "/:id",
-  isAuth,
+  isAdmin,
   blogValidationRules,
   returnValidation,
-  Blogs.deleteBlog
+  Blogs.delete
 );
 
 module.exports = router;

@@ -64,8 +64,6 @@ const seedData = async () => {
       description: "A look at the latest trends in construction for 2024.",
       content: "The construction industry is evolving rapidly...",
       author_id: user1.id,
-      category_id: 1,
-      tag_id: 1,
       show: "about1.jpg",
     });
 
@@ -74,8 +72,6 @@ const seedData = async () => {
       description: "A look at the latest trends in construction for 2024.",
       content: "The construction industry is evolving rapidly...",
       author_id: user2.id,
-      category_id: 2,
-      tag_id: 2,
       show: "about1.jpg",
     });
 
@@ -89,8 +85,6 @@ const seedData = async () => {
       budget: 5000000,
       start_date: new Date(),
       end_date: new Date(),
-      category_id: 2,
-      tag_id: 2,
     });
 
     const project2 = await Project.create({
@@ -102,8 +96,6 @@ const seedData = async () => {
       budget: 5000000,
       start_date: new Date(),
       end_date: new Date(),
-      category_id: 1,
-      tag_id: 1,
     });
 
     // Seed Comments

@@ -13,6 +13,13 @@ import Gallery from "./pages/Post/Gallery";
 import Sidebar from "./pages/Post/Sidebar";
 import Blog from "./pages/Blog";
 import DynamicRoute from "./pages/Homepage/DynamicRoute";
+import Admin from "./pages/Admin";
+import SignUP from "./pages/Auth/SignUP";
+import SignIn from "./pages/Auth/SignIn";
+import ForgetPassword from "./pages/Auth/ForgetPassword";
+import ForgetPasswordConfirm from "./pages/Auth/ForgetPasswordConfirm";
+import ResetEmail from "./pages/Auth/ResetEmail";
+import ResetEmailConfirm from "./pages/Auth/ResetEmailConfirm";
 
 export default function RouterPath() {
   return (
@@ -35,6 +42,20 @@ export default function RouterPath() {
       <Route path="/post_video" element={<Video />} />
       <Route path="/post_gallery" element={<Gallery />} />
       <Route path="/blog" element={<Blog />} />
+
+      {/* admin path */}
+      <Route path="/admin" element={<Admin />} />
+
+      {/* auth path  */}
+      <Route path="/sign_up" element={<SignUP />} />
+      <Route path="/sign_in" element={<SignIn />} />
+      <Route path="/forget_password" element={<ForgetPassword />} />
+      <Route
+        path="/forget_password_confirm"
+        element={<ForgetPasswordConfirm />}
+      />
+      <Route path="/reset_email" element={<ResetEmail />} />
+      <Route path="/reset_email_Confirm" element={<ResetEmailConfirm />} />
     </Routes>
   );
 }
