@@ -1,36 +1,44 @@
 const Media = require("../database/models/Media"); // Import the Media model
 const path = require("path");
 const fs = require("fs");
+const Project = require("../database/models/Project");
+const Blog = require("../database/models/Blog");
 
-// CREATE - Add new media
 exports.create = async (req, res) => {
   try {
-    const { parent_id, type, exe } = req.body;
-
-    // Assuming file is uploaded via multer and its path is available as req.file
-    if (!req.file) {
-      return res.status(400).json({ message: "No media file uploaded." });
+    let { parent_id, type } = req.body; // No need to pass `exe`, it's determined from multer logic
+    parent_id = parent_id === "null" ? null : parent_id;
+    // Check if files are uploaded
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ msg: "No media files uploaded." });
     }
 
-    const filePath =
-      exe === "image"
-        ? path.join("public", "images", req.file.filename)
-        : path.join("public", "videos", req.file.filename);
+    const mediaEntries = [];
 
-    // Create media entry in the database
-    const media = await Media.create({
-      parent_id,
-      type,
-      path: filePath,
-      exe,
-    });
+    // Process each file in the files array
+    for (const file of req.files) {
+      let filePath = file.path.replace(/^public[\\/]/, ""); // Remove 'public/' from the file path
+
+      // Automatically determine `exe` (file type) based on the file extension
+      const ext = file.mimetype.startsWith("image") ? "image" : "video";
+
+      // Create media entry in the database for each file
+      const media = await Media.create({
+        parent_id,
+        type,
+        path: filePath,
+        exe: ext,
+      });
+
+      mediaEntries.push(media);
+    }
 
     return res
       .status(201)
-      .json({ message: "Media created successfully.", media });
+      .json({ msg: "Media created successfully.", media: mediaEntries });
   } catch (error) {
     console.error("Error creating media:", error);
-    return res.status(500).json({ message: "Error creating media.", error });
+    return res.status(500).json({ msg: "Error creating media.", error });
   }
 };
 
@@ -38,7 +46,26 @@ exports.create = async (req, res) => {
 exports.getAll = async (req, res) => {
   try {
     const media = await Media.findAll();
-    return res.status(200).json({ media });
+
+    // Fetch additional data based on the type (either project or blog)
+    const mediaWithParentData = await Promise.all(
+      media.map(async (item) => {
+        let parentData = null;
+
+        if (item.type === "project") {
+          parentData = await Project.findOne({ where: { id: item.parent_id } });
+        } else if (item.type === "blog") {
+          parentData = await Blog.findOne({ where: { id: item.parent_id } });
+        }
+
+        return {
+          ...item.toJSON(),
+          parentData, // Append the parent data (project or blog) to each media item
+        };
+      })
+    );
+
+    return res.status(200).json({ media: mediaWithParentData });
   } catch (error) {
     console.error("Error fetching media:", error);
     return res.status(500).json({ message: "Error fetching media.", error });
@@ -62,52 +89,57 @@ exports.getById = async (req, res) => {
   }
 };
 
-// UPDATE - Update an entire media entry by ID
+//UPDATE
 exports.update = async (req, res) => {
   try {
     const { id } = req.params;
-    const { parent_id, type, exe } = req.body;
+    let { parent_id, type, files } = req.body; // Get new data from the request
+    // Convert 'null' string to actual null value
+    parent_id = parent_id === "null" ? null : parent_id;
 
+    // Retrieve the existing media entry from the database
     const media = await Media.findByPk(id);
     if (!media) {
-      return res.status(404).json({ message: "Media not found." });
+      return res.status(404).json({ msg: "Media not found." });
     }
 
-    // If new file is uploaded, replace the old file
-    if (req.file) {
-      const newFilePath =
-        exe === "image"
-          ? path.join("public", "images", req.file.filename)
-          : path.join("public", "videos", req.file.filename);
+    // Delete the old file from the filesystem
+    if (fs.existsSync(media.path)) {
+      fs.unlinkSync(media.path); // Delete the old file
+    }
 
-      // Delete old file
-      fs.unlinkSync(media.path);
+    // If new files are provided, process the first new file
+    if (req.files && req.files.length > 0) {
+      const newFile = req.files[0]; // Assuming a single file for simplicity
+      const newFilePath = newFile.path.replace(/^public[\\/]/, ""); // Remove 'public/' prefix
 
+      // Determine the file type based on the file extension
+      const ext = newFile.mimetype.startsWith("image") ? "image" : "video";
+
+      // Update media path and type with the new file details
       media.path = newFilePath;
+      media.exe = ext; // Update exe based on the new file type
     }
 
-    // Update media fields
+    // Update other media fields
     await media.update({
       parent_id,
       type,
-      exe,
       path: media.path,
+      exe: media.exe,
     });
 
-    return res
-      .status(200)
-      .json({ message: "Media updated successfully.", media });
+    return res.status(200).json({ msg: "Media updated successfully.", media });
   } catch (error) {
     console.error("Error updating media:", error);
-    return res.status(500).json({ message: "Error updating media.", error });
+    return res.status(500).json({ msg: "Error updating media.", error });
   }
 };
 
-// PARTIAL UPDATE - Partially update a media entry by ID
 exports.partialUpdate = async (req, res) => {
   try {
     const { id } = req.params;
-    const { parent_id, type, exe } = req.body;
+    const { parent_id, type } = req.body; // Removed exe, will be determined from the file
 
     const media = await Media.findByPk(id);
     if (!media) {
@@ -116,23 +148,28 @@ exports.partialUpdate = async (req, res) => {
 
     // If a new file is uploaded, replace the old file
     if (req.file) {
-      const newFilePath =
-        exe === "image"
-          ? path.join("public", "images", req.file.filename)
-          : path.join("public", "videos", req.file.filename);
+      // Determine the file type based on the file mimetype
+      const ext = req.file.mimetype.startsWith("image") ? "image" : "video";
 
-      // Delete old file
-      fs.unlinkSync(media.path);
+      // Create new file path without the 'public/' prefix
+      const newFilePath = req.file.path.replace(/^public[\\/]/, "");
 
+      // Delete old file if it exists
+      if (fs.existsSync(media.path)) {
+        fs.unlinkSync(media.path);
+      }
+
+      // Update media path and exe based on the new file
       media.path = newFilePath;
+      media.exe = ext; // Update exe based on the new file type
     }
 
-    // Update media fields with partial data
+    // Update media fields with partial data, keeping existing values if not provided
     await media.update({
-      parent_id: parent_id || media.parent_id,
-      type: type || media.type,
-      exe: exe || media.exe,
+      parent_id: parent_id !== undefined ? parent_id : media.parent_id,
+      type: type !== undefined ? type : media.type,
       path: media.path,
+      exe: media.exe,
     });
 
     return res
@@ -156,15 +193,23 @@ exports.delete = async (req, res) => {
       return res.status(404).json({ message: "Media not found." });
     }
 
-    // Delete the file from the filesystem
-    fs.unlinkSync(media.path);
+    // Construct the absolute path to the media file
+    const mediaPath = path.join(__dirname, "../public", media.path);
+
+    // Check if the file exists before attempting to delete it
+    if (fs.existsSync(mediaPath)) {
+      fs.unlinkSync(mediaPath); // Delete the file from the filesystem
+    } else {
+      await media.destroy();
+      return res.status(404).json({ msg: "File not found on the server." });
+    }
 
     // Delete the media entry from the database
     await media.destroy();
 
-    return res.status(200).json({ message: "Media deleted successfully." });
+    return res.status(200).json({ msg: "Media deleted successfully." });
   } catch (error) {
     console.error("Error deleting media:", error);
-    return res.status(500).json({ message: "Error deleting media.", error });
+    return res.status(500).json({ msg: "Error deleting media.", error });
   }
 };

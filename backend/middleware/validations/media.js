@@ -1,10 +1,24 @@
 const { check } = require("express-validator");
 
 exports.mediaValidationRules = [
-  check("parent_id")
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage("Parent ID must be a positive integer."),
+  check("parent_id").custom((value) => {
+    // Check if the value is the string "null" and convert it to actual null
+    if (value === "null") {
+      value = null; // Use assignment to actually change the value
+    } else {
+      value = parseInt(value); // Convert the value to an integer
+    }
+
+    console.log(typeof value, value); // Log the type and value for debugging
+
+    // Allow null or a positive integer
+    if (value === null || (Number.isInteger(value) && value > 0)) {
+      return true; // Valid case
+    }
+
+    // Error case
+    throw new Error("Parent ID must be a positive integer or null.");
+  }),
 
   check("type")
     .notEmpty()

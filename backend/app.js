@@ -35,14 +35,14 @@ app.use("/auth", require("./routes/auth"));
 // app.use("/urls", require("./routes/urls"));
 // app.use("/teams", require("./routes/teams"));
 // app.use("/tag", require("./routes/tags"));
-// app.use("/projects", require("./routes/projects"));
+app.use("/projects", require("./routes/projects"));
 // app.use("/partners", require("./routes/partners"));
 // app.use("/notifications", require("./routes/notifications"));
 app.use("/medias", require("./routes/medias"));
 // app.use("/locations", require("./routes/locations"));
 // app.use("/comment", require("./routes/comments"));
 app.use("/category", require("./routes/category"));
-app.use("/blog", require("./routes/blog"));
+app.use("/blogs", require("./routes/blog"));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

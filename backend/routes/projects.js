@@ -1,9 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const Project = require("../controllers/ProjectController"); // Import the Blog controller
+const { projectValidationRules } = require("../middleware/validations/project");
+const { returnValidation } = require("../middleware/validations");
+const isAdmin = require("../middleware/auth/isAdmin");
 
 // CREATE - Add a new blog
-router.post("/", Project.createBlog);
+router.post(
+  "/",
+  isAdmin,
+  projectValidationRules,
+  returnValidation,
+  Project.createBlog
+);
 
 // READ - Get all blogs
 router.get("/", Project.getAllProject);

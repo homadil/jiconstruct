@@ -5,9 +5,10 @@ const { returnValidation } = require("../middleware/validations");
 const isAuth = require("../middleware/auth/isAuth");
 const isAdmin = require("../middleware/auth/isAdmin");
 const { mediaValidationRules } = require("../middleware/validations/media");
+const upload = require("../config/multerConfig");
 
 // CREATE - Add a new blog
-router.post("/", isAdmin, mediaValidationRules, returnValidation, Media.create);
+router.post("/", upload, mediaValidationRules, returnValidation, Media.create);
 
 // READ - Get all blogs
 router.get("/", Media.getAll);
@@ -16,13 +17,7 @@ router.get("/", Media.getAll);
 router.get("/:id", Media.getById);
 
 // UPDATE (PUT) - Update an entire blog by ID
-router.put(
-  "/:id",
-  isAdmin,
-  mediaValidationRules,
-  returnValidation,
-  Media.update
-);
+router.put("/:id", upload, Media.update);
 
 // PARTIAL UPDATE (PATCH) - Partially update a blog by ID
 router.patch(

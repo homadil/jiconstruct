@@ -18,6 +18,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import AdminRouter from "./AdminRouter";
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -147,9 +149,19 @@ export default function Admin() {
         </DrawerHeader>
         <Divider />
         <List>
-          {["Upload Media", "Starred", "Send email", "Drafts"].map(
-            (text, index) => (
-              <ListItem key={text} disablePadding sx={{ display: "block" }}>
+          {[
+            { text: "Upload Media", link: "upload_media", icon: <InboxIcon /> },
+            { text: "Blog", link: "blog", icon: <MailIcon /> },
+            { text: "Project", link: "project", icon: <MailIcon /> },
+            { text: "Team", link: "team", icon: <MailIcon /> },
+          ].map((item, index) => (
+            <ListItem key={item.text} disablePadding sx={{ display: "block" }}>
+              <Link
+                to={{
+                  pathname: "/admin",
+                  search: `?page=${item.link}`, // You need to format search as a query string
+                }}
+              >
                 <ListItemButton
                   sx={[
                     {
@@ -180,10 +192,10 @@ export default function Admin() {
                           },
                     ]}
                   >
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    {item.icon}
                   </ListItemIcon>
                   <ListItemText
-                    primary={text}
+                    primary={item.text}
                     sx={[
                       open
                         ? {
@@ -195,9 +207,9 @@ export default function Admin() {
                     ]}
                   />
                 </ListItemButton>
-              </ListItem>
-            )
-          )}
+              </Link>
+            </ListItem>
+          ))}
         </List>
         <Divider />
         <List>
@@ -254,6 +266,7 @@ export default function Admin() {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
+        <AdminRouter />
       </Box>
     </Box>
   );

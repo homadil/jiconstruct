@@ -20,7 +20,6 @@ axiosInstance.interceptors.request.use(
     }
 
     // Add Content-Type and Accept headers
-    config.headers["Content-Type"] = "application/json";
     config.headers["Accept"] = "application/json";
 
     return config;
@@ -41,6 +40,7 @@ const apiRequest = {
       });
 
       // Success toast
+      //Note : Error on toggle
       toast.success(response.data.msg, {
         position: "top-right",
         autoClose: 3000,
@@ -62,10 +62,10 @@ const apiRequest = {
       });
 
       // Success toast
-      toast.success("Request successful", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      // toast.success("Request successful", {
+      //   position: "top-right",
+      //   autoClose: 3000,
+      // });
 
       return response.data;
     } catch (error) {
@@ -83,7 +83,7 @@ const apiRequest = {
       });
 
       // Success toast
-      toast.success("Request successful", {
+      toast.success(response.data?.msg, {
         position: "top-right",
         autoClose: 3000,
       });
@@ -104,7 +104,7 @@ const apiRequest = {
       });
 
       // Success toast
-      toast.success("Request successful", {
+      toast.success(response.data?.msg, {
         position: "top-right",
         autoClose: 3000,
       });
