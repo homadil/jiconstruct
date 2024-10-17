@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import img_one from "../../assets/images/dummy/download_4.avif";
 import img_two from "../../assets/images/dummy/download_5.jpg";
 import img_three from "../../assets/images/dummy/download_6.jpg";
 import img_four from "../../assets/images/dummy/download_7.jpg";
+import { DataContext } from "../../store";
 export default function Welcome() {
+  const { homeGrid, backend_url } = useContext(DataContext);
+
+  const [homeGridFirstIndex, ...remainingHomeGrid] = homeGrid;
+
+  if (!homeGridFirstIndex || remainingHomeGrid.length <= 0) {
+    return;
+  }
+
   return (
     /* <!-- WELCOME SECTION START --> */
     <div class="section-full p-t80 p-b80 bg-gray overflow-hide">
@@ -37,7 +46,10 @@ export default function Welcome() {
                   <div class="col-md-6 col-sm-6 masonry-item">
                     <div class="arc-about-year text-uppercase text-right m-b20">
                       <div class="arc-about-year-pic">
-                        <img src={img_four} alt="" />
+                        <img
+                          src={backend_url + "/" + homeGridFirstIndex.path}
+                          alt=""
+                        />
                       </div>
                       <div class="arc-about-year-info">
                         <span class="title-small">
@@ -50,23 +62,18 @@ export default function Welcome() {
                     </div>
                   </div>
 
-                  <div class="col-md-6 col-sm-6 masonry-item">
-                    <div class="wt-media m-b20  img-reflection">
-                      <img src={img_one} alt="" />
+                  {remainingHomeGrid.map((item, index) => (
+                    <div key={index} class="col-md-6 col-sm-6 masonry-item">
+                      <div class="wt-media m-b20  img-reflection">
+                        <img
+                          src={backend_url + "/" + item?.path}
+                          alt=""
+                          height={200}
+                          style={{ height: "200px", width: "100%" }}
+                        />
+                      </div>
                     </div>
-                  </div>
-
-                  <div class="col-md-6 col-sm-6 masonry-item">
-                    <div class="wt-media m-b20  img-reflection">
-                      <img src={img_two} alt="" />
-                    </div>
-                  </div>
-
-                  <div class="col-md-6 col-sm-6 masonry-item">
-                    <div class="wt-media m-b20  img-reflection">
-                      <img src={img_three} alt="" />
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>

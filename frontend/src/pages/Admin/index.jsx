@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import BookIcon from "@mui/icons-material/Book";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
@@ -18,7 +19,9 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import AdminRouter from "./AdminRouter";
+import Groups2Icon from "@mui/icons-material/Groups2";
 import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -151,9 +154,9 @@ export default function Admin() {
         <List>
           {[
             { text: "Upload Media", link: "upload_media", icon: <InboxIcon /> },
-            { text: "Blog", link: "blog", icon: <MailIcon /> },
-            { text: "Project", link: "project", icon: <MailIcon /> },
-            { text: "Team", link: "team", icon: <MailIcon /> },
+            { text: "Blog", link: "blog", icon: <BookIcon /> },
+            { text: "Project", link: "project", icon: <AccountTreeIcon /> },
+            { text: "Team", link: "team", icon: <Groups2Icon /> },
           ].map((item, index) => (
             <ListItem key={item.text} disablePadding sx={{ display: "block" }}>
               <Link
@@ -213,53 +216,65 @@ export default function Admin() {
         </List>
         <Divider />
         <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={[
-                  {
-                    minHeight: 48,
-                    px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: "initial",
-                      }
-                    : {
-                        justifyContent: "center",
-                      },
-                ]}
+          {[
+            { text: "Testimony", link: "testimony", icon: <InboxIcon /> },
+            { text: "team", link: "team", icon: <BookIcon /> },
+            { text: "Project", link: "project", icon: <AccountTreeIcon /> },
+            { text: "Team", link: "team", icon: <Groups2Icon /> },
+          ].map((item, index) => (
+            <ListItem key={item.text} disablePadding sx={{ display: "block" }}>
+              <Link
+                to={{
+                  pathname: "/admin",
+                  search: `?page=${item.link}`, // You need to format search as a query string
+                }}
               >
-                <ListItemIcon
+                <ListItemButton
                   sx={[
                     {
-                      minWidth: 0,
-                      justifyContent: "center",
+                      minHeight: 48,
+                      px: 2.5,
                     },
                     open
                       ? {
-                          mr: 3,
+                          justifyContent: "initial",
                         }
                       : {
-                          mr: "auto",
+                          justifyContent: "center",
                         },
                   ]}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
-                />
-              </ListItemButton>
+                  <ListItemIcon
+                    sx={[
+                      {
+                        minWidth: 0,
+                        justifyContent: "center",
+                      },
+                      open
+                        ? {
+                            mr: 3,
+                          }
+                        : {
+                            mr: "auto",
+                          },
+                    ]}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={item.text}
+                    sx={[
+                      open
+                        ? {
+                            opacity: 1,
+                          }
+                        : {
+                            opacity: 0,
+                          },
+                    ]}
+                  />
+                </ListItemButton>
+              </Link>
             </ListItem>
           ))}
         </List>

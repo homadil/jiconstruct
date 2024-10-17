@@ -11,6 +11,7 @@ const Notification = require("./models/Notification");
 const Partner = require("./models/Partner");
 const Url = require("./models/Url");
 const Team = require("./models/Team");
+const Testimony = require("./models/Testimony");
 
 // Define associations here
 Location.hasMany(User, { foreignKey: "location_id" }); // Location has many Users
@@ -67,6 +68,14 @@ Media.belongsTo(Project, {
   constraints: false,
   scope: { type: "project" },
 });
+
+// Blog <-> Url relationship
+Blog.belongsToMany(Url, { through: "BlogUrl", foreignKey: "blog_id" });
+Url.belongsToMany(Blog, { through: "BlogUrl", foreignKey: "url_id" });
+
+// Project <-> Url relationship
+Project.belongsToMany(Url, { through: "ProjectUrl", foreignKey: "project_id" });
+Url.belongsToMany(Project, { through: "ProjectUrl", foreignKey: "url_id" });
 
 // Sync database
 const syncDatabase = async () => {

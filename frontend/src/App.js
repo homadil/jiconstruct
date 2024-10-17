@@ -6,7 +6,6 @@ import Loader from "./components/Loader.jsx";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 function ScrollToHashElement() {
   const { hash } = useLocation();

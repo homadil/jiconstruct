@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import postOne from "./assets/images/dummy/download_4.avif";
 import postTwo from "./assets/images/dummy/download_3.jpg";
 import postThree from "./assets/images/dummy/download_5.jpg";
@@ -9,6 +9,7 @@ import postSeven from "./assets/images/dummy/download_9.webp";
 import postEight from "./assets/images/dummy/download_10.jpg";
 import postNine from "./assets/images/dummy/download_11.webp";
 import user_img from "./assets/images/dummy/team1.jpg";
+import apiRequest from "./apiRequest";
 // 1. Create the context
 export const DataContext = createContext();
 
@@ -367,6 +368,7 @@ export const DataProvider = ({ children }) => {
       ],
     },
   ]);
+  const [medias, setMedias] = useState([]);
 
   const [projects, setProjects] = useState([
     // Add your initial project data here
@@ -406,6 +408,31 @@ export const DataProvider = ({ children }) => {
     }
     return desc; // If the desc is less than the limit, return it as is
   };
+  const [homeHeader, setHomeHeader] = useState([]);
+  const [homeGrid, setHomeGrid] = useState([]);
+  const [newsHeader, setNewsHeader] = useState([]);
+  const [aboutUsHeader, setAboutUsHeader] = useState([]);
+  const [aboutUsImage, setAboutUsImage] = useState([]);
+  const [contactUsHeader, setContactUsHeader] = useState([]);
+  const [projectHeader, setProjectHeader] = useState([]);
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
+  useEffect(() => {
+    apiRequest.get("/medias").then((res) => {
+      const medias = res.media;
+      // Filter for different media types
+      setHomeHeader(medias.filter((item) => item.type === "home_header"));
+      setHomeGrid(medias.filter((item) => item.type === "home_grid"));
+      setNewsHeader(medias.filter((item) => item.type === "news_header"));
+      setAboutUsHeader(
+        medias.filter((item) => item.type === "about_us_header")
+      );
+      setAboutUsImage(medias.filter((item) => item.type === "about_us_image"));
+      setContactUsHeader(
+        medias.filter((item) => item.type === "contact_us_header")
+      );
+      setProjectHeader(medias.filter((item) => item.type === "project_header"));
+    });
+  }, []);
 
   // 4. Provide the data and functions
   return (
@@ -418,6 +445,14 @@ export const DataProvider = ({ children }) => {
         formatDate,
         truncateContent,
         formatDateTime,
+        homeHeader,
+        homeGrid,
+        newsHeader,
+        aboutUsHeader,
+        contactUsHeader,
+        projectHeader,
+        aboutUsImage,
+        backend_url,
       }}
     >
       {children}

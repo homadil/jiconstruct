@@ -4,6 +4,7 @@ import UploadMedia from "./Pages/UploadMedia";
 import Blog from "./Pages/Blog";
 import Project from "./Pages/Project";
 import Team from "./Pages/Team";
+import Testimony from "./Pages/Testimony";
 export default function AdminRouter() {
   const location = useLocation();
 
@@ -25,6 +26,9 @@ export default function AdminRouter() {
 
     case "team":
       return <Team />;
+
+    case "testimony":
+      return <Testimony />;
 
     default:
       return <UploadMedia />;
