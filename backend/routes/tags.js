@@ -5,7 +5,7 @@ const { returnValidation } = require("../middleware/validations");
 const isAdmin = require("../middleware/auth/isAdmin");
 const { TagValidationRules } = require("../middleware/validations/tag");
 // CREATE - Add a new blog
-router.post("/", isAdmin, TagValidationRules, returnValidation, Tags.create);
+router.post("/", TagValidationRules, returnValidation, Tags.create);
 
 // READ - Get all blogs
 router.get("/", Tags.getAll);
@@ -14,7 +14,7 @@ router.get("/", Tags.getAll);
 router.get("/:id", Tags.getById);
 
 // // UPDATE (PUT) - Update an entire blog by ID
-router.put("/:id", isAdmin, TagValidationRules, returnValidation, Tags.update);
+router.put("/:id", TagValidationRules, returnValidation, Tags.update);
 
 // // PARTIAL UPDATE (PATCH) - Partially update a blog by ID
 router.patch(

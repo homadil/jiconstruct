@@ -4,7 +4,9 @@ const Tag = require("../database/models/Tag");
 const create = async (req, res) => {
   try {
     const tag = await Tag.create(req.body);
-    res.status(201).json(tag);
+    res
+      .status(201)
+      .json({ msg: tag.name + " was created successfully", ...tag.dataValues });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -41,7 +43,10 @@ const update = async (req, res) => {
       return res.status(404).json({ message: "Tag not found" });
     }
     await tag.update(req.body);
-    res.status(200).json(tag);
+    res.status(200).json({
+      msg: tag.name + " has been updated successfully",
+      ...tag.dataValues,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -69,7 +74,7 @@ const deleteTag = async (req, res) => {
       return res.status(404).json({ message: "Tag not found" });
     }
     await tag.destroy();
-    res.status(204).send();
+    res.status(204).json({ msg: tag.name + "was deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

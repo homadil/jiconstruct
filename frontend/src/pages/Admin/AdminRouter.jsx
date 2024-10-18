@@ -5,6 +5,12 @@ import Blog from "./Pages/Blog";
 import Project from "./Pages/Project";
 import Team from "./Pages/Team";
 import Testimony from "./Pages/Testimony";
+import Tag from "./Pages/Tag";
+import Category from "./Pages/Category";
+import Url from "./Pages/Url";
+import Comment from "./Pages/Comment";
+import Partner from "./Pages/Partner";
+import Notification from "./Pages/Notification";
 export default function AdminRouter() {
   const location = useLocation();
 
@@ -29,6 +35,24 @@ export default function AdminRouter() {
 
     case "testimony":
       return <Testimony />;
+
+    case "tag":
+      return <Tag />;
+
+    case "category":
+      return <Category />;
+
+    case "comment":
+      return <Comment />;
+
+    case "partner":
+      return <Partner />;
+
+    case "notification":
+      return <Notification />;
+
+    case "url":
+      return <Url />;
 
     default:
       return <UploadMedia />;
