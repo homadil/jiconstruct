@@ -6,7 +6,7 @@ const { returnValidation } = require("../middleware/validations");
 const urlValidationRules = require("../middleware/validations/url");
 
 // CREATE - Add a new blog
-router.post("/", isAdmin, urlValidationRules(), returnValidation, Url.create);
+router.post("/", urlValidationRules(), returnValidation, Url.create);
 
 // READ - Get all blogs
 router.get("/", Url.getAll);
@@ -15,7 +15,7 @@ router.get("/", Url.getAll);
 router.get("/:id", Url.getById);
 
 // UPDATE (PUT) - Update an entire blog by ID
-router.put("/:id", isAdmin, urlValidationRules(), returnValidation, Url.update);
+router.put("/:id", urlValidationRules(), returnValidation, Url.update);
 
 // PARTIAL UPDATE (PATCH) - Partially update a blog by ID
 router.patch(
@@ -27,6 +27,6 @@ router.patch(
 );
 
 // DELETE - Remove a blog by ID
-router.delete("/:id", isAdmin, Url.delete);
+router.delete("/:id", Url.delete);
 
 module.exports = router;

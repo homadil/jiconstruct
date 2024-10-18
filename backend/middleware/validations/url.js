@@ -14,7 +14,6 @@ const urlValidationRules = () => {
       .isURL()
       .withMessage("Link must be a valid URL."),
     body("icon").optional().isString().withMessage("Icon must be a string."),
-    body("image").optional().isString().withMessage("Image must be a string."),
   ];
 };
 
