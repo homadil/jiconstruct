@@ -41,7 +41,7 @@ app.use("/partners", require("./routes/partners"));
 // app.use("/notifications", require("./routes/notifications"));
 app.use("/medias", require("./routes/medias"));
 // app.use("/locations", require("./routes/locations"));
-// app.use("/comment", require("./routes/comments"));
+app.use("/comments", require("./routes/comments"));
 app.use("/categories", require("./routes/category"));
 app.use("/blogs", require("./routes/blog"));
 

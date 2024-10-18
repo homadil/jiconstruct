@@ -4,9 +4,10 @@ const Url = require("../controllers/UrlController"); // Import the Blog controll
 const isAdmin = require("../middleware/auth/isAdmin");
 const { returnValidation } = require("../middleware/validations");
 const urlValidationRules = require("../middleware/validations/url");
+const upload = require("../config/multerConfig");
 
 // CREATE - Add a new blog
-router.post("/", urlValidationRules(), returnValidation, Url.create);
+router.post("/", upload, urlValidationRules, returnValidation, Url.create);
 
 // READ - Get all blogs
 router.get("/", Url.getAll);
@@ -15,13 +16,13 @@ router.get("/", Url.getAll);
 router.get("/:id", Url.getById);
 
 // UPDATE (PUT) - Update an entire blog by ID
-router.put("/:id", urlValidationRules(), returnValidation, Url.update);
+router.put("/:id", upload, urlValidationRules, returnValidation, Url.update);
 
 // PARTIAL UPDATE (PATCH) - Partially update a blog by ID
 router.patch(
   "/:id",
   isAdmin,
-  urlValidationRules(),
+  urlValidationRules,
   returnValidation,
   Url.partialUpdate
 );

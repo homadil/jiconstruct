@@ -39,6 +39,7 @@ const storage = multer.diskStorage({
     } else if (fileType === "video") {
       dir = "public/videos";
     } else {
+      req.saved = false;
       return cb(new Error("Unsupported file type"), null); // Error if file type is unsupported
     }
 
@@ -51,6 +52,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const uniqueName = Date.now() + path.extname(file.originalname); // Generate unique filename
+    req.saved = true; // Mark that the file was saved
     cb(null, uniqueName);
   },
 });

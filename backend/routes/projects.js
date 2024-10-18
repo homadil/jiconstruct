@@ -6,13 +6,7 @@ const { returnValidation } = require("../middleware/validations");
 const isAdmin = require("../middleware/auth/isAdmin");
 
 // CREATE - Add a new blog
-router.post(
-  "/",
-  isAdmin,
-  projectValidationRules,
-  returnValidation,
-  Project.createBlog
-);
+router.post("/", projectValidationRules, returnValidation, Project.createBlog);
 
 // READ - Get all blogs
 router.get("/", Project.getAllProject);
