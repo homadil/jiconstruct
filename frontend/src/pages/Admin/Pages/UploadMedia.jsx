@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import apiRequest from "../../../apiRequest";
 import Loader from "../../../components/Loader";
 import ImageTemplate from "../../../components/ImageTemplate";
-import MediaForm from "../../../components/DataBaseForms/MediaForm";
 
 export default function UploadMedia() {
   const [medias, setMedias] = useState([]);

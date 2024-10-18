@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -11,18 +11,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import apiRequest from "../../../apiRequest";
-
+import Loader from "../../../components/Loader";
+import { DataContext } from "../../../store";
 export default function Testimony() {
   const [testimonies, setTestimonies] = useState([]);
   const [loader, setLoader] = useState([]);
-
+  const { backend_url } = useContext(DataContext);
+  const [id, setID] = useState(null);
+  const [update, setUpdate] = useState(false);
   useEffect(() => {
     apiRequest
       .get("/testimonies")
       .then((res) => setTestimonies(res))
       .finally(() => setLoader(false));
   }, []);
-
   const [showModal, setShowModal] = useState(false);
   const [newTestimony, setNewTestimony] = useState({
     comment: "",
@@ -36,36 +38,98 @@ export default function Testimony() {
   const handleCloseModal = () => setShowModal(false);
 
   // Add Testimony
-  const handleAddTestimony = () => {
-    setTestimonies([
-      ...testimonies,
-      { ...newTestimony, id: testimonies.length + 1 },
-    ]);
-    setNewTestimony({ comment: "", name: "", position: "", image: "" });
-    handleCloseModal();
+  const handleAddTestimony = (formData) => {
+    apiRequest
+      .post(
+        `/testimonies`,
+        formData,
+        {},
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      .then((res) => {
+        testimonies.push(res);
+        setTestimonies(testimonies);
+        handleCloseModal();
+      });
   };
 
   // Delete Testimony
   const handleDeleteTestimony = (id) => {
-    const updatedTestimonies = testimonies.filter(
-      (testimony) => testimony.id !== id
-    );
-    setTestimonies(updatedTestimonies);
+    apiRequest
+      .delete(`/testimonies/${id}`)
+      .then((res) => {
+        const updatedTestimonies = testimonies.filter(
+          (testimony) => testimony.id !== id
+        );
+        setTestimonies(updatedTestimonies);
+      })
+      .finally(() => {});
   };
 
   // Update Testimony (Mock)
-  const handleUpdateTestimony = (id) => {
-    alert(`Update testimony with id ${id}`); // You can implement an actual update logic here
+  const handleUpdateTestimony = (id, formData) => {
+    apiRequest
+      .put(
+        `/testimonies/${id}`,
+        formData,
+        {},
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      .then((res) => {
+        const updatedTestimonies = testimonies.map((item) =>
+          item.id === res.id ? (item = res) : item
+        );
+        console.log(res);
+        setTestimonies(updatedTestimonies); // Update the testimonies state with the updated data
+        handleCloseModal(); // Close the modal after successful update
+      });
   };
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData();
+
+    formData.append("files", newTestimony.image);
+    formData.append("comment", newTestimony.comment);
+    formData.append("name", newTestimony.name);
+    formData.append("position", newTestimony.position);
+
+    if (update) {
+      handleUpdateTestimony(id, formData);
+    } else {
+      handleAddTestimony(formData);
+    }
+  }
+
+  if (loader) {
+    return <Loader />;
+  }
 
   return (
     <div className="container">
-      <h3>Testimonies</h3>
+      <h3>Testimonies </h3>
       <Button
         variant="contained"
         color="primary"
         startIcon={<FontAwesomeIcon icon={faPlus} />}
-        onClick={handleOpenModal}
+        onClick={() => {
+          handleOpenModal();
+          setUpdate(false);
+          setNewTestimony({
+            comment: "",
+            name: "",
+            position: "",
+            image: "",
+          });
+        }}
       >
         Add More
       </Button>
@@ -74,30 +138,49 @@ export default function Testimony() {
         {testimonies.map((testimony) => (
           <Grid item xs={12} md={6} key={testimony.id}>
             <Card className="p-3" style={{ position: "relative" }}>
-              <Typography variant="h6">{testimony.name}</Typography>
-              <Typography variant="body1">{testimony.position}</Typography>
-              <Typography variant="body2" className="mt-2">
-                {testimony.comment}
-              </Typography>
-              <div className="mt-3">
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  startIcon={<FontAwesomeIcon icon={faEdit} />}
-                  onClick={() => handleUpdateTestimony(testimony.id)}
-                >
-                  Update
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  startIcon={<FontAwesomeIcon icon={faTrash} />}
-                  className="ms-2"
-                  onClick={() => handleDeleteTestimony(testimony.id)}
-                >
-                  Delete
-                </Button>
-              </div>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <img
+                    src={backend_url + "/" + testimony.image}
+                    alt={testimony.name}
+                    style={{ width: "100%", borderRadius: "8px" }}
+                  />
+                </Grid>
+                <Grid item xs={8}>
+                  <Typography variant="h6">{testimony.name}</Typography>
+                  <Typography variant="body1">{testimony.position}</Typography>
+                  <Typography variant="body2" className="mt-2">
+                    {testimony.comment}
+                  </Typography>
+                  <div className="mt-3">
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      startIcon={<FontAwesomeIcon icon={faEdit} />}
+                      onClick={() => {
+                        setID(testimony.id);
+                        handleOpenModal();
+                        setUpdate(true);
+                        setNewTestimony(testimony);
+                      }}
+                    >
+                      Update
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      startIcon={<FontAwesomeIcon icon={faTrash} />}
+                      className="ms-2"
+                      onClick={() => {
+                        setID(testimony.id);
+                        handleDeleteTestimony(testimony.id);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </Grid>
+              </Grid>
             </Card>
           </Grid>
         ))}
@@ -105,12 +188,20 @@ export default function Testimony() {
 
       {/* Add Testimony Modal */}
       <Modal open={showModal} onClose={handleCloseModal}>
-        <div className="p-4" style={modalStyle}>
-          <Typography variant="h6">Add Testimony</Typography>
+        <form
+          onSubmit={handleSubmit}
+          className="p-4"
+          style={modalStyle}
+          encType="multipart/form-data"
+        >
+          <Typography variant="h6">
+            {update ? "Update" : "Add"} Testimony
+          </Typography>
           <TextField
             label="Name"
             fullWidth
             variant="outlined"
+            required={update ? false : true}
             value={newTestimony.name}
             onChange={(e) =>
               setNewTestimony({ ...newTestimony, name: e.target.value })
@@ -121,6 +212,7 @@ export default function Testimony() {
             label="Position"
             fullWidth
             variant="outlined"
+            required={update ? false : true}
             value={newTestimony.position}
             onChange={(e) =>
               setNewTestimony({ ...newTestimony, position: e.target.value })
@@ -132,6 +224,7 @@ export default function Testimony() {
             fullWidth
             multiline
             rows={4}
+            required={update ? false : true}
             variant="outlined"
             value={newTestimony.comment}
             onChange={(e) =>
@@ -139,25 +232,26 @@ export default function Testimony() {
             }
             className="mt-3"
           />
-          <TextField
-            label="Image URL"
-            fullWidth
-            variant="outlined"
-            value={newTestimony.image}
-            onChange={(e) =>
-              setNewTestimony({ ...newTestimony, image: e.target.value })
-            }
-            className="mt-3"
+          <input
+            type="file"
+            accept="image/*"
+            className="form-control mt-3"
+            required={update ? false : true}
+            onChange={(e) => {
+              setNewTestimony({ ...newTestimony, image: e.target.files[0] });
+            }}
           />
+
           <Button
+            type="submit"
             variant="contained"
             color="primary"
+            fullWidth
             className="mt-4"
-            onClick={handleAddTestimony}
           >
-            Add Testimony
+            {update ? "Update" : "Add"} Testimony
           </Button>
-        </div>
+        </form>
       </Modal>
     </div>
   );

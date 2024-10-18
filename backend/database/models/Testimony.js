@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../index"); // Sequelize instance
-const Media = require("./Media"); // Assuming the Media model is defined in the same directory
 
 const Testimony = sequelize.define(
   "Testimony",

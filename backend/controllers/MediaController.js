@@ -102,10 +102,11 @@ exports.update = async (req, res) => {
     if (!media) {
       return res.status(404).json({ msg: "Media not found." });
     }
+    const OldPath = path.join(__dirname, "..", "public", media.path); // Get absolute path
 
     // Delete the old file from the filesystem
-    if (fs.existsSync(media.path)) {
-      fs.unlinkSync(media.path); // Delete the old file
+    if (fs.existsSync(OldPath)) {
+      fs.unlinkSync(OldPath); // Delete the old file
     }
 
     // If new files are provided, process the first new file
@@ -193,15 +194,13 @@ exports.delete = async (req, res) => {
       return res.status(404).json({ message: "Media not found." });
     }
 
-    // Construct the absolute path to the media file
-    const mediaPath = path.join(__dirname, "../public", media.path);
+    if (media.path) {
+      const OldPath = path.join(__dirname, "..", "public", media.path); // Get absolute path
 
-    // Check if the file exists before attempting to delete it
-    if (fs.existsSync(mediaPath)) {
-      fs.unlinkSync(mediaPath); // Delete the file from the filesystem
-    } else {
-      await media.destroy();
-      return res.status(404).json({ msg: "File not found on the server." });
+      // Delete the old file from the filesystem
+      if (fs.existsSync(OldPath)) {
+        fs.unlinkSync(OldPath); // Delete the old file
+      }
     }
 
     // Delete the media entry from the database
