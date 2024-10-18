@@ -7,13 +7,7 @@ const {
   CategoryValidationRules,
 } = require("../middleware/validations/category");
 // CREATE - Add a new blog
-router.post(
-  "/",
-  isAdmin,
-  CategoryValidationRules,
-  returnValidation,
-  Categories.create
-);
+router.post("/", CategoryValidationRules, returnValidation, Categories.create);
 
 // READ - Get all blogs
 router.get("/", Categories.getAll);
@@ -24,7 +18,6 @@ router.get("/:id", Categories.getById);
 // UPDATE (PUT) - Update an entire blog by ID
 router.put(
   "/:id",
-  isAdmin,
   CategoryValidationRules,
   returnValidation,
   Categories.update

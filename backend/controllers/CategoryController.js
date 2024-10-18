@@ -4,7 +4,10 @@ const Category = require("../database/models/Category");
 const create = async (req, res) => {
   try {
     const category = await Category.create(req.body);
-    res.status(201).json(category);
+    res.status(201).json({
+      msg: category.name + " has been updated successfully",
+      ...category.dataValues,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -41,7 +44,10 @@ const update = async (req, res) => {
       return res.status(404).json({ message: "Category not found" });
     }
     await category.update(req.body);
-    res.status(200).json(category);
+    res.status(200).json({
+      msg: category.name + " has been updated successfully",
+      ...category.dataValues,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -69,7 +75,7 @@ const deleteCategory = async (req, res) => {
       return res.status(404).json({ message: "Category not found" });
     }
     await category.destroy();
-    res.status(204).send();
+    res.status(204).json({ msg: category.name + "was deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
