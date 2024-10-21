@@ -5,8 +5,8 @@ const getLatestPostAndSortedBlogs = (blogs) => {
   // Step 1: Remove the first blog post (latest) and store it in a separate variable
   const latest = blogs.splice(0, 1)[0];
 
-  // Step 2: Sort the remaining blogs by date (latest first)
-  blogs.sort((a, b) => new Date(b.date) - new Date(a.date));
+  // Step 2: Sort the remaining blogs by? date (latest first)
+  blogs.sort((a, b) => new Date(b?.date) - new Date(a?.date));
 
   // Step 3: Limit the blogs to 4 posts
   const limitedBlogs = blogs.slice(0, 4);
@@ -17,7 +17,7 @@ const getLatestPostAndSortedBlogs = (blogs) => {
 export default function Blog() {
   const { blogs, formatDate, truncateContent } = useContext(DataContext);
   const { latest, limitedBlogs } = getLatestPostAndSortedBlogs(blogs);
-  const { day, month, year } = formatDate(latest.date);
+  const { day, month, year } = formatDate(latest?.date);
   return (
     /* <!-- OUR BLOG START --> */
     <div class="section-full p-t80 p-b50 bg-white">
@@ -39,7 +39,7 @@ export default function Blog() {
           <div class="col-xl-6 col-lg-6 col-md-12">
             <div class="latest-blog-3-pattern">
               <div
-                class="blog-post latest-blog-3 overlay-wraper post-overlay  large-date bg-cover bg-no-repeat bg-top-center"
+                class="blog-post latest-blog-3 overlay-wraper post-overlay  large?-date bg-cover bg-no-repeat bg-top-center"
                 // input url here
                 style={{ backgroundImage: "url(images/dummy/download14.webp)" }}
               >
@@ -49,7 +49,7 @@ export default function Blog() {
                     <div class="post-content-outer bdr-l-8 bdr-solid bdr-primary p-a15">
                       <div class="wt-post-meta ">
                         <ul>
-                          <li class="post-date">
+                          <li class="post?-date">
                             <strong>{day}</strong>
                             <span>
                               {month} {year}
@@ -129,14 +129,14 @@ export default function Blog() {
           <div class="col-xl-6 col-lg-6 col-md-12">
             <div class="row latest-blog-2-outer m-t30">
               {limitedBlogs.map((item, index) => {
-                const { day, month, year } = formatDate(item.date);
+                const { day, month, year } = formatDate(item?.date);
                 return (
                   <div key={index} class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="blog-post latest-blog-2 mid-size-date bdr-1 bdr-solid bdr-gray  p-a20">
+                    <div class="blog-post latest-blog-2 mid-size?-date bdr-1 bdr-solid bdr-gray  p-a20">
                       <div class="wt-post-info">
                         <div class="wt-post-meta ">
                           <ul>
-                            <li class="post-date">
+                            <li class="post?-date">
                               <strong>{day} </strong>{" "}
                               <span>
                                 {month} {year}

@@ -10,8 +10,6 @@ import { HelmetProvider } from "react-helmet-async";
 import "font-awesome/css/font-awesome.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
-import "owl.carousel/dist/assets/owl.carousel.css";
-import "owl.carousel/dist/assets/owl.theme.default.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
