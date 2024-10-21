@@ -45,6 +45,10 @@ const Project = sequelize.define(
       type: DataTypes.DECIMAL(10, 2),
       allowNull: true,
     },
+    show: {
+      type: DataTypes.STRING, // Can store both image or video paths
+      allowNull: true,
+    },
   },
   {
     timestamps: true,

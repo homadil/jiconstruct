@@ -77,6 +77,20 @@ Url.belongsToMany(Blog, { through: "BlogUrl", foreignKey: "url_id" });
 Project.belongsToMany(Url, { through: "ProjectUrl", foreignKey: "project_id" });
 Url.belongsToMany(Project, { through: "ProjectUrl", foreignKey: "url_id" });
 
+// Project <-> Media relationship
+Project.belongsToMany(Media, {
+  through: "ProjectMedia",
+  foreignKey: "project_id",
+});
+Media.belongsToMany(Project, {
+  through: "ProjectMedia",
+  foreignKey: "media_id",
+});
+
+// Blog <-> Media relationship
+Blog.belongsToMany(Media, { through: "BlogMedia", foreignKey: "blog_id" });
+Media.belongsToMany(Blog, { through: "BlogMedia", foreignKey: "media_id" });
+
 // Sync database
 const syncDatabase = async () => {
   try {

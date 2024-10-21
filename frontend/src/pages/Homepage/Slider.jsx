@@ -72,7 +72,7 @@ export default function Slider() {
   return (
     <Swiper
       modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-      spaceBetween={50}
+      spaceBetween={0}
       slidesPerView={1}
       autoplay={{ delay: 5000 }}
       pagination={{ clickable: true }}

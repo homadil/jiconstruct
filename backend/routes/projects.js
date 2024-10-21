@@ -4,9 +4,16 @@ const Project = require("../controllers/ProjectController"); // Import the Blog 
 const { projectValidationRules } = require("../middleware/validations/project");
 const { returnValidation } = require("../middleware/validations");
 const isAdmin = require("../middleware/auth/isAdmin");
+const upload = require("../config/multerConfig");
 
 // CREATE - Add a new blog
-router.post("/", projectValidationRules, returnValidation, Project.createBlog);
+router.post(
+  "/",
+  upload,
+  projectValidationRules,
+  returnValidation,
+  Project.createBlog
+);
 
 // READ - Get all blogs
 router.get("/", Project.getAllProject);

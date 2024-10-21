@@ -415,6 +415,8 @@ export const DataProvider = ({ children }) => {
   const [aboutUsImage, setAboutUsImage] = useState([]);
   const [contactUsHeader, setContactUsHeader] = useState([]);
   const [projectHeader, setProjectHeader] = useState([]);
+  const [testimonies, setTestimonies] = useState([]);
+  const [teams, setTeams] = useState([]);
   const backend_url = process.env.REACT_APP_BACKEND_URL;
   useEffect(() => {
     apiRequest.get("/medias").then((res) => {
@@ -431,6 +433,14 @@ export const DataProvider = ({ children }) => {
         medias.filter((item) => item.type === "contact_us_header")
       );
       setProjectHeader(medias.filter((item) => item.type === "project_header"));
+    });
+
+    apiRequest.get("/testimonies").then((res) => {
+      setTestimonies(res);
+    });
+
+    apiRequest.get("/teams").then((res) => {
+      setTeams(res);
     });
   }, []);
 
@@ -453,6 +463,10 @@ export const DataProvider = ({ children }) => {
         projectHeader,
         aboutUsImage,
         backend_url,
+        testimonies,
+        setTestimonies,
+        teams,
+        setTeams,
       }}
     >
       {children}

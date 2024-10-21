@@ -1,224 +1,137 @@
-import React from "react";
-import testOne from "../../assets/images/dummy/tes1.avif";
-import testTwo from "../../assets/images/dummy/test2.jpg";
-import testThree from "../../assets/images/dummy/test3.webp";
-import testFour from "../../assets/images/dummy/test4.jpg";
-import testFive from "../../assets/images/dummy/test5.jpg";
-import testSix from "../../assets/images/dummy/test6.jpg";
+import React, { useContext, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Thumbs,
+} from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+import "swiper/css/thumbs";
+import { DataContext } from "../../store";
+import Loader from "../../components/Loader";
+
 export default function Testimony() {
-  const stylesheet = {
-    height: "60px",
-  };
+  const { testimonies, backend_url } = useContext(DataContext);
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  if (!testimonies || testimonies.length === 0) {
+    return <Loader />;
+  }
   return (
-    /* <!-- TESTIMONIAL START --> */
     <section
       id="clients"
-      class="section-full p-tb80 testimonial-slider-outer bg-white bg-cover bg-left-center"
+      className="section-full p-tb80 testimonial-slider-outer bg-white bg-cover bg-left-center"
       style={{ backgroundImage: "url(images/background/bg-1.jpg)" }}
     >
-      <div class="container">
-        <div class="section-head clearfix">
-          <div class="wt-tilte-main bdr-r-3 bdr-primary bdr-solid">
-            <small class="wt-small-title">Best Clients</small>
-            <h2 class="m-b5">Our Client says</h2>
+      <div className="container">
+        <div className="section-head clearfix">
+          <div className="wt-tilte-main bdr-r-3 bdr-primary bdr-solid">
+            <small className="wt-small-title">Best Clients</small>
+            <h2 className="m-b5">Our Client says</h2>
           </div>
-          <div class="title-right-detail">
+          <div className="title-right-detail">
             <p>
-              We are uncompetitor in architectural solutions Friendly neighbour
+              We are uncompetitive in architectural solutions Friendly neighbors
               there that power. Keep away Architecture who try to Ambitions
               people do that really great.
             </p>
           </div>
         </div>
 
-        <div class="testimonial-slider">
-          <div id="sync1" class="owl-carousel owl-theme">
-            <div class="item">
-              <div class="testimonial-slider-content clearfix">
-                <div class="testimonial-1 clearfix">
-                  <div class="testimonial-text">
-                    <div class="testimonial-paragraph">
-                      <div class="quote-left"></div>
-                      <p>
-                        “Today we can tell you, thanks to your passion, hard
-                        work creativity, and expertise, you delivered us the
-                        most beautiful house great looks. today we can tell you,
-                        design is concerened with how things work, how they are
-                        controled, and the nature of the interaction between
-                        people and technology.{" "}
-                      </p>
-                    </div>
-                    <div class="testimonial-detail ">
-                      <h4 class="testimonial-name m-b5">Poul Anderson</h4>
-                    </div>
-                    <div class="testimonial-detail ">
-                      <span class="testimonial-position">Architect</span>
+        <div className="testimonial-slider">
+          {/* Main Swiper */}
+          <Swiper
+            spaceBetween={10}
+            slidesPerView={1}
+            thumbs={{
+              swiper:
+                thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null,
+            }}
+            modules={[Navigation, Pagination, Scrollbar, A11y, Thumbs]} // Include the Thumbs module
+            className="mainSwiper"
+          >
+            {testimonies.map((tes, index) => {
+              return (
+                <SwiperSlide key={index}>
+                  <div className="item">
+                    <div className="testimonial-slider-content clearfix">
+                      <div className="testimonial-1 clearfix">
+                        <div className="testimonial-text">
+                          <div className="testimonial-paragraph">
+                            <div className="quote-left"></div>
+                            <p>{tes?.comment}</p>
+                          </div>
+                          <div className="testimonial-detail">
+                            <h4 className="testimonial-name m-b5">
+                              {tes?.name}
+                            </h4>
+                          </div>
+                          <div className="testimonial-detail">
+                            <span className="testimonial-position">
+                              {tes?.position}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="testimonial-pic-block">
+                          <div className="testimonial-pic">
+                            <img
+                              src={backend_url + "/" + tes?.image}
+                              alt={tes?.name}
+                            />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div class="testimonial-pic-block">
-                    <div class="testimonial-pic">
-                      <img src={testOne} alt="" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
 
-            <div class="item">
-              <div class="testimonial-slider-content clearfix">
-                <div class="testimonial-1 clearfix">
-                  <div class="testimonial-text">
-                    <div class="testimonial-paragraph">
-                      <div class="quote-left"></div>
-                      <p>
-                        “Today we can tell you, thanks to your passion, hard
-                        work creativity, and expertise, you delivered us the
-                        most beautiful house great looks. today we can tell you,
-                        design is concerened with how things work, how they are
-                        controled, and the nature of the interaction between
-                        people and technology.{" "}
-                      </p>
+          {/* Thumbnail Swiper */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+            }}
+          >
+            <Swiper
+              onSwiper={setThumbsSwiper} // Pass the thumbnail swiper instance to the state
+              spaceBetween={10}
+              slidesPerView={3}
+              modules={[Thumbs, Navigation, Pagination]}
+              watchSlidesProgress
+              navigation
+              className="thumbSwiper"
+            >
+              {testimonies.map((tes, index) => {
+                return (
+                  <SwiperSlide key={index}>
+                    <div className="item">
+                      <div className="wt-media">
+                        <img
+                          src={backend_url + "/" + tes?.image}
+                          alt={tes?.name}
+                          style={stylesheet}
+                        />
+                      </div>
                     </div>
-                    <div class="testimonial-detail ">
-                      <h4 class="testimonial-name m-b5">Poul Anderson</h4>
-                    </div>
-                    <div class="testimonial-detail ">
-                      <span class="testimonial-position">Architect</span>
-                    </div>
-                  </div>
-                  <div class="testimonial-pic-block">
-                    <div class="testimonial-pic">
-                      <img src={testTwo} alt="" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="testimonial-slider-content clearfix">
-                <div class="testimonial-1 clearfix">
-                  <div class="testimonial-text">
-                    <div class="testimonial-paragraph">
-                      <div class="quote-left"></div>
-                      <p>
-                        “Today we can tell you, thanks to your passion, hard
-                        work creativity, and expertise, you delivered us the
-                        most beautiful house great looks. today we can tell you,
-                        design is concerened with how things work, how they are
-                        controled, and the nature of the interaction between
-                        people and technology.{" "}
-                      </p>
-                    </div>
-                    <div class="testimonial-detail ">
-                      <h4 class="testimonial-name m-b5">Poul Anderson</h4>
-                    </div>
-                    <div class="testimonial-detail ">
-                      <span class="testimonial-position">Architect</span>
-                    </div>
-                  </div>
-                  <div class="testimonial-pic-block">
-                    <div class="testimonial-pic">
-                      <img src={testThree} alt="" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="testimonial-slider-content clearfix">
-                <div class="testimonial-1 clearfix">
-                  <div class="testimonial-text">
-                    <div class="testimonial-paragraph">
-                      <div class="quote-left"></div>
-                      <p>
-                        “Today we can tell you, thanks to your passion, hard
-                        work creativity, and expertise, you delivered us the
-                        most beautiful house great looks. today we can tell you,
-                        design is concerened with how things work, how they are
-                        controled, and the nature of the interaction between
-                        people and technology.{" "}
-                      </p>
-                    </div>
-                    <div class="testimonial-detail ">
-                      <h4 class="testimonial-name m-b5">Poul Anderson</h4>
-                    </div>
-                    <div class="testimonial-detail ">
-                      <span class="testimonial-position">Architect</span>
-                    </div>
-                  </div>
-                  <div class="testimonial-pic-block">
-                    <div class="testimonial-pic">
-                      <img src={testFour} alt="" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="item">
-              <div class="testimonial-slider-content clearfix">
-                <div class="testimonial-1 clearfix">
-                  <div class="testimonial-text">
-                    <div class="testimonial-paragraph">
-                      <div class="quote-left"></div>
-                      <p>
-                        “Today we can tell you, thanks to your passion, hard
-                        work creativity, and expertise, you delivered us the
-                        most beautiful house great looks. today we can tell you,
-                        design is concerened with how things work, how they are
-                        controled, and the nature of the interaction between
-                        people and technology.{" "}
-                      </p>
-                    </div>
-                    <div class="testimonial-detail ">
-                      <h4 class="testimonial-name m-b5">Poul Anderson</h4>
-                    </div>
-                    <div class="testimonial-detail ">
-                      <span class="testimonial-position">Architect</span>
-                    </div>
-                  </div>
-                  <div class="testimonial-pic-block">
-                    <div class="testimonial-pic">
-                      <img src={testFive} alt="" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div id="sync2" class="owl-carousel owl-theme testimonial-1-thumb">
-            <div class="item">
-              <div class="wt-media">
-                <img src={testOne} alt="" style={stylesheet} />
-              </div>
-            </div>
-            <div class="item">
-              <div class="wt-media">
-                <img src={testTwo} alt="" style={stylesheet} />
-              </div>
-            </div>
-            <div class="item">
-              <div class="wt-media">
-                <img src={testThree} alt="" style={stylesheet} />
-              </div>
-            </div>
-            <div class="item">
-              <div class="wt-media">
-                <img src={testFour} alt="" style={stylesheet} />
-              </div>
-            </div>
-            <div class="item">
-              <div class="wt-media">
-                <img src={testFive} alt="" style={stylesheet} />
-              </div>
-            </div>
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
           </div>
         </div>
       </div>
     </section>
-    /* <!-- TESTIMONIAL END --> */
   );
 }
+const stylesheet = {
+  height: "60px",
+};
