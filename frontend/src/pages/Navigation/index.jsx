@@ -90,7 +90,8 @@ export default function Navigation() {
                     <Link to={"/project_grid"}>Projects</Link>
                   </li>
 
-                  {/* <li class="submenu-direction">
+                  {/*
+                   <li class="submenu-direction">
                     <a href="javascript:;">Projects</a>
                     <ul class="sub-menu">
                       <li>
@@ -103,7 +104,8 @@ export default function Navigation() {
                         <Link to={"/project_detail"}>Project Detail</Link>
                       </li>
                     </ul>
-                  </li> */}
+                  </li>
+                   */}
 
                   <li>
                     <Link to={"/page_about_us"}>About us</Link>
@@ -112,13 +114,27 @@ export default function Navigation() {
                     <Link to={"/page_contact_us"}>Contact us</Link>
                   </li>
 
-                  <li>
-                    <Link to={"/sign_in"}>Login</Link>
-                  </li>
-
-                  <li>
-                    <Link to={"/sign_up"}>Register</Link>
-                  </li>
+                  {false && (
+                    <li class="submenu-direction">
+                      <a href="javascript:;">Authentication</a>
+                      <ul class="sub-menu">
+                        {true ? (
+                          <li>
+                            <li>
+                              <Link to={"/sign_in"}>Login</Link>
+                            </li>
+                            <li>
+                              <Link to={"/sign_up"}>Register</Link>
+                            </li>
+                          </li>
+                        ) : (
+                          <li>
+                            <Link to={"/project_detail"}>Project Detail</Link>
+                          </li>
+                        )}
+                      </ul>
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>

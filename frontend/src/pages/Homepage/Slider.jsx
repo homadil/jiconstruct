@@ -21,9 +21,9 @@ import { DataContext } from "../../store";
 import HomeImageSlide from "../../components/HomeImageSlide";
 
 export default function Slider() {
-  const { homeHeader, backend_url } = useContext(DataContext);
+  const { homeHeader, backend_url, projects } = useContext(DataContext);
   const [animeToggle, setAnimeToggle] = useState(false);
-
+  console.log(projects);
   // Restart animation on slide change
   const handleSlideChange = (swiper) => {
     setAnimeToggle(!animeToggle);

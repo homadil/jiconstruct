@@ -11,14 +11,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
-import { EditorState, convertToRaw } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import draftToHtml from "draftjs-to-html";
+import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import apiRequest from "../../apiRequest";
-
+import QuillEditor from "../QuillEditor";
 export default function ProjectForm({
   update,
   formData,
@@ -50,27 +46,11 @@ export default function ProjectForm({
     accept: formData.exe === "image" ? "image/*" : "video/*",
     multiple: true,
   });
+  const [value, setValue] = useState(formData.content);
 
-  const uploadImageCallback = (file) => {
-    return new Promise((resolve, reject) => {
-      const formData = new FormData();
-      formData.append("image", file);
-
-      apiRequest
-        .post("/upload", formData)
-        .then((response) => {
-          resolve({ data: { link: response.data.imageUrl } });
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  };
-  const handleContentChange = (editorState) => {
-    const rawContentState = convertToRaw(editorState.getCurrentContent()); // Convert to raw draft-js state
-    const htmlContent = draftToHtml(rawContentState); // Convert raw state to HTML
-    setFormData({ ...formData, content: htmlContent }); // Save as stringed HTML in formData
-  };
+  useEffect(() => {
+    setFormData({ ...formData, content: value });
+  }, [value, formData, setFormData]);
 
   return (
     <div>
@@ -121,59 +101,42 @@ export default function ProjectForm({
             required={update ? false : true}
           />
 
-          <Box sx={{ mt: 2 }}>
-            <Editor
-              editorState={formData.content}
-              onEditorStateChange={handleContentChange}
-              required={update ? false : true}
-              toolbar={{
-                options: [
-                  "inline",
-                  "blockType",
-                  "fontSize",
-                  "fontFamily",
-                  "list",
-                  "textAlign",
-                  "colorPicker",
-                  "link",
-                  "emoji",
-                  "image",
-                  "history",
-                ],
-                inline: {
-                  options: [
-                    "bold",
-                    "italic",
-                    "underline",
-                    "strikethrough",
-                    "monospace",
-                    "superscript",
-                    "subscript",
-                  ],
-                },
-                fontFamily: {
-                  options: [
-                    "Arial",
-                    "Georgia",
-                    "Impact",
-                    "Tahoma",
-                    "Times New Roman",
-                    "Verdana",
-                  ],
-                },
-                list: {
-                  options: ["unordered", "ordered", "indent", "outdent"],
-                },
-                textAlign: { options: ["left", "center", "right", "justify"] },
-                link: { options: ["link", "unlink"] },
-                image: {
-                  uploadEnabled: true,
-                  uploadCallback: uploadImageCallback, // Define this function for image upload
-                  alt: { present: true, mandatory: false },
-                },
-              }}
-            />
-          </Box>
+          <TextField
+            label="Country"
+            name="country"
+            value={formData.country}
+            onChange={handleFormChange}
+            fullWidth
+            style={styleSheet.addGap}
+            required={update ? false : true}
+          />
+          <TextField
+            label="State"
+            name="state"
+            value={formData.state}
+            onChange={handleFormChange}
+            fullWidth
+            style={styleSheet.addGap}
+            required={update ? false : true}
+          />
+          <TextField
+            label="City"
+            name="city"
+            value={formData.city}
+            onChange={handleFormChange}
+            fullWidth
+            style={styleSheet.addGap}
+            required={update ? false : true}
+          />
+          <TextField
+            label="Address"
+            name="address"
+            value={formData.address}
+            onChange={handleFormChange}
+            fullWidth
+            style={styleSheet.addGap}
+            required={update ? false : true}
+          />
 
           <TextField
             label="Start Date"
@@ -323,6 +286,10 @@ export default function ProjectForm({
               ))}
             </Select>
           </FormControl>
+
+          <Box sx={{ mt: 2 }}>
+            <QuillEditor value={value} setValue={setValue} />
+          </Box>
 
           {update && (
             <FormControlLabel

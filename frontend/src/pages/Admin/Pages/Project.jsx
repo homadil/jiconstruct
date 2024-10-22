@@ -41,6 +41,11 @@ const Project = () => {
     location_id: null,
     budget: "",
     show: "",
+    country: "",
+    state: "",
+    city: "",
+    address: "",
+    deletePrevMedia: false,
   });
   const [openModal, setOpenModal] = useState(false);
   const [update, setUpdate] = useState(false);
@@ -118,21 +123,26 @@ const Project = () => {
     if (project) {
       setUpdate(true);
       setCurrentProjectId(project.id);
+      console.log(project);
       setFormData({
         title: project.title,
         description: project.description,
         content: project.content,
-        start_date: project.start_date,
-        end_date: project.end_date,
+        start_date: new Date(project.start_date).toISOString().split("T")[0],
+        end_date: new Date(project.end_date).toISOString().split("T")[0],
         client: project.client,
         director: project.director,
         location_id: project.location_id,
         budget: project.budget,
+        country: project.location.country,
+        state: project.location.state,
+        city: project.location.city,
+        address: project.location.address,
       });
       // Reset selected options
-      setSelectedCategories(project.categories.map((c) => c.id));
-      setSelectedUrls(project.urls.map((u) => u.id));
-      setSelectedTags(project.tags.map((t) => t.id));
+      setSelectedCategories(project.Categories.map((c) => c.id));
+      setSelectedUrls(project.Urls.map((u) => u.id));
+      setSelectedTags(project.Tags.map((t) => t.id));
     } else {
       setUpdate(false);
       setCurrentProjectId(null);
@@ -161,34 +171,69 @@ const Project = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
   const handleSaveProject = (e) => {
     e.preventDefault();
-    const projectData = {
-      ...formData,
-      categories: selectedCategories,
-      urls: selectedUrls,
-      tags: selectedTags,
-      files: files,
-    };
 
-    console.log(projectData);
-    // try {
-    //   if (update) {
-    //     apiRequest.put(`/projects/${currentProjectId}`, projectData).then();
-    //   } else {
-    //     apiRequest.put(`/projects`, projectData).then();
-    //   }
-    //   fetchProjects(); // Refresh project list
-    //   handleCloseModal();
-    // } catch (error) {
-    //   toast.error("Failed to save project");
-    // }
+    const newFormData = new FormData();
+
+    // Append file objects
+    for (let i = 0; i < files.length; i++) {
+      newFormData.append("files", files[i]);
+    }
+
+    // Append URL objects as JSON strings
+    for (let i = 0; i < urls.length; i++) {
+      newFormData.append("urls", JSON.stringify(urls[i])); // Stringify the URL objects
+    }
+
+    // Append category objects as JSON strings
+    for (let i = 0; i < categories.length; i++) {
+      newFormData.append("categories", JSON.stringify(categories[i])); // Stringify the category objects
+    }
+
+    // Append tag objects as JSON strings
+    for (let i = 0; i < tags.length; i++) {
+      newFormData.append("tags", JSON.stringify(tags[i])); // Stringify the tag objects
+    }
+
+    // Append other fields
+    newFormData.append("title", formData.title);
+    newFormData.append("description", formData.description);
+    newFormData.append("content", formData.content);
+    newFormData.append("start_date", formData.start_date);
+    newFormData.append("end_date", formData.end_date);
+    newFormData.append("client", formData.client);
+    newFormData.append("budget", formData.budget);
+    newFormData.append("director", formData.director);
+    newFormData.append("country", formData.country);
+    newFormData.append("state", formData.state);
+    newFormData.append("city", formData.city);
+    newFormData.append("address", formData.address);
+    newFormData.append("location_id", formData.location_id);
+    newFormData.append("show", formData.show);
+    newFormData.append("deletePrevMedia", formData.deletePrevMedia);
+
+    try {
+      if (update) {
+        apiRequest
+          .put(`/projects/${currentProjectId}`, newFormData)
+          .then((res) => {
+            console.log(res);
+          });
+      } else {
+        apiRequest.post(`/projects`, newFormData);
+      }
+      fetchProjects(); // Refresh project list
+      handleCloseModal();
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to save project");
+    }
   };
 
   const handleDeleteProject = async (id) => {
     try {
-      await apiRequest.delete(`/api/projects/${id}`);
+      await apiRequest.delete(`/projects/${id}`);
       fetchProjects(); // Refresh project list
     } catch (error) {
       toast.error("Failed to delete project");

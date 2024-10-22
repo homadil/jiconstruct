@@ -6,13 +6,13 @@ const Partners = require("../database/models/Partner");
 const create = async (req, res) => {
   try {
     // Check if file was uploaded
-    if (!req.files || req.files.length === 0) {
+    if (!req.files["files"] || req.files["files"].length === 0) {
       return res.status(400).json({ msg: "No media files uploaded." });
     }
 
     // let imagePath = req.files ? `images/${req.files.filename}` : null;
 
-    let imagePath = req.files[0].path.replace(/^public[\\/]/, ""); // Remove 'public/' from the file path
+    let imagePath = req.files["files"][0].path.replace(/^public[\\/]/, ""); // Remove 'public/' from the file path
 
     const partnerData = {
       ...req.body,
@@ -63,9 +63,12 @@ const update = async (req, res) => {
 
     let imagePath = partner.image; // Keep the current image by default
 
-    if (req.files && req.files.length > 0) {
+    if (req.files["files"] && req.files["files"].length > 0) {
       // Get the new image path
-      const newImagePath = req.files[0].path.replace(/^public[\\/]/, "");
+      const newImagePath = req.files[0]["files"].path.replace(
+        /^public[\\/]/,
+        ""
+      );
 
       // If the Partners already has an image, delete the old one
       const OldPath = path.join(__dirname, "..", "public", partner.image); // Get absolute path

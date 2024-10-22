@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Grid,
@@ -14,6 +14,7 @@ import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import apiRequest from "../../../apiRequest";
 import { Container } from "react-bootstrap";
 import BlogForm from "../../../components/DataBaseForms/BlogForm";
+import { DataContext } from "../../../store";
 
 const modalStyle = {
   position: "absolute",
@@ -30,7 +31,10 @@ const modalStyle = {
 
 export default function Blog() {
   const [blogs, setBlogs] = useState([]);
+  const [blog, setBlog] = useState([]);
   const [openModal, setOpenModal] = React.useState(false);
+  const { backend_url } = useContext(DataContext);
+  const [update, setUpdate] = useState(false);
   useEffect(() => {
     apiRequest.get("/blogs").then((res) => {
       const blogs = res;
@@ -40,8 +44,11 @@ export default function Blog() {
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
-  const handleEdit = (id) => {
+  const handleEdit = (blog) => {
     // Logic to update blog by ID
+    setBlog(blog);
+    setUpdate(true);
+    handleOpenModal();
   };
 
   const handleDelete = (id) => {
@@ -56,7 +63,10 @@ export default function Blog() {
         variant="contained"
         color="primary"
         startIcon={<FontAwesomeIcon icon={faPlus} />}
-        onClick={handleOpenModal}
+        onClick={() => {
+          handleOpenModal();
+          setUpdate(false);
+        }}
         style={{ marginBottom: "20px" }}
       >
         Create New Blog
@@ -67,6 +77,7 @@ export default function Blog() {
           <Grid item xs={12} sm={6} md={4} key={blog.id}>
             <Card>
               <CardContent>
+                <img src={backend_url + "/" + blog.show} alt="" />
                 <Typography variant="h5" component="div">
                   {blog.title}
                 </Typography>
@@ -81,10 +92,7 @@ export default function Blog() {
                     marginTop: "10px",
                   }}
                 >
-                  <IconButton
-                    color="primary"
-                    onClick={() => handleEdit(blog.id)}
-                  >
+                  <IconButton color="primary" onClick={() => handleEdit(blog)}>
                     <FontAwesomeIcon icon={faEdit} />
                   </IconButton>
 
@@ -105,7 +113,7 @@ export default function Blog() {
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box sx={modalStyle}>
           {/* Form or Content for Add Modal */}
-          <BlogForm />
+          <BlogForm blog={blog} update={update} />
           <Button
             onClick={handleCloseModal}
             color="danger"

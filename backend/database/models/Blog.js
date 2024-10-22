@@ -21,14 +21,6 @@ const Blog = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    author_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: "users",
-        key: "id",
-      },
-    },
     show: {
       type: DataTypes.STRING, // Can store both image or video paths
       allowNull: true,

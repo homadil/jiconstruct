@@ -7,38 +7,107 @@ import {
   Select,
   InputLabel,
   FormControl,
+  Typography,
+  FormControlLabel,
+  Switch,
+  Chip,
 } from "@mui/material";
-import { EditorState, convertToRaw } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import draftToHtml from "draftjs-to-html";
+import QuillEditor from "../QuillEditor";
 import apiRequest from "../../apiRequest";
 import Loader from "../Loader";
+import { useDropzone } from "react-dropzone";
 
-export default function BlogForm(update = false, id) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [content, setContent] = useState(EditorState.createEmpty());
-  const [show, setShow] = useState("");
-  const [category, setCategory] = useState("");
-  const [serverCategory, setServerCategory] = useState([]);
-  const [tag, setTag] = useState([]);
-  const [serverTag, setServerTag] = useState([]);
-  const [media, setMedia] = useState(null);
-  const [loaders, setLoader] = useState({
+export default function BlogForm({ blog, update }) {
+  const [formData, setFormData] = useState({
+    title: update ? blog?.title : "",
+    description: update ? blog?.description : "",
+    content: update ? blog?.content : "",
+    show: "",
+    quote: update ? blog?.quote : "",
+    deletePrevMedia: false,
+  });
+  const [categories, setCategories] = useState([]);
+  const [urls, setUrls] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState(
+    update ? blog.Categories.map((c) => c.id) : []
+  );
+  const [selectedUrls, setSelectedUrls] = useState(
+    update ? blog.Urls.map((u) => u.id) : []
+  );
+  const [selectedTags, setSelectedTags] = useState(
+    update ? blog.Tags.map((t) => t.id) : []
+  );
+
+  const [files, setFiles] = useState([]);
+  const [value, setValue] = useState(formData.content);
+  const [loading, setLoading] = useState({
     category: false,
+    url: false,
     tag: false,
   });
 
-  const handleContentChange = (state) => {
-    setContent(state);
+  useEffect(() => {
+    setLoading({ ...loading, category: true });
+    setLoading({ ...loading, url: true });
+    setLoading({ ...loading, tag: true });
+
+    fetchCategories();
+    fetchUrls();
+    fetchTags();
+  }, []);
+
+  useEffect(() => {
+    setFormData({ ...formData, content: value });
+  }, [value, setValue]);
+
+  const fetchCategories = async () => {
+    // Fetch categories from the backend
+    apiRequest
+      .get("/categories")
+      .then((res) => {
+        setCategories(res);
+      })
+      .finally(() => {
+        setLoading({ ...loading, category: false });
+      });
   };
 
-  const handleFileChange = (e) => {
-    setMedia(e.target.files[0]);
+  const fetchUrls = async () => {
+    // Fetch URLs from the backend
+    apiRequest
+      .get("/urls")
+      .then((res) => {
+        setUrls(res);
+      })
+      .finally(() => {
+        setLoading({ ...loading, url: false });
+      });
   };
+
+  const fetchTags = async () => {
+    // Fetch tags from the backend
+    apiRequest
+      .get("/tags")
+      .then((res) => {
+        setTags(res);
+      })
+      .finally(() => {
+        setLoading({ ...loading, tag: false });
+      });
+  };
+  const handleDrop = (acceptedFiles) => {
+    setFiles(acceptedFiles);
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: handleDrop,
+    name: "files",
+    multiple: true,
+  });
 
   function create(formData) {
+    console.log(formData);
     apiRequest
       .post("/blogs", formData)
       .then((response) => {
@@ -49,9 +118,9 @@ export default function BlogForm(update = false, id) {
       });
   }
 
-  function put(formData) {
+  function put(formData, id) {
     apiRequest
-      .post(`/blogs/${id}`, formData)
+      .put(`/blogs/${id}`, formData)
       .then((response) => {
         console.log("Blog created successfully:", response.data);
       })
@@ -60,192 +129,248 @@ export default function BlogForm(update = false, id) {
       });
   }
 
-  const handleSubmit = () => {
-    const contentHtml = draftToHtml(convertToRaw(content.getCurrentContent()));
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("content", contentHtml);
-    formData.append("category", category);
-    formData.append("tag", tag);
-    formData.append("show", show);
-    if (media) {
-      formData.append("media", media);
+    const newFormData = new FormData();
+
+    // Append file objects
+    for (let i = 0; i < files.length; i++) {
+      newFormData.append("files", files[i]);
     }
+
+    // Append URL objects as JSON strings
+    for (let i = 0; i < urls.length; i++) {
+      newFormData.append("urls", JSON.stringify(urls[i])); // Stringify the URL objects
+    }
+
+    // Append category objects as JSON strings
+    for (let i = 0; i < categories.length; i++) {
+      newFormData.append("categories", JSON.stringify(categories[i])); // Stringify the category objects
+    }
+
+    // Append tag objects as JSON strings
+    for (let i = 0; i < tags.length; i++) {
+      newFormData.append("tags", JSON.stringify(tags[i])); // Stringify the tag objects
+    }
+
+    // Append other fields
+    newFormData.append("title", formData.title);
+    newFormData.append("description", formData.description);
+    newFormData.append("content", formData.content);
+    newFormData.append("show", formData.show);
+    newFormData.append("quote", formData.quote);
+    newFormData.append("deletePrevMedia", formData.deletePrevMedia);
 
     if (update) {
-      put(formData, id);
+      put(newFormData, blog.id);
     } else {
-      create(formData);
+      create(newFormData);
     }
   };
 
-  useEffect(() => {
-    apiRequest
-      .get("/categories")
-      .then((res) => {
-        setServerCategory(res);
-      })
-      .catch()
-      .finally(() => setLoader((prev) => ({ ...prev, category: true })));
-
-    apiRequest
-      .get("/tags")
-      .then((res) => {
-        setServerTag(res);
-      })
-      .catch()
-      .finally(() => setLoader((prev) => ({ ...prev, tag: true })));
-  }, []);
-
-  const uploadImageCallback = (file) => {
-    return new Promise((resolve, reject) => {
-      const formData = new FormData();
-      formData.append("image", file);
-
-      apiRequest
-        .post("/upload", formData)
-        .then((response) => {
-          resolve({ data: { link: response.data.imageUrl } });
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  };
-
-  if (!loaders.category || !loaders.tag) {
+  if (loading.category || loading.tag || loading.url) {
     return <Loader />;
   }
 
   return (
-    <form action="" onSubmit={handleSubmit}>
+    <form encType="multipart/form-data" onSubmit={handleSubmit}>
       <Box>
-        <h3>{update ? " Add New Blog" : "Update Blog"}</h3>
+        <h3>{!update ? "Add New Blog" : "Update Blog"}</h3>
       </Box>
       <Box sx={{ p: 3 }}>
         <TextField
           label="Title"
           variant="outlined"
           fullWidth
+          name="title"
           margin="normal"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
         />
 
         <TextField
           label="Description"
           variant="outlined"
           fullWidth
+          name="description"
           margin="normal"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={formData.description}
+          onChange={(e) =>
+            setFormData({ ...formData, description: e.target.value })
+          }
         />
-
-        <Box sx={{ mt: 2 }}>
-          <Editor
-            editorState={content}
-            onEditorStateChange={handleContentChange}
-            toolbar={{
-              options: [
-                "inline",
-                "blockType",
-                "fontSize",
-                "fontFamily",
-                "list",
-                "textAlign",
-                "colorPicker",
-                "link",
-                "emoji",
-                "image",
-                "history",
-              ],
-              inline: {
-                options: [
-                  "bold",
-                  "italic",
-                  "underline",
-                  "strikethrough",
-                  "monospace",
-                  "superscript",
-                  "subscript",
-                ],
-              },
-              fontFamily: {
-                options: [
-                  "Arial",
-                  "Georgia",
-                  "Impact",
-                  "Tahoma",
-                  "Times New Roman",
-                  "Verdana",
-                ],
-              },
-              list: {
-                options: ["unordered", "ordered", "indent", "outdent"],
-              },
-              textAlign: { options: ["left", "center", "right", "justify"] },
-              link: { options: ["link", "unlink"] },
-              image: {
-                uploadEnabled: true,
-                uploadCallback: uploadImageCallback, // Define this function for image upload
-                alt: { present: true, mandatory: false },
-              },
-            }}
-          />
-        </Box>
-
-        <FormControl fullWidth margin="normal">
-          <InputLabel id="category-select-label">Category</InputLabel>
-          <Select
-            labelId="category-select-label"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            label="Category"
-          >
-            {serverCategory.map((cat) => (
-              <MenuItem key={cat.id} value={cat.id}>
-                {cat.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <FormControl fullWidth margin="normal">
-          <InputLabel id="tag-select-label">Tags</InputLabel>
-          <Select
-            labelId="tag-select-label"
-            value={tag}
-            onChange={(e) => setTag(e.target.value)}
-            label="Tags"
-            multiple
-          >
-            {serverTag.map((t) => (
-              <MenuItem key={t.id} value={t.id}>
-                {t.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
 
         <TextField
-          label="Show Image"
+          label="Quote"
           variant="outlined"
           fullWidth
-          value={show}
+          name="quote"
           margin="normal"
-          multiple="false"
-          type="file"
-          onChange={(e) => {
-            setShow(e.currentTarget.value);
-          }}
+          value={formData.quote}
+          onChange={(e) => setFormData({ ...formData, quote: e.target.value })}
         />
 
-        <Button variant="contained" color="primary" sx={{ mt: 3 }}>
-          {update ? "Submit" : "Update"}
+        <label className="d-flex">
+          <Typography variant="body1" style={{ wordWrap: "normal" }}>
+            Display Media
+          </Typography>
+          <input
+            type="file"
+            accept="image/*"
+            style={styleSheet.addGap}
+            name="show"
+            className="form-control mt-3"
+            required={update ? false : true}
+            onChange={(e) => {
+              setFormData({ ...formData, show: e.target.files[0] });
+            }}
+          />
+        </label>
+
+        <FormControl fullWidth>
+          <InputLabel>Categories</InputLabel>
+          <Select
+            multiple
+            style={styleSheet.addGap}
+            value={selectedCategories}
+            onChange={(e) => setSelectedCategories(e.target.value)}
+            renderValue={(selected) => (
+              <div>
+                {selected.map((value) => (
+                  <Chip
+                    key={value}
+                    label={categories.find((cat) => cat.id === value)?.name}
+                  />
+                ))}
+              </div>
+            )}
+          >
+            {categories.map((category) => (
+              <MenuItem key={category.id} value={category.id}>
+                {category.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <FormControl fullWidth>
+          <InputLabel>URLs</InputLabel>
+          <Select
+            multiple
+            style={styleSheet.addGap}
+            value={selectedUrls}
+            onChange={(e) => setSelectedUrls(e.target.value)}
+            renderValue={(selected) => (
+              <div>
+                {selected.map((value) => (
+                  <Chip
+                    key={value}
+                    label={urls.find((url) => url.id === value)?.name}
+                  />
+                ))}
+              </div>
+            )}
+          >
+            {urls.map((url) => (
+              <MenuItem key={url.id} value={url.id}>
+                {url.name} {`{ ${url.link}}`}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <FormControl fullWidth>
+          <InputLabel>Tags</InputLabel>
+          <Select
+            multiple
+            value={selectedTags}
+            style={styleSheet.addGap}
+            onChange={(e) => setSelectedTags(e.target.value)}
+            renderValue={(selected) => (
+              <div>
+                {selected.map((value) => (
+                  <Chip
+                    key={value}
+                    label={tags.find((tag) => tag.id === value)?.name}
+                  />
+                ))}
+              </div>
+            )}
+          >
+            {tags.map((tag) => (
+              <MenuItem key={tag.id} value={tag.id}>
+                {tag.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <Box sx={{ mt: 2 }}>
+          <QuillEditor value={value} setValue={setValue} />
+        </Box>
+
+        {update && (
+          <FormControlLabel
+            control={
+              <Switch
+                checked={formData.deletePrevMedia} // Control the checked state
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    deletePrevMedia: e.target.checked,
+                  })
+                }
+                color="primary" // Change color as needed
+              />
+            }
+            label="Delete Previous Media" // Label for the switch
+          />
+        )}
+
+        {/* File Drag and Drop */}
+        <div
+          {...getRootProps()}
+          className={`dropzone border p-4 text-center mb-3 ${
+            isDragActive ? "bg-light" : ""
+          }`}
+          style={{ cursor: "pointer" }}
+        >
+          <input {...getInputProps()} required={update ? false : true} />
+          <p>
+            {isDragActive
+              ? "Drop the files here..."
+              : "Drag & drop files here, or click to select files"}
+          </p>
+          <p>Upload Files</p>
+        </div>
+
+        {/* Display Selected Files */}
+        {files.length > 0 && (
+          <div>
+            <h5>Selected Files:</h5>
+            <ul className="list-group">
+              {files.map((file, idx) => (
+                <li key={idx} className="list-group-item">
+                  {file.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ mt: 3 }}
+          type="submit"
+        >
+          {!update ? "Submit" : "Update"}
         </Button>
       </Box>
     </form>
   );
 }
+const styleSheet = {
+  addGap: { margin: "6px" },
+};

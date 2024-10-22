@@ -9,14 +9,14 @@ exports.create = async (req, res) => {
     let { parent_id, type } = req.body; // No need to pass `exe`, it's determined from multer logic
     parent_id = parent_id === "null" ? null : parent_id;
     // Check if files are uploaded
-    if (!req.files || req.files.length === 0) {
+    if (!req.files["files"] || req.files["files"].length === 0) {
       return res.status(400).json({ msg: "No media files uploaded." });
     }
 
     const mediaEntries = [];
 
     // Process each file in the files array
-    for (const file of req.files) {
+    for (const file of req.files["files"]) {
       let filePath = file.path.replace(/^public[\\/]/, ""); // Remove 'public/' from the file path
 
       // Automatically determine `exe` (file type) based on the file extension
@@ -110,8 +110,8 @@ exports.update = async (req, res) => {
     }
 
     // If new files are provided, process the first new file
-    if (req.files && req.files.length > 0) {
-      const newFile = req.files[0]; // Assuming a single file for simplicity
+    if (req.files["files"] && req.files["files"].length > 0) {
+      const newFile = req.files["files"][0]; // Assuming a single file for simplicity
       const newFilePath = newFile.path.replace(/^public[\\/]/, ""); // Remove 'public/' prefix
 
       // Determine the file type based on the file extension

@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../index"); // Sequelize instance
+const Project = require("./Project");
 
 // Define the Category model
 const Category = sequelize.define(

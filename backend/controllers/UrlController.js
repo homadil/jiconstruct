@@ -7,14 +7,14 @@ exports.create = async (req, res) => {
   try {
     let imagePath = null;
 
-    let checker = req.files || req.body.icon;
+    let checker = req.files["files"] || req.body.icon;
 
     if (!checker) {
       return res.status(400).json({ msg: "must include either icon or image" });
     }
     // Check if file was uploaded
-    if (req.files.length > 0) {
-      imagePath = req.files[0].path.replace(/^public[\\/]/, "");
+    if (req.files["files"].length > 0) {
+      imagePath = req.files["files"][0].path.replace(/^public[\\/]/, "");
     }
 
     // let imagePath = req.files ? `images/${req.files.filename}` : null;
@@ -69,9 +69,12 @@ exports.update = async (req, res) => {
 
     let imagePath = url.image; // Keep the current image by default
 
-    if (req.files && req.files.length > 0) {
+    if (req.files["files"] && req.files["files"].length > 0) {
       // Get the new image path
-      const newImagePath = req.files[0].path.replace(/^public[\\/]/, "");
+      const newImagePath = req.files["files"][0].path.replace(
+        /^public[\\/]/,
+        ""
+      );
 
       // If the Url already has an image, delete the old one
       const OldPath = path.join(__dirname, "..", "public", url.image); // Get absolute path

@@ -14,87 +14,86 @@ const Team = require("./models/Team");
 const Testimony = require("./models/Testimony");
 
 // Define associations here
-Location.hasMany(User, { foreignKey: "location_id" }); // Location has many Users
-User.belongsTo(Location, { foreignKey: "location_id" }); // User belongs to Location
 
-User.hasMany(Blog, { foreignKey: "author_id" }); // Blog belongs to User
-Blog.belongsTo(User, { foreignKey: "author_id" });
+// Location <-> User (One-to-Many)
+Location.hasMany(User, { foreignKey: "location_id", as: "user" });
+User.belongsTo(Location, { foreignKey: "location_id", as: "location" });
 
-Project.belongsTo(Location, { foreignKey: "location_id" }); // Project has a location
-Location.hasMany(Project, { foreignKey: "location_id" }); // Location can have multiple projects
+// User <-> Blog (One-to-Many)
+User.hasMany(Blog, { foreignKey: "user_id", as: "blog" });
+Blog.belongsTo(User, { foreignKey: "user_id", as: "user" });
 
-Comment.belongsTo(User, { foreignKey: "user_id" }); // Comment belongs to User
-Comment.belongsTo(Blog, { foreignKey: "parent_id", constraints: false }); // Comment belongs to Blog
-Comment.belongsTo(Project, { foreignKey: "parent_id", constraints: false }); // Comment belongs to Project
+// Define associations with alias
+Location.hasMany(Project, { foreignKey: "location_id", as: "projects" });
+Project.belongsTo(Location, { foreignKey: "location_id", as: "location" });
 
-Tag.belongsToMany(Blog, { through: "BlogTags", foreignKey: "tag_id" }); // Blog <-> Tag relationship
-Blog.belongsToMany(Tag, { through: "BlogTags", foreignKey: "blog_id" });
+// User <-> Comment relationship
+User.hasMany(Comment, { foreignKey: "user_id", as: "comment" });
+Comment.belongsTo(User, { foreignKey: "user_id", as: "user" });
 
-Tag.belongsToMany(Project, { through: "ProjectTags", foreignKey: "tag_id" }); // Project <-> Tag relationship
-Project.belongsToMany(Tag, {
-  through: "ProjectTags",
-  foreignKey: "project_id",
+// Blog <-> Comment (Many-to-Many through BlogComment)
+Comment.belongsToMany(Blog, {
+  through: "BlogComment",
+  foreignKey: "comment_id",
 });
+Blog.belongsToMany(Comment, { through: "BlogComment", foreignKey: "blog_id" });
 
-// Blog associations
-Blog.belongsToMany(Category, { through: "BlogCategories" });
-Blog.hasMany(Media, { foreignKey: "parent_id" }); // Media belongs to Blog
-Blog.hasMany(Comment, { foreignKey: "parent_id" }); // Comment belongs to Blog
-
-// Category associations
-Category.belongsToMany(Blog, { through: "BlogCategories" });
-Category.belongsToMany(Project, { through: "ProjectCategories" }); // Category <-> Project relationship
-
-// Comment associations
-Comment.belongsTo(Blog, {
-  foreignKey: "parent_id",
-  constraints: false,
-  scope: { type: "blog" },
-});
-Comment.belongsTo(Project, {
-  foreignKey: "parent_id",
-  constraints: false,
-  scope: { type: "project" },
-});
-
-// Media associations
-Media.belongsTo(Blog, {
-  foreignKey: "parent_id",
-  constraints: false,
-  scope: { type: "blog" },
-});
-Media.belongsTo(Project, {
-  foreignKey: "parent_id",
-  constraints: false,
-  scope: { type: "project" },
-});
-
-// Blog <-> Url relationship
-Blog.belongsToMany(Url, { through: "BlogUrl", foreignKey: "blog_id" });
-Url.belongsToMany(Blog, { through: "BlogUrl", foreignKey: "url_id" });
-
-// Project <-> Url relationship
-Project.belongsToMany(Url, { through: "ProjectUrl", foreignKey: "project_id" });
-Url.belongsToMany(Project, { through: "ProjectUrl", foreignKey: "url_id" });
-
-// Project <-> Media relationship
-Project.belongsToMany(Media, {
-  through: "ProjectMedia",
-  foreignKey: "project_id",
-});
+// Project <-> Media (Many-to-Many through ProjectMedia)
 Media.belongsToMany(Project, {
   through: "ProjectMedia",
   foreignKey: "media_id",
 });
+Project.belongsToMany(Media, {
+  through: "ProjectMedia",
+  foreignKey: "project_id",
+});
 
-// Blog <-> Media relationship
-Blog.belongsToMany(Media, { through: "BlogMedia", foreignKey: "blog_id" });
+// Blog <-> Media (Many-to-Many through BlogMedia)
 Media.belongsToMany(Blog, { through: "BlogMedia", foreignKey: "media_id" });
+Blog.belongsToMany(Media, { through: "BlogMedia", foreignKey: "blog_id" });
+
+// Category <-> Blog and Project (Many-to-Many)
+Category.belongsToMany(Blog, {
+  through: "BlogCategories",
+  foreignKey: "category_id",
+});
+Blog.belongsToMany(Category, {
+  through: "BlogCategories",
+  foreignKey: "blog_id",
+});
+
+Category.belongsToMany(Project, {
+  through: "ProjectCategories",
+  foreignKey: "category_id",
+});
+Project.belongsToMany(Category, {
+  through: "ProjectCategories",
+  foreignKey: "project_id",
+});
+
+// Tag <-> Blog and Project (Many-to-Many)
+Tag.belongsToMany(Blog, { through: "BlogTag", foreignKey: "tag_id" });
+Blog.belongsToMany(Tag, { through: "BlogTag", foreignKey: "blog_id" });
+
+Tag.belongsToMany(Project, { through: "ProjectTag", foreignKey: "tag_id" });
+Project.belongsToMany(Tag, { through: "ProjectTag", foreignKey: "project_id" });
+
+// Blog <-> Url (Many-to-Many through BlogUrl)
+Blog.belongsToMany(Url, { through: "BlogUrl", foreignKey: "blog_id" });
+Url.belongsToMany(Blog, { through: "BlogUrl", foreignKey: "url_id" });
+
+// Project <-> Url (Many-to-Many through ProjectUrl)
+Project.belongsToMany(Url, { through: "ProjectUrl", foreignKey: "project_id" });
+Url.belongsToMany(Project, { through: "ProjectUrl", foreignKey: "url_id" });
+
+//
+Media.belongsTo(Project, { foreignKey: "parent_id", as: "project" });
+Media.belongsTo(Blog, { foreignKey: "parent_id", as: "blog" });
 
 // Sync database
 const syncDatabase = async () => {
   try {
-    await sequelize.sync({ alter: true }); // Use { force: true } to drop and recreate tables
+    await sequelize.sync({ alter: false }); // Use { force: true } to drop and recreate tables
     console.log("Database synchronized successfully.");
   } catch (error) {
     console.error("Error synchronizing database:", error);

@@ -368,13 +368,8 @@ export const DataProvider = ({ children }) => {
       ],
     },
   ]);
-  const [medias, setMedias] = useState([]);
 
-  const [projects, setProjects] = useState([
-    // Add your initial project data here
-    { id: 1, title: "Project 1", description: "Description of project 1" },
-    { id: 2, title: "Project 2", description: "Description of project 2" },
-  ]);
+  const [projects, setProjects] = useState([]);
 
   // Function to format the date
   const formatDate = (dateString) => {
@@ -418,30 +413,63 @@ export const DataProvider = ({ children }) => {
   const [testimonies, setTestimonies] = useState([]);
   const [teams, setTeams] = useState([]);
   const backend_url = process.env.REACT_APP_BACKEND_URL;
+  const [loaders, setLoaders] = useState({
+    medias: false,
+    testimonies: false,
+    teams: false,
+    projects: false,
+  });
   useEffect(() => {
-    apiRequest.get("/medias").then((res) => {
-      const medias = res.media;
-      // Filter for different media types
-      setHomeHeader(medias.filter((item) => item.type === "home_header"));
-      setHomeGrid(medias.filter((item) => item.type === "home_grid"));
-      setNewsHeader(medias.filter((item) => item.type === "news_header"));
-      setAboutUsHeader(
-        medias.filter((item) => item.type === "about_us_header")
-      );
-      setAboutUsImage(medias.filter((item) => item.type === "about_us_image"));
-      setContactUsHeader(
-        medias.filter((item) => item.type === "contact_us_header")
-      );
-      setProjectHeader(medias.filter((item) => item.type === "project_header"));
+    setLoaders({
+      medias: true,
+      testimonies: true,
+      teams: true,
+      projects: true,
     });
 
-    apiRequest.get("/testimonies").then((res) => {
-      setTestimonies(res);
-    });
+    apiRequest
+      .get("/medias")
+      .then((res) => {
+        const medias = res.media;
+        // Filter for different media types
+        setHomeHeader(medias.filter((item) => item.type === "home_header"));
+        setHomeGrid(medias.filter((item) => item.type === "home_grid"));
+        setNewsHeader(medias.filter((item) => item.type === "news_header"));
+        setAboutUsHeader(
+          medias.filter((item) => item.type === "about_us_header")
+        );
+        setAboutUsImage(
+          medias.filter((item) => item.type === "about_us_image")
+        );
+        setContactUsHeader(
+          medias.filter((item) => item.type === "contact_us_header")
+        );
+        setProjectHeader(
+          medias.filter((item) => item.type === "project_header")
+        );
+      })
+      .finally(() => setLoaders({ medias: false }));
 
-    apiRequest.get("/teams").then((res) => {
-      setTeams(res);
-    });
+    apiRequest
+      .get("/testimonies")
+      .then((res) => {
+        setTestimonies(res);
+      })
+      .finally(() => setLoaders({ testimonies: false }));
+
+    apiRequest
+      .get("/teams")
+      .then((res) => {
+        setTeams(res);
+      })
+      .finally(() => setLoaders({ teams: false }));
+
+    apiRequest
+      .get("/projects")
+      .then((res) => {
+        setProjects(res);
+      })
+      .finally(() => setLoaders({ projects: false }));
   }, []);
 
   // 4. Provide the data and functions
@@ -467,6 +495,7 @@ export const DataProvider = ({ children }) => {
         setTestimonies,
         teams,
         setTeams,
+        loaders,
       }}
     >
       {children}

@@ -18,23 +18,19 @@ exports.blogValidationRules = [
     .withMessage("Content is required")
     .trim(),
 
-  // Validate categories (optional)
-  check("categories")
-    .optional()
-    .isArray()
-    .withMessage("Categories must be an array"),
-
-  // Validate tags (optional)
-  check("tags").optional().isArray().withMessage("Tags must be an array"),
-
-  // Validate media (optional)
-  check("media").optional().isArray().withMessage("Media must be an array"),
-
-  // Validate ID parameter for update and delete
-  check("id")
-    .isInt()
-    .optional()
-    .withMessage("ID must be an integer")
+  // Validate and sanitize the content
+  check("description")
+    .isString()
+    .withMessage("Description must be a string")
     .notEmpty()
-    .withMessage("ID is required"),
+    .withMessage("Description is required")
+    .trim(),
+
+  // Validate and sanitize the content
+  check("quote")
+    .isString()
+    .withMessage("Quote must be a string")
+    .notEmpty()
+    .withMessage("Quote is required")
+    .trim(),
 ];

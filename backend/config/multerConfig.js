@@ -40,7 +40,7 @@ const storage = multer.diskStorage({
       dir = "public/videos";
     } else {
       req.saved = false;
-      return cb(new Error("Unsupported file type"), null); // Error if file type is unsupported
+      return cb(new Error("Unsupported file type"), null);
     }
 
     // Create directory if it doesn't exist
@@ -51,13 +51,18 @@ const storage = multer.diskStorage({
     cb(null, dir);
   },
   filename: (req, file, cb) => {
-    const uniqueName = Date.now() + path.extname(file.originalname); // Generate unique filename
-    req.saved = true; // Mark that the file was saved
+    const uniqueName = Date.now() + path.extname(file.originalname);
+    req.saved = true;
     cb(null, uniqueName);
   },
 });
 
-// Multer middleware for handling multiple file uploads
-const upload = multer({ storage }).array("files");
+// Multer middleware for handling multiple file fields
+const upload = multer({
+  storage: storage,
+}).fields([
+  { name: "show", maxCount: 1 }, // Single file for "show"
+  { name: "files", maxCount: 10 }, // Multiple files for "files"
+]);
 
 module.exports = upload;

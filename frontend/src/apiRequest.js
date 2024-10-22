@@ -129,6 +129,10 @@ const handleError = (error) => {
         });
       });
     }
+    console.log(error.response);
+    if (error.response.data?.error) {
+      return toast.error(error.response.data?.error);
+    }
     // Server responded with a status code that falls out of the range of 2xx
     toast.error(`Error: ${error.response.data.msg || "Something went wrong"}`, {
       position: "top-right",

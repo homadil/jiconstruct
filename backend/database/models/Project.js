@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../index"); // Sequelize instance
-
+const Media = require("./Media");
 // Define the Project model
 const Project = sequelize.define(
   "Project",
@@ -15,7 +15,7 @@ const Project = sequelize.define(
     },
     content: {
       type: DataTypes.TEXT,
-      allowNull: true,
+      allowNull: false,
     },
     start_date: {
       type: DataTypes.DATE,
@@ -47,12 +47,12 @@ const Project = sequelize.define(
     },
     show: {
       type: DataTypes.STRING, // Can store both image or video paths
-      allowNull: true,
+      allowNull: false,
     },
   },
   {
     timestamps: true,
   }
 );
-
+// Project.hasMany(Media, { as: "media" });
 module.exports = Project;

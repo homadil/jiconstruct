@@ -12,22 +12,28 @@ router.post(
   upload,
   projectValidationRules,
   returnValidation,
-  Project.createBlog
+  Project.create
 );
 
 // READ - Get all blogs
-router.get("/", Project.getAllProject);
+router.get("/", Project.getAll);
 
 // READ - Get a single blog by ID
-router.get("/:id", Project.getBlogById);
+router.get("/:id", Project.getById);
 
 // UPDATE (PUT) - Update an entire blog by ID
-router.put("/:id", Project.updateBlog);
+router.put(
+  "/:id",
+  upload,
+  projectValidationRules,
+  returnValidation,
+  Project.update
+);
 
 // PARTIAL UPDATE (PATCH) - Partially update a blog by ID
-router.patch("/:id", Project.partialUpdateBlog);
+router.patch("/:id", Project.partialUpdate);
 
 // DELETE - Remove a blog by ID
-router.delete("/:id", Project.deleteBlog);
+router.delete("/:id", Project.delete);
 
 module.exports = router;
