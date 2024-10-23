@@ -1,27 +1,89 @@
-import React from "react";
-import postOne from "../../assets/images/dummy/download_4.avif";
-import postTwo from "../../assets/images/dummy/download_3.jpg";
-import postThree from "../../assets/images/dummy/download_5.jpg";
-import postFour from "../../assets/images/dummy/download_6.jpg";
-import postFive from "../../assets/images/dummy/download_7.jpg";
-import postSix from "../../assets/images/dummy/download_8.jpg";
-import postSeven from "../../assets/images/dummy/download_9.webp";
-import postEight from "../../assets/images/dummy/download_10.jpg";
-import postNine from "../../assets/images/dummy/download_11.webp";
+import React, { useContext, useState } from "react";
 import author from "../../assets/images/dummy/team2.jpg";
+import { DataContext } from "../../store";
+import { Link } from "react-router-dom";
+import Pagination from "react-js-pagination"; // Example pagination library
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Scrollbar, A11y, Autoplay } from "swiper/modules";
+
 export default function Blog() {
-  const posts = [
-    postOne,
-    postTwo,
-    postEight,
-    postFive,
-    postFour,
-    postNine,
-    postSeven,
-    postSix,
-    postThree,
-    postNine,
-  ];
+  const {
+    newsHeader,
+    blogs,
+    backend_url,
+    formatDate,
+    truncateContent,
+    partners,
+    tags,
+  } = useContext(DataContext);
+
+  const sortedBlogs = blogs.sort(
+    (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+  );
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredBlogs, setFilteredBlogs] = useState(sortedBlogs);
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Set how many blogs to show per page
+
+  // Handle search query change
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // Handle form submission
+  const handleSearchSubmit = (e) => {
+    e.preventDefault(); // Prevent page refresh
+    const filtered = sortedBlogs.filter((blog) =>
+      blog.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredBlogs(filtered);
+    setCurrentPage(1); // Reset to the first page on new search
+  };
+
+  // Paginate the blogs (filteredBlogs if searching, otherwise sortedBlogs)
+  const paginatedBlogs = (searchQuery ? filteredBlogs : sortedBlogs).slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Handle page change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const allMediaPaths = sortedBlogs
+    .flatMap((blog) => blog.Media.map((media) => media.path))
+    .slice(0, 9);
+
+  const categoryCounts = {};
+
+  // Loop through each blog
+  sortedBlogs.forEach((blog) => {
+    // Loop through each category in the blog
+    blog.Categories.forEach((category) => {
+      const categoryName = category.name;
+
+      // If category is already in the object, increment the count, otherwise set it to 1
+      if (categoryCounts[categoryName]) {
+        categoryCounts[categoryName]++;
+      } else {
+        categoryCounts[categoryName] = 1;
+      }
+    });
+  });
+
+  // Convert the categoryCounts object into an array of objects
+  const categories = Object.keys(categoryCounts).map((categoryName) => ({
+    name: categoryName,
+    amount: categoryCounts[categoryName],
+  }));
+
+  const users = sortedBlogs.flatMap((blog) => blog.user);
+
+  const recentBlogs = sortedBlogs.slice(0, 3);
+
   return (
     <div>
       {/* <!-- CONTENT START --> */}
@@ -30,7 +92,9 @@ export default function Blog() {
         <div
           class="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"
           data-stellar-background-ratio="0.5"
-          style={{ backgroundImage: "url(images/dummy/news.webp)" }}
+          style={{
+            backgroundImage: `url(${backend_url}/${newsHeader[0]?.path})`, // Corrected syntax
+          }}
         >
           <div class="overlay-main bg-black opacity-07"></div>
           <div class="container">
@@ -45,7 +109,7 @@ export default function Blog() {
               <div>
                 <ul class="wt-breadcrumb breadcrumb-style-2">
                   <li>
-                    <a href="javascript:void(0);">Home</a>
+                    <Link to={"/"}>Home</Link>
                   </li>
                   <li>News Listing</li>
                 </ul>
@@ -62,291 +126,89 @@ export default function Blog() {
           {/* <!-- GALLERY CONTENT START --> */}
           <div class="container">
             <div class="row">
-              <div class="col-lg-8 col-md-12 col-sm-12">
-                <div class="news-listing ">
-                  {/* <!-- COLUMNS 1 --> */}
-                  <div class="blog-post blog-md date-style-1 clearfix  m-b60 bg-white">
-                    <div class="wt-post-media wt-img-effect zoom-slow">
-                      <a href="javascript:void(0);">
-                        <img src={postOne} alt="" />
-                      </a>
-                    </div>
-                    <div class="wt-post-info p-a30">
-                      <div class="wt-post-meta ">
-                        <ul>
-                          <li class="post-date">
-                            <strong>25 </strong> <span>Aug 2019</span>{" "}
-                          </li>
-                          <li class="post-author">
-                            <i class="fa fa-user"></i>
+              <div className="col-lg-8 col-md-12 col-sm-12">
+                <div className="news-listing m-t20">
+                  {paginatedBlogs.length ? (
+                    paginatedBlogs.map((blog) => {
+                      const { day, month, year } = formatDate(blog.createdAt);
+                      return (
+                        <div
+                          className="blog-post blog-md date-style-1 clearfix m-b60 bg-white"
+                          key={blog.id}
+                        >
+                          <div className="wt-post-media wt-img-effect zoom-slow">
                             <a href="javascript:void(0);">
-                              By <span>Admin</span>
-                            </a>{" "}
-                          </li>
-                          <li class="post-comment">
-                            <i class="fa fa fa-comments"></i>
-                            <a href="javascript:void(0);">
-                              10 <span>Comment</span>
-                            </a>{" "}
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="wt-post-title ">
-                        <h3 class="post-title">
-                          <a href="javascript:void(0);" class=" m-t0">
-                            Being a famous designer is like being a famous.
-                          </a>
-                        </h3>
-                      </div>
-                      <div class="wt-post-text">
-                        <p>
-                          The longer I live, the more beautiful life becomes. If
-                          you foolishly ignore beauty, you will soon find
-                          yourself without it. Your life will be impoverished.
-                          But if you invest in beauty, it will remain with you
-                          all the days of your life.
-                        </p>
-                      </div>
-                      <a href="javascript:void(0);" class="site-button-link">
-                        Read More
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* <!-- COLUMNS 2 --> */}
-                  <div class="blog-post blog-md date-style-1 clearfix  m-b60 bg-white">
-                    <div class="wt-post-media wt-img-effect zoom-slow">
-                      <a href="javascript:void(0);">
-                        <img src={postTwo} alt="" />
-                      </a>
-                    </div>
-                    <div class="wt-post-info p-a30">
-                      <div class="wt-post-meta ">
-                        <ul>
-                          <li class="post-date">
-                            <strong>25 </strong> <span>Aug 2019</span>{" "}
-                          </li>
-                          <li class="post-author">
-                            <i class="fa fa-user"></i>
-                            <a href="javascript:void(0);">
-                              By <span>Admin</span>
-                            </a>{" "}
-                          </li>
-                          <li class="post-comment">
-                            <i class="fa fa fa-comments"></i>
-                            <a href="javascript:void(0);">
-                              10 <span>Comment</span>
-                            </a>{" "}
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="wt-post-title ">
-                        <h3 class="post-title">
-                          <a href="javascript:void(0);" class=" m-t0">
-                            Architecture is not based on concrete and steel.
-                          </a>
-                        </h3>
-                      </div>
-                      <div class="wt-post-text">
-                        <p>
-                          The longer I live, the more beautiful life becomes. If
-                          you foolishly ignore beauty, you will soon find
-                          yourself without it. Your life will be impoverished.
-                          But if you invest in beauty, it will remain with you
-                          all the days of your life.
-                        </p>
-                      </div>
-                      <a href="javascript:void(0);" class="site-button-link">
-                        Read More
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* <!-- COLUMNS 3 --> */}
-                  <div class="blog-post blog-md date-style-1 clearfix  m-b60 bg-white">
-                    <div class="wt-post-media wt-img-effect zoom-slow">
-                      <a href="javascript:void(0);">
-                        <img src={postThree} alt="" />
-                      </a>
-                    </div>
-                    <div class="wt-post-info p-a30">
-                      <div class="wt-post-meta ">
-                        <ul>
-                          <li class="post-date">
-                            <strong>25 </strong> <span>Aug 2019</span>{" "}
-                          </li>
-                          <li class="post-author">
-                            <i class="fa fa-user"></i>
-                            <a href="javascript:void(0);">
-                              By <span>Admin</span>
-                            </a>{" "}
-                          </li>
-                          <li class="post-comment">
-                            <i class="fa fa fa-comments"></i>
-                            <a href="javascript:void(0);">
-                              10 <span>Comment</span>
-                            </a>{" "}
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="wt-post-title ">
-                        <h3 class="post-title">
-                          <a href="javascript:void(0);" class=" m-t0">
-                            An object should be judged by whether.
-                          </a>
-                        </h3>
-                      </div>
-                      <div class="wt-post-text">
-                        <p>
-                          The longer I live, the more beautiful life becomes. If
-                          you foolishly ignore beauty, you will soon find
-                          yourself without it. Your life will be impoverished.
-                          But if you invest in beauty, it will remain with you
-                          all the days of your life.
-                        </p>
-                      </div>
-                      <a href="javascript:void(0);" class="site-button-link">
-                        Read More
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* <!-- COLUMNS 4 --> */}
-                  <div class="blog-post blog-md date-style-1 clearfix  m-b60 bg-white">
-                    <div class="wt-post-media wt-img-effect zoom-slow">
-                      <a href="javascript:void(0);">
-                        <img src={postFour} alt="" />
-                      </a>
-                    </div>
-                    <div class="wt-post-info p-a30">
-                      <div class="wt-post-meta ">
-                        <ul>
-                          <li class="post-date">
-                            <strong>25 </strong> <span>Aug 2019</span>{" "}
-                          </li>
-                          <li class="post-author">
-                            <i class="fa fa-user"></i>
-                            <a href="javascript:void(0);">
-                              By <span>Admin</span>
-                            </a>{" "}
-                          </li>
-                          <li class="post-comment">
-                            <i class="fa fa fa-comments"></i>
-                            <a href="javascript:void(0);">
-                              10 <span>Comment</span>
-                            </a>{" "}
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="wt-post-title ">
-                        <h3 class="post-title">
-                          <a href="javascript:void(0);" class=" m-t0">
-                            Very often the opinion of the clients must be.
-                          </a>
-                        </h3>
-                      </div>
-                      <div class="wt-post-text">
-                        <p>
-                          The longer I live, the more beautiful life becomes. If
-                          you foolishly ignore beauty, you will soon find
-                          yourself without it. Your life will be impoverished.
-                          But if you invest in beauty, it will remain with you
-                          all the days of your life.
-                        </p>
-                      </div>
-                      <a href="javascript:void(0);" class="site-button-link">
-                        Read More
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* <!-- COLUMNS 5 --> */}
-                  <div class="blog-post blog-md date-style-1 clearfix  m-b60 bg-white">
-                    <div class="wt-post-media wt-img-effect zoom-slow">
-                      <a href="javascript:void(0);">
-                        <img src={postFive} alt="" />
-                      </a>
-                    </div>
-                    <div class="wt-post-info p-a30">
-                      <div class="wt-post-meta ">
-                        <ul>
-                          <li class="post-date">
-                            <strong>25</strong> <span>Aug 2019</span>{" "}
-                          </li>
-                          <li class="post-author">
-                            <i class="fa fa-user"></i>
-                            <a href="javascript:void(0);">
-                              By <span>Admin</span>
-                            </a>{" "}
-                          </li>
-                          <li class="post-comment">
-                            <i class="fa fa fa-comments"></i>
-                            <a href="javascript:void(0);">
-                              10 <span>Comment</span>
-                            </a>{" "}
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="wt-post-title ">
-                        <h3 class="post-title">
-                          <a href="javascript:void(0);" class=" m-t0">
-                            Architects spend an entire life with this.
-                          </a>
-                        </h3>
-                      </div>
-                      <div class="wt-post-text">
-                        <p>
-                          The longer I live, the more beautiful life becomes. If
-                          you foolishly ignore beauty, you will soon find
-                          yourself without it. Your life will be impoverished.
-                          But if you invest in beauty, it will remain with you
-                          all the days of your life.
-                        </p>
-                      </div>
-                      <a href="javascript:void(0);" class="site-button-link">
-                        Read More
-                      </a>
-                    </div>
-                  </div>
+                              <img
+                                src={`${backend_url}/${blog.show}`}
+                                alt={blog.title}
+                              />
+                            </a>
+                          </div>
+                          <div className="wt-post-info p-a30">
+                            <div className="wt-post-meta">
+                              <ul>
+                                <li className="post-date">
+                                  <strong>{day}</strong>
+                                  <span>
+                                    {month} {year}
+                                  </span>
+                                </li>
+                                <li className="post-author">
+                                  <i className="fa fa-user"></i>
+                                  <a href="javascript:void(0);">
+                                    By{" "}
+                                    <span>
+                                      {blog.user.role} ({blog.user.name})
+                                    </span>
+                                  </a>
+                                </li>
+                                <li className="post-comment">
+                                  <i className="fa fa-comments"></i>
+                                  <a href="javascript:void(0);">
+                                    {blog.Comments.length} <span>Comments</span>
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                            <div className="wt-post-title">
+                              <h3 className="post-title">
+                                <a href="javascript:void(0);" className="m-t0">
+                                  {blog.title}
+                                </a>
+                              </h3>
+                            </div>
+                            <div className="wt-post-text">
+                              <p>{truncateContent(blog.description, 100)}</p>
+                            </div>
+                            <Link
+                              className="site-button-link"
+                              to={`/blog_detail?id=${blog.id}`}
+                            >
+                              Read More
+                            </Link>
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p>No blogs found for "{searchQuery}"</p>
+                  )}
                 </div>
-                <ul class="pagination m-t0 m-b20">
-                  <li class="page-item">
-                    <a href="#" class="page-link">
-                      «
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a href="#" class="page-link">
-                      1
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a href="#" class="page-link">
-                      2
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a href="#" class="page-link">
-                      3
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a href="#" class="page-link">
-                      4
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a href="#" class="page-link">
-                      5
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a href="#" class="page-link">
-                      »
-                    </a>
-                  </li>
-                </ul>
+
+                {/* Pagination */}
+                <Pagination
+                  activePage={currentPage}
+                  itemsCountPerPage={itemsPerPage}
+                  totalItemsCount={
+                    searchQuery ? filteredBlogs.length : sortedBlogs.length
+                  }
+                  pageRangeDisplayed={5}
+                  onChange={handlePageChange}
+                  itemClass="page-item"
+                  linkClass="page-link"
+                />
               </div>
+
               {/* <!-- SIDE BAR START --> */}
               <div class="col-lg-4 col-md-12 col-sm-12 rightSidebar">
                 <aside class="side-bar">
@@ -354,17 +216,23 @@ export default function Blog() {
                   <div class="widget p-a30 bg-white">
                     <h4 class="widget-title">Search</h4>
                     <div class="search-bx">
-                      <form role="search" method="post">
-                        <div class="input-group">
+                      <form
+                        role="search"
+                        method="post"
+                        onSubmit={handleSearchSubmit}
+                      >
+                        <div className="input-group">
                           <input
-                            name="news-letter"
+                            name="search-query"
                             type="text"
-                            class="form-control"
+                            className="form-control"
                             placeholder="Write your text"
+                            value={searchQuery}
+                            onChange={handleSearchChange}
                           />
-                          <span class="input-group-btn">
-                            <button type="submit" class="site-button">
-                              <i class="fa fa-search"></i>
+                          <span className="input-group-btn">
+                            <button type="submit" className="site-button">
+                              <i className="fa fa-search"></i>
                             </button>
                           </span>
                         </div>
@@ -376,30 +244,14 @@ export default function Blog() {
                   <div class="widget bg-white  widget_services p-a30 bg-white">
                     <h4 class="widget-title">Categories</h4>
                     <ul>
-                      <li>
-                        <a href="javascript:void(0);">Architecture</a>
-                        <span> (28)</span>
-                      </li>
-                      <li>
-                        <a href="javascript:void(0);">Awards</a>
-                        <span> (05)</span>
-                      </li>
-                      <li>
-                        <a href="javascript:void(0);">Reseller</a>
-                        <span> (24)</span>
-                      </li>
-                      <li>
-                        <a href="javascript:void(0);">Uncategorized</a>
-                        <span> (15)</span>
-                      </li>
-                      <li>
-                        <a href="javascript:void(0);">Interviews</a>
-                        <span> (20)</span>
-                      </li>
-                      <li>
-                        <a href="javascript:void(0);">Event</a>
-                        <span> (90)</span>
-                      </li>
+                      {categories?.map((cat) => {
+                        return (
+                          <li>
+                            <a href="javascript:void(0);">{cat.name}</a>
+                            <span> ({cat.amount})</span>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
 
@@ -407,15 +259,12 @@ export default function Blog() {
                   <div class="widget widget_gallery mfp-gallery p-a30 bg-white">
                     <h4 class="widget-title">Our Gallery</h4>
                     <div class="row no-gutters justify-content-center">
-                      {posts.map((item, index) => {
+                      {allMediaPaths.map((item, index) => {
                         return (
                           <div className="col-6 col-sm-4" key={index}>
-                            <div className="wt-post-thum m-1">
-                              <a
-                                href={`images/gallery/pic${index}.jpg`}
-                                className="mfp-link"
-                              >
-                                <img src={item} alt="" />
+                            <div className="wt-post-thum m-1" key={index}>
+                              <a href={`#`} className="mfp-link">
+                                <img src={`${backend_url}/${item}`} alt="" />
                               </a>
                             </div>
                           </div>
@@ -427,16 +276,36 @@ export default function Blog() {
                   {/* <!-- ABOUT AUTHOR --> */}
                   <div class="widget widget-team p-a30 bg-white">
                     <h4 class="widget-title">About Author</h4>
-                    <div class="widget-post m-b15">
-                      <img src={author} alt="" class="img-responsive" />
-                    </div>
-                    <div class="team-detail  text-center">
-                      <h4 class="m-t0">Taminm Alows</h4>
-                      <p>
-                        We are the dolor sit ametLorem Ipsum Proin gravida nibh
-                        vel velit auctor aliquet. Aenean sollicitudin.
-                      </p>
-                    </div>
+
+                    <Swiper
+                      modules={[Navigation, Scrollbar, A11y, Autoplay]}
+                      spaceBetween={0}
+                      slidesPerView={1}
+                      autoplay={{ delay: 5000 }}
+                      pagination={{ clickable: true }}
+                      effect="fade" // Use the fade effect
+                      fadeEffect={{ crossFade: true }} // Smooth fade between slides
+                      scrollbar={{ draggable: true }}
+                    >
+                      {users.map((item, index) => (
+                        <SwiperSlide key={index}>
+                          <div class="widget-post m-b15">
+                            <img
+                              src={
+                                item.profile_image == null
+                                  ? author
+                                  : `${backend_url}/${item.profile_image}`
+                              }
+                              alt=""
+                              class="img-responsive"
+                            />
+                          </div>
+                          <div class="team-detail  text-center">
+                            <h4 class="m-t0">{item.name}</h4>
+                          </div>
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
                   </div>
 
                   {/* <!-- RECENT POSTS --> */}
@@ -444,114 +313,83 @@ export default function Blog() {
                     <h4 class="widget-title">Recent Posts</h4>
                     <div class="section-content">
                       <div class="widget-post-bx">
-                        <div class="widget-post clearfix">
-                          <div class="wt-post-media">
-                            <img src={postFour} alt="" />
-                          </div>
-                          <div class="wt-post-info">
-                            <div class="wt-post-meta">
-                              <ul>
-                                <li class="post-author">Aug 14, 2019</li>
-                              </ul>
+                        {recentBlogs?.map((blog, index) => {
+                          const { day, month, year } = formatDate(
+                            blog.createdAt
+                          );
+                          return (
+                            <div class="widget-post clearfix" key={index}>
+                              <div class="wt-post-media">
+                                <img
+                                  src={`${backend_url}/${blog?.show}`}
+                                  alt=""
+                                  class="img-responsive"
+                                />
+                              </div>
+                              <div class="wt-post-info">
+                                <div class="wt-post-meta">
+                                  <ul>
+                                    <li class="post-author">
+                                      {month} {day}, {year}
+                                    </li>
+                                  </ul>
+                                </div>
+                                <div class="wt-post-header">
+                                  <h5 class="post-title">{blog.title}</h5>
+                                </div>
+                              </div>
                             </div>
-                            <div class="wt-post-header">
-                              <h5 class="post-title">
-                                Years behold fourth tree creeping god
-                              </h5>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="widget-post clearfix">
-                          <div class="wt-post-media">
-                            <img src={postNine} alt="" />
-                          </div>
-                          <div class="wt-post-info">
-                            <div class="wt-post-meta">
-                              <ul>
-                                <li class="post-author">Aug 19, 2019</li>
-                              </ul>
-                            </div>
-                            <div class="wt-post-header">
-                              <h5 class="post-title">
-                                Tips for Self-Made Home Interiors Layout
-                              </h5>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="widget-post clearfix">
-                          <div class="wt-post-media">
-                            <img src={postOne} alt="" />
-                          </div>
-                          <div class="wt-post-info">
-                            <div class="wt-post-meta">
-                              <ul>
-                                <li class="post-author">Aug 28, 2019</li>
-                              </ul>
-                            </div>
-                            <div class="wt-post-header">
-                              <h5 class="post-title">
-                                Design of Building: From Planning to Peforming
-                              </h5>
-                            </div>
-                          </div>
-                        </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
 
                   {/* <!-- OUR CLIENT --> */}
                   <div class="widget p-a30 bg-white">
-                    <h4 class="widget-title">Our Client</h4>
-                    <div class="owl-carousel widget-client p-t10">
-                      {/* <!-- COLUMNS 1 -->  */}
-                      <div class="item">
-                        <div class="ow-client-logo">
-                          <div class="client-logo wt-img-effect on-color">
-                            <a href="#">
-                              <img src="images/client-logo/w1.png" alt="" />
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                      {/* <!-- COLUMNS 2 -->  */}
-                      <div class="item">
-                        <div class="ow-client-logo">
-                          <div class="client-logo wt-img-effect on-color">
-                            <a href="#">
-                              <img src="images/client-logo/w2.png" alt="" />
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                      {/* <!-- COLUMNS 3 -->  */}
-                      <div class="item">
-                        <div class="ow-client-logo">
-                          <div class="client-logo wt-img-effect on-color">
-                            <a href="#">
-                              <img src="images/client-logo/w3.png" alt="" />
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <h4 class="widget-title">Our Partners</h4>
+                    <Swiper
+                      modules={[Navigation, Scrollbar, A11y, Autoplay]}
+                      spaceBetween={0}
+                      slidesPerView={5}
+                      autoplay
+                      effect="fade" // Use the fade effect
+                      fadeEffect={{ crossFade: true }} // Smooth fade between slides
+                      scrollbar={{ draggable: true }}
+                    >
+                      {partners?.map((partner, index) => {
+                        return (
+                          <SwiperSlide key={index}>
+                            <div class="item" key={index}>
+                              <div class="ow-client-logo">
+                                <div class="client-logo wt-img-effect on-color">
+                                  <a href="#">
+                                    <img
+                                      src={`${backend_url}/${partner?.image}`}
+                                      alt=""
+                                      class="img-responsive"
+                                    />
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </SwiperSlide>
+                        );
+                      })}
+                    </Swiper>
                   </div>
 
                   {/* <!-- TAGS --> */}
                   <div class="widget widget_tag_cloud p-a30 bg-white">
                     <h4 class="widget-title">Tags</h4>
                     <div class="tagcloud">
-                      <a href="javascript:void(0);">Trouble </a>
-                      <a href="javascript:void(0);">Programmers</a>
-                      <a href="javascript:void(0);">Never</a>
-                      <a href="javascript:void(0);">Tell</a>
-                      <a href="javascript:void(0);">Doing</a>
-                      <a href="javascript:void(0);">Person</a>
-                      <a href="javascript:void(0);">Inventors Tag</a>
-                      <a href="javascript:void(0);">Between </a>
-                      <a href="javascript:void(0);">Abilities</a>
-                      <a href="javascript:void(0);">Fault </a>
-                      <a href="javascript:void(0);">Gets </a>
-                      <a href="javascript:void(0);">Macho</a>
+                      {tags.map((tag, index) => {
+                        return (
+                          <a key={index} href="javascript:void(0);">
+                            {tag.name}{" "}
+                          </a>
+                        );
+                      })}
                     </div>
                   </div>
                 </aside>

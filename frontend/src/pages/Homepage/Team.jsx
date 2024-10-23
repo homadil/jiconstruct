@@ -3,6 +3,10 @@ import { DataContext } from "../../store";
 
 export default function Team() {
   const { teams, backend_url } = useContext(DataContext);
+  const sortedTeams = teams
+    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)) // Sort by createdAt ascending
+    .slice(0, 4); // Get the first four teams
+
   return (
     /* <!-- OUR TEAM START --> */
     <section id="team" class="section-full p-t80 p-b50 bg-white our-team-two">
@@ -23,7 +27,7 @@ export default function Team() {
 
         <div class="section-content">
           <div class="row justify-content-center">
-            {teams.map((team) => {
+            {sortedTeams.map((team) => {
               return (
                 <div class="col-lg-4 col-md-6 col-sm-12">
                   <div class="wt-team-arc2">
@@ -35,33 +39,24 @@ export default function Team() {
                       />
                       <div class="team-social-center">
                         <ul class="team-social-icon">
-                          <li>
-                            <a
-                              href="javascript:void(0);"
-                              class="fa fa-google"
-                            ></a>
-                          </li>
-                          <li>
-                            <a href="javascript:void(0);" class="fa fa-rss"></a>
-                          </li>
-                          <li>
-                            <a
-                              href="javascript:void(0);"
-                              class="fa fa-facebook"
-                            ></a>
-                          </li>
-                          <li>
-                            <a
-                              href="javascript:void(0);"
-                              class="fa fa-twitter"
-                            ></a>
-                          </li>
-                          <li>
-                            <a
-                              href="javascript:void(0);"
-                              class="fa fa-linkedin"
-                            ></a>
-                          </li>
+                          {team?.Urls.map((url) => {
+                            return (
+                              <li>
+                                <a
+                                  href={url.link}
+                                  class={`fa  ${url.image ? "" : url.icon}`}
+                                >
+                                  {url.image && (
+                                    <img
+                                      src={`${backend_url}/${url.image}`}
+                                      alt=""
+                                      className="img-fluid rounded-circle"
+                                    />
+                                  )}
+                                </a>
+                              </li>
+                            );
+                          })}
                         </ul>
                       </div>
                     </div>
@@ -85,6 +80,6 @@ export default function Team() {
 }
 
 const stylesheet = {
-  height: "400px",
+  height: "300px",
   width: "100%",
 };

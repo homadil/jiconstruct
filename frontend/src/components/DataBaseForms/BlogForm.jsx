@@ -107,7 +107,6 @@ export default function BlogForm({ blog, update }) {
   });
 
   function create(formData) {
-    console.log(formData);
     apiRequest
       .post("/blogs", formData)
       .then((response) => {

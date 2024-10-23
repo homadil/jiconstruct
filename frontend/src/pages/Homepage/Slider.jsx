@@ -21,9 +21,8 @@ import { DataContext } from "../../store";
 import HomeImageSlide from "../../components/HomeImageSlide";
 
 export default function Slider() {
-  const { homeHeader, backend_url, projects } = useContext(DataContext);
+  const { projects } = useContext(DataContext);
   const [animeToggle, setAnimeToggle] = useState(false);
-  console.log(projects);
   // Restart animation on slide change
   const handleSlideChange = (swiper) => {
     setAnimeToggle(!animeToggle);
@@ -81,9 +80,9 @@ export default function Slider() {
       scrollbar={{ draggable: true }}
       onSlideChange={handleSlideChange}
     >
-      {homeHeader.map((item, index) => (
+      {projects.map((item, index) => (
         <SwiperSlide key={index}>
-          <HomeImageSlide item={item} backend_url={backend_url} index={index} />
+          <HomeImageSlide item={item} index={index} />
         </SwiperSlide>
       ))}
     </Swiper>

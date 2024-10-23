@@ -4,10 +4,11 @@ const Tag = require("../database/models/Tag");
 const Media = require("../database/models/Media");
 const Url = require("../database/models/Url");
 const User = require("../database/models/User");
+const Comment = require("../database/models/Comment");
+
 // CREATE - Add a new blog
 exports.create = async (req, res) => {
   // Check if the user is logged in
-  console.log(req.user);
   const user = req?.user?.user;
   if (!user || !user.id) {
     return res.status(401).json({ error: "User not logged in." });
@@ -49,19 +50,12 @@ exports.create = async (req, res) => {
       await blog.addMedia(mediaFiles, { transaction });
     }
 
-    // Change relationships to array
-    if (!Array.isArray(data.categories)) {
-      data.categories = [data.categories];
-    }
-    if (!Array.isArray(data.tags)) {
-      data.tags = [data.tags];
-    }
-    if (!Array.isArray(data.urls)) {
-      data.urls = [data.urls];
-    }
-
     // Step 4: Associate categories
     if (data.categories && data.categories.length > 0) {
+      if (!Array.isArray(data.categories)) {
+        data.categories = [data.categories];
+      }
+
       const parsedCategories = data.categories.map((category) =>
         JSON.parse(category)
       );
@@ -80,6 +74,9 @@ exports.create = async (req, res) => {
 
     // Step 5: Associate tags
     if (data.tags && data.tags.length > 0) {
+      if (!Array.isArray(data.tags)) {
+        data.tags = [data.tags];
+      }
       const parsedTags = data.tags.map((tag) => JSON.parse(tag));
 
       const tagIds = parsedTags.map((tag) => tag.id);
@@ -96,6 +93,9 @@ exports.create = async (req, res) => {
 
     // Step 6: Associate URLs
     if (data.urls && data.urls.length > 0) {
+      if (!Array.isArray(data.urls)) {
+        data.urls = [data.urls];
+      }
       const parsedUrls = data.urls.map((url) => JSON.parse(url));
 
       const urlIds = parsedUrls.map((url) => url.id);
@@ -130,6 +130,7 @@ exports.getAll = async (req, res) => {
         { model: Category, through: { attributes: [] } },
         { model: Tag, through: { attributes: [] } },
         { model: Url, through: { attributes: [] } },
+        { model: Comment, through: { attributes: [] } },
         { model: Media },
         {
           model: User,
@@ -343,5 +344,37 @@ exports.delete = async (req, res) => {
   } catch (error) {
     console.error("Error deleting blog:", error);
     return res.status(500).json({ msg: "Error deleting blog.", error });
+  }
+};
+
+exports.saveCommentForBlog = async (req, res) => {
+  const { id } = req.params; // Extract blog ID from request parameters
+  const { content, author } = req.body; // Extract comment data from request body
+
+  try {
+    // Find the blog by ID
+    const blog = await Blog.findByPk(id);
+
+    if (!blog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    // Create a new comment
+    const newComment = await Comment.create({
+      content,
+      author,
+      user_id: req.user ? req.user.id : null, // Save user ID if logged in, otherwise null
+    });
+
+    // Associate the comment with the blog
+    await blog.addComment(newComment); // This automatically handles the BlogComment table
+
+    return res.status(201).json({
+      msg: "Comment added successfully",
+      comment: newComment,
+    });
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    return res.status(500).json({ msg: "Failed to add comment", error });
   }
 };

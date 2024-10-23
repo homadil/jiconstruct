@@ -30,6 +30,8 @@ export default function Category() {
   const [showModal, setShowModal] = useState(false);
   const [newCategory, setNewCategory] = useState({
     name: "",
+    description: "",
+    icon: "",
   });
 
   // Modal Handlers
@@ -91,7 +93,11 @@ export default function Category() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const formData = { name: newCategory.name };
+    const formData = {
+      name: newCategory.name,
+      description: newCategory.description,
+      icon: newCategory.icon,
+    };
 
     if (update) {
       handleUpdateTag(id, formData);
@@ -127,6 +133,8 @@ export default function Category() {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Icon</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -135,6 +143,8 @@ export default function Category() {
               <TableRow key={Tag.id}>
                 <TableCell>
                   <Typography variant="h6">{Tag.name}</Typography>
+                  <Typography variant="h6">{Tag.description}</Typography>
+                  <Typography variant="h6">{Tag.icon}</Typography>
                 </TableCell>
                 <TableCell>
                   <Button
@@ -182,6 +192,30 @@ export default function Category() {
             value={newCategory.name}
             onChange={(e) =>
               setNewCategory({ ...newCategory, name: e.target.value })
+            }
+            className="mt-3"
+          />
+
+          <TextField
+            label="Description"
+            fullWidth
+            variant="outlined"
+            required={update ? false : true}
+            value={newCategory.description}
+            onChange={(e) =>
+              setNewCategory({ ...newCategory, description: e.target.value })
+            }
+            className="mt-3"
+          />
+
+          <TextField
+            label="Icon"
+            fullWidth
+            variant="outlined"
+            required={update ? false : true}
+            value={newCategory.icon}
+            onChange={(e) =>
+              setNewCategory({ ...newCategory, icon: e.target.value })
             }
             className="mt-3"
           />

@@ -5,6 +5,7 @@ const path = require("path");
 const Tag = require("../database/models/Tag");
 const Category = require("../database/models/Category");
 const Url = require("../database/models/Url");
+const Comment = require("../database/models/Comment");
 
 exports.create = async (req, res) => {
   const transaction = await Project.sequelize.transaction(); // Start a transaction
@@ -67,19 +68,11 @@ exports.create = async (req, res) => {
       await project.addMedia(mediaFiles, { transaction });
     }
 
-    //change relationships to array
-    if (!Array.isArray(data.categories)) {
-      data.categories = [data.categories];
-    }
-    if (!Array.isArray(data.tags)) {
-      data.tags = [data.tags];
-    }
-    if (!Array.isArray(data.urls)) {
-      data.urls = [data.urls];
-    }
-
     // Step 4: Associate categories (ProjectCategories)
     if (data.categories && data.categories.length > 0) {
+      if (!Array.isArray(data.categories)) {
+        data.categories = [data.categories];
+      }
       // Parse JSON strings back to objects
 
       const parsedCategories = data.categories.map((category) =>
@@ -101,6 +94,9 @@ exports.create = async (req, res) => {
 
     // Step 5: Associate tags (ProjectTags)
     if (data.tags && data.tags.length > 0) {
+      if (!Array.isArray(data.tags)) {
+        data.tags = [data.tags];
+      }
       // Parse JSON strings back to objects
       const parsedTags = data.tags.map((tag) => JSON.parse(tag));
 
@@ -119,6 +115,9 @@ exports.create = async (req, res) => {
 
     // Step 6: Associate URLs (ProjectUrl)
     if (data.urls && data.urls.length > 0) {
+      if (!Array.isArray(data.urls)) {
+        data.urls = [data.urls];
+      }
       // Parse JSON strings back to objects
       const parsedUrls = data.urls.map((url) => JSON.parse(url));
 
@@ -164,6 +163,10 @@ exports.getAll = async (req, res) => {
         },
         {
           model: Url,
+          through: { attributes: [] }, // Include URLs via the ProjectUrl association
+        },
+        {
+          model: Comment,
           through: { attributes: [] }, // Include URLs via the ProjectUrl association
         },
         { model: Media },
@@ -382,5 +385,37 @@ exports.delete = async (req, res) => {
   } catch (error) {
     console.error("Error deleting project:", error);
     return res.status(500).json({ msg: "Error deleting project.", error });
+  }
+};
+
+exports.saveCommentForProject = async (req, res) => {
+  const { id } = req.params; // Extract project ID from request parameters
+  const { content, author } = req.body; // Extract comment data from request body
+
+  try {
+    // Find the project by ID
+    const project = await Project.findByPk(id);
+
+    if (!project) {
+      return res.status(404).json({ message: "project not found" });
+    }
+
+    // Create a new comment
+    const newComment = await Comment.create({
+      content,
+      author,
+      user_id: req.user ? req.user.id : null, // Save user ID if logged in, otherwise null
+    });
+
+    // Associate the comment with the project
+    await project.addComment(newComment); // This automatically handles the projectComment table
+
+    return res.status(201).json({
+      msg: "Comment added successfully",
+      comment: newComment,
+    });
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    return res.status(500).json({ msg: "Failed to add comment", error });
   }
 };

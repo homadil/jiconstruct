@@ -13,7 +13,7 @@ exports.create = async (req, res) => {
       return res.status(400).json({ msg: "must include either icon or image" });
     }
     // Check if file was uploaded
-    if (req.files["files"].length > 0) {
+    if (req.files["files"] && req.files["files"]?.length > 0) {
       imagePath = req.files["files"][0].path.replace(/^public[\\/]/, "");
     }
 

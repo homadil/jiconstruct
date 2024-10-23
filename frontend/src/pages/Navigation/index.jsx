@@ -87,7 +87,7 @@ export default function Navigation() {
                   </li> */}
 
                   <li>
-                    <Link to={"/project_grid"}>Projects</Link>
+                    <Link to={"/project"}>Projects</Link>
                   </li>
 
                   {/*

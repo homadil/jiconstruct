@@ -29,7 +29,7 @@ export default function RouterPath() {
 
       {/* project paths */}
       <Route path="/project_detail" element={<Details />} />
-      <Route path="/project_grid" element={<Grid />} />
+      <Route path="/project" element={<Grid />} />
       <Route path="/project_masonry" element={<Masonry />} />
       <Route path="/project_carousel" element={<Carousel />} />
 
@@ -39,7 +39,7 @@ export default function RouterPath() {
 
       {/* blog path */}
       <Route path="/post_image" element={<Image />} />
-      <Route path="/post_video" element={<Video />} />
+      <Route path="/blog_detail" element={<Video />} />
       <Route path="/post_gallery" element={<Gallery />} />
       <Route path="/blog" element={<Blog />} />
 

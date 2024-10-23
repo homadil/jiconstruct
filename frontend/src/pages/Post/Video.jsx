@@ -1,6 +1,48 @@
-import React from "react";
-
+import React, { useContext, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { DataContext } from "../../store";
+import apiRequest from "../../apiRequest";
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 export default function Video() {
+  const query = useQuery();
+  const id = query.get("id"); // This will get the 'id' query param
+  const [formData, setFormData] = useState({
+    content: "",
+    author: "",
+    email: "",
+    website: "",
+  });
+  const navigate = useNavigate();
+  const { blogs, backend_url, formatDate, formatDateTime, setBlogs } =
+    useContext(DataContext);
+  const blog = blogs.filter((blog) => blog.id === parseInt(id))[0];
+  if (!blog) {
+    return navigate("/blog");
+  }
+
+  const { day, month, year } = formatDate(blog.createdAt);
+  function handleSubmit(e) {
+    e.preventDefault();
+    apiRequest.post(`blogs/${blog.id}/comments`, formData).then((res) => {
+      // Update the blogs state with the new comment
+      setBlogs((prevBlogs) =>
+        prevBlogs.map((prevBlog) => {
+          if (prevBlog.id === blog.id) {
+            // Add the new comment to the existing comments array
+            return {
+              ...prevBlog,
+              Comments: [...prevBlog.Comments, res.comment],
+            };
+          }
+          return prevBlog; // Return the previous blog unchanged
+        })
+      );
+
+      setFormData({ content: "", author: "", email: "", website: "" });
+    });
+  }
   return (
     // <!-- CONTENT START -->
     <div class="page-content ">
@@ -8,14 +50,16 @@ export default function Video() {
       <div
         class="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"
         data-stellar-background-ratio="0.5"
-        style={{ backgroundImage: "url(images/banner/4.jpg)" }}
+        style={{
+          backgroundImage: `url(${backend_url}/${blog.show})`, // Corrected syntax
+        }}
       >
         <div class="overlay-main bg-black opacity-07"></div>
         <div class="container">
           <div class="wt-bnr-inr-entry">
             <div class="banner-title-outer">
               <div class="banner-title-name">
-                <h2 class="text-white">Post Video</h2>
+                <h2 class="text-white">{blog.title}</h2>
               </div>
             </div>
             {/* <!-- BREADCRUMB ROW -->                             */}
@@ -23,9 +67,9 @@ export default function Video() {
             <div>
               <ul class="wt-breadcrumb breadcrumb-style-2">
                 <li>
-                  <a href="javascript:void(0);">Home</a>
+                  <Link to={"/"}>Home</Link>
                 </li>
-                <li>Post Video</li>
+                <li>{blog.title}</li>
               </ul>
             </div>
 
@@ -42,24 +86,25 @@ export default function Video() {
           <div class="blog-post date-style-1 blog-detail text-black bg-white">
             <div class="wt-post-media clearfix">
               <div class="grid-post row">
-                <div class="col-md-6">
-                  <div class="portfolio-item wt-img-effect zoom-slow m-b30">
-                    <iframe
-                      width="560"
-                      height="315"
-                      src="https://www.youtube.com/embed/4xgOWWfurpU"
-                    ></iframe>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="portfolio-item wt-img-effect zoom-slow m-b30">
-                    <iframe
-                      src="https://player.vimeo.com/video/32719806"
-                      width="560"
-                      height="315"
-                    ></iframe>
-                  </div>
-                </div>
+                {blog.Media.map((media, index) => {
+                  return (
+                    <div key={index} class="col-md-6">
+                      <div class="portfolio-item wt-img-effect zoom-slow m-b30">
+                        {media.exe === "image" ? (
+                          <img
+                            src={`${backend_url}/${media.path}`}
+                            alt={media.type}
+                          />
+                        ) : (
+                          <video
+                            src={`${backend_url}/${media.path}`}
+                            control
+                          ></video>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -67,18 +112,24 @@ export default function Video() {
               <div class="wt-post-meta ">
                 <ul>
                   <li class="post-date">
-                    <strong>25 </strong> <span>Aug 2019</span>{" "}
+                    <strong>{day} </strong>{" "}
+                    <span>
+                      {month} {year}
+                    </span>{" "}
                   </li>
                   <li class="post-author">
                     <i class="fa fa-user"></i>
                     <a href="javascript:void(0);">
-                      By <span>Admin</span>
+                      By{" "}
+                      <span>
+                        {blog?.user.role} ({blog?.user.name})
+                      </span>
                     </a>{" "}
                   </li>
                   <li class="post-comment">
                     <i class="fa fa fa-comments"></i>
                     <a href="javascript:void(0);">
-                      10 <span>Comment</span>
+                      {blog?.Comments.length} <span>Comment</span>
                     </a>{" "}
                   </li>
                 </ul>
@@ -86,195 +137,65 @@ export default function Video() {
               <div class="wt-post-title ">
                 <h3 class="post-title">
                   <a href="javascript:void(0);" class=" m-t0">
-                    Architecture is not based on concrete and steel.
+                    {blog?.title}
                   </a>
                 </h3>
               </div>
               <div class="wt-post-text">
-                <p>
-                  A wonderful serenity has taken possession of my entire soul,
-                  like these sweet mornings of spring which I enjoy with my
-                  whole heart. I am alone, and feel the charm of existence in
-                  this spot, which was created for the bliss of souls like mine.
-                  I am so happy, my dear friend, so absorbed in the exquisite
-                  sense of me. Lorem ipsum dolor sit amet, consectetur
-                  adipisicing elit, sed do eiusmod tempor incididunt ut labore
-                  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                  exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                  consequat.
-                </p>
+                <p>{blog?.description}</p>
               </div>
 
-              <div class="wt-blog-post-media">
-                <div class="row m-t30">
-                  <div class="col-md-4  m-b30">
-                    <div class="wt-media">
-                      <img src="images/projects/pic-4.jpg" alt="" />
-                    </div>
-                  </div>
+              {blog.quote && (
+                <blockquote class="bg-gray">
+                  <i class="fa fa-quote-left"></i>
+                  <span>{blog.quote}</span>
+                </blockquote>
+              )}
 
-                  <div class="col-md-4  m-b30">
-                    <div class="wt-media">
-                      <img src="images/projects/pic-5.jpg" alt="" />
-                    </div>
-                  </div>
-
-                  <div class="col-md-4 m-b30">
-                    <div class="wt-media">
-                      <img src="images/projects/pic-1.jpg" alt="" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <blockquote class="bg-gray">
-                <i class="fa fa-quote-left"></i>A bene fraticinida. Est barbatus
-                parma, cesaris. Regius era virtualiter imperiums palus est.
-                Domesticus, dexter parmas sed mire magicae.
-              </blockquote>
-
-              <div class="wt-post-text">
-                <p>
-                  Ut porta risus ac justo laoreet congue. Morbi sed varius odio,
-                  id vestibulum tellus. Aliquam sem felis, vehicula at quam vel,
-                  pellentesque malesuada lectus. Curabitur quis sem non odio
-                  dictum posuere vel nec orci. Nunc laoreet lectus efficitur,
-                  laoreet ipsum in, congue nunc. Praesent fringilla, ipsum
-                  euismod eleifend pulvinar, elit nulla tristique enim, nec
-                  sagittis lacus leo non mi. Integer velit mauris, laoreet id
-                  gravida sed, vehicula vitae elit. Nunc ornare bibendum
-                  laoreet. Donec egestas, orci sagittis faucibus consequat, leo
-                  est mattis turpis, sit amet imperdiet ante massa ut risus.
-                </p>
-              </div>
-
-              <div class="wt-blog-post-media ">
-                <div class="row">
-                  <div class="col-md-6 m-t30">
-                    <div class="wt-media">
-                      <img src="images/gallery/pic3.jpg" alt="" />
-                    </div>
-                  </div>
-
-                  <div class="col-md-6 m-t30">
-                    <div class="wt-media">
-                      <img src="images/gallery/pic1.jpg" alt="" />
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <div
+                className="wt-post-text"
+                dangerouslySetInnerHTML={{ __html: blog.content }}
+              ></div>
             </div>
           </div>
 
           <div class="clear p-a30 m-b30 bg-white" id="comment-list">
             <div class="comments-area" id="comments">
-              <h4 class="comments-title">3 Comments</h4>
+              <h4 class="comments-title">{blog.Comments.length} Comments</h4>
               <div>
                 {/* <!-- COMMENT LIST START --> */}
                 <ol class="comment-list">
                   <li class="comment">
                     {/* <!-- COMMENT BLOCK --> */}
-                    <div class="comment-body">
-                      <div class="comment-meta">
-                        <a href="javascript:void(0);">
-                          March 6, 2019 at 7:15 am
-                        </a>
-                      </div>
-                      <div class="comment-author vcard">
-                        <img
-                          class="avatar photo"
-                          src="images/comment-pic/1.jpg"
-                          alt=""
-                        />
-                        <cite class="fn">Diego</cite>
-                        <span class="says">says:</span>
-                      </div>
-
-                      <p>
-                        Eheu. Teres exemplars ducunt ad idoleum. Ubi est peritus
-                        cotta? Abaculus potuss, tanquam peritus zeta. Cur
-                        hippotoxota ortum? Eras volare, tanquam audax poeta.
-                        Scutums peregrinatione in ferox piscinam! Cum amor
-                        assimilant, omnes.
-                      </p>
-                      <div class="reply">
-                        <a
-                          href="javscript:;"
-                          class="comment-reply-link letter-spacing-2 text-uppercase"
-                        >
-                          Read More
-                        </a>
-                      </div>
-                    </div>
-                    {/* <!-- SUB COMMENT BLOCK --> */}
-                    <ol class="children">
-                      <li class="comment odd parent">
+                    {blog.Comments.map((comment, index) => {
+                      const date = formatDateTime(comment.createdAt);
+                      return (
                         <div class="comment-body">
                           <div class="comment-meta">
-                            <a href="javascript:void(0);">
-                              March 8, 2019 at 9:15 am
-                            </a>
+                            <a href="javascript:void(0);">{date}</a>
                           </div>
                           <div class="comment-author vcard">
                             <img
                               class="avatar photo"
-                              src="images/comment-pic/2.jpg"
+                              src={
+                                comment.user
+                                  ? `${backend_url}/${comment?.user.profile_image}`
+                                  : "https://picsum.photos/200/300"
+                              }
                               alt=""
                             />
-                            <cite class="fn">Brayden</cite>
+                            <cite class="fn">
+                              {comment.user
+                                ? comment.user.name
+                                : comment.author}
+                            </cite>
                             <span class="says">says:</span>
                           </div>
 
-                          <p>
-                            Orexis peregrinationess, tanquam barbatus decor. Cum
-                            elevatus manducare, omnes liberies vitare.
-                          </p>
-                          <div class="reply">
-                            <a
-                              href="javscript:;"
-                              class="comment-reply-link letter-spacing-2 text-uppercase"
-                            >
-                              Read More
-                            </a>
-                          </div>
+                          <p>{comment.content}</p>
                         </div>
-
-                        <ol class="children">
-                          <li class="comment odd parent">
-                            <div class="comment-body">
-                              <div class="comment-meta">
-                                <a href="javascript:void(0);">
-                                  March 9, 2019 at 11:15 am
-                                </a>
-                              </div>
-                              <div class="comment-author vcard">
-                                <img
-                                  class="avatar photo"
-                                  src="images/comment-pic/3.jpg"
-                                  alt=""
-                                />
-                                <cite class="fn">Diego</cite>
-                                <span class="says">says:</span>
-                              </div>
-
-                              <p>
-                                Vel velit auctor aliquet. Aenean sollicitudin,
-                                lorem quis bibendum auctor Lorem ipsum dolor sit
-                                amet of Lorem Ipsum. Proin gravida nibh..
-                              </p>
-                              <div class="reply">
-                                <a
-                                  href="javscript:;"
-                                  class="comment-reply-link letter-spacing-2 text-uppercase"
-                                >
-                                  Read More
-                                </a>
-                              </div>
-                            </div>
-                          </li>
-                        </ol>
-                      </li>
-                    </ol>
+                      );
+                    })}
                   </li>
                 </ol>
                 {/* <!-- COMMENT LIST END --> */}
@@ -295,7 +216,12 @@ export default function Video() {
                     </small>
                   </h4>
 
-                  <form class="comment-form" id="commentform" method="post">
+                  <form
+                    class="comment-form"
+                    id="commentform"
+                    method="post"
+                    onSubmit={handleSubmit}
+                  >
                     <p class="comment-form-author">
                       <label for="author">
                         Name <span class="required">*</span>
@@ -303,8 +229,15 @@ export default function Video() {
                       <input
                         class="form-control"
                         type="text"
-                        value=""
-                        name="user-comment"
+                        value={formData.author}
+                        name="author"
+                        required
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            author: e.currentTarget.value,
+                          })
+                        }
                         placeholder="Author"
                         id="author"
                       />
@@ -317,8 +250,14 @@ export default function Video() {
                       <input
                         class="form-control"
                         type="text"
-                        value=""
+                        value={formData.email}
                         name="email"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            email: e.currentTarget.value,
+                          })
+                        }
                         placeholder="Email"
                         id="email"
                       />
@@ -329,7 +268,13 @@ export default function Video() {
                       <input
                         class="form-control"
                         type="text"
-                        value=""
+                        value={formData.website}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            website: e.currentTarget.value,
+                          })
+                        }
                         name="url"
                         placeholder="Website"
                         id="url"
@@ -342,7 +287,14 @@ export default function Video() {
                         class="form-control"
                         rows="8"
                         name="comment"
+                        required
                         placeholder="Comment"
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            content: e.currentTarget.value,
+                          })
+                        }
                         id="comment"
                       ></textarea>
                     </p>
@@ -350,7 +302,7 @@ export default function Video() {
                     <p class="form-submit">
                       <button
                         class="site-button radius-no text-uppercase font-weight-600"
-                        type="button"
+                        type="submit"
                       >
                         Submit
                       </button>

@@ -1,14 +1,4 @@
 import React, { createContext, useEffect, useState } from "react";
-import postOne from "./assets/images/dummy/download_4.avif";
-import postTwo from "./assets/images/dummy/download_3.jpg";
-import postThree from "./assets/images/dummy/download_5.jpg";
-import postFour from "./assets/images/dummy/download_6.jpg";
-import postFive from "./assets/images/dummy/download_7.jpg";
-import postSix from "./assets/images/dummy/download_8.jpg";
-import postSeven from "./assets/images/dummy/download_9.webp";
-import postEight from "./assets/images/dummy/download_10.jpg";
-import postNine from "./assets/images/dummy/download_11.webp";
-import user_img from "./assets/images/dummy/team1.jpg";
 import apiRequest from "./apiRequest";
 // 1. Create the context
 export const DataContext = createContext();
@@ -16,360 +6,12 @@ export const DataContext = createContext();
 // 2. Create the provider component
 export const DataProvider = ({ children }) => {
   // 3. State for blogs and projects
-  const [blogs, setBlogs] = useState([
-    // Add your initial blog data here
-    {
-      id: 0,
-      title: "Blog 0",
-      desc: "desc of blog 2",
-      date: "2024-08-25",
-      comment_count: 5,
-      author: {
-        id: 22,
-        name: "Admin",
-      },
-      content:
-        "<div> <h1> this is the content</h1> <br/> <p>this is the body</p></div>",
-      images: [postFive, postFour],
-      videos: [],
-      quote: "this is the quote of the day",
-      show_image: postOne,
-      comment: [
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-      ],
-      tag: [
-        "Trouble ",
-        "Programmers",
-        "Never",
-        "Tell",
-        "Doing",
-        "Person",
-        "Inventors",
-        "Tag",
-        "Between",
-        "Abilities",
-        "Fault",
-        "Gets",
-        "Macho",
-      ],
-    },
-    {
-      id: 1,
-      title: "Blog 1",
-      desc: "desc of blog 1",
-      date: "2024-08-25",
-      comment_count: 5,
-      author: {
-        id: 22,
-        name: "Admin",
-      },
-      content:
-        "<div> <h1> this is the content</h1> <br/> <p>this is the body</p></div>",
-      images: [postOne, postSeven],
-      videos: [],
-      quote: null,
-      show_image: postFive,
-      comment: [
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-      ],
-      tag: [
-        "Trouble ",
-        "Programmers",
-        "Never",
-        "Tell",
-        "Doing",
-        "Person",
-        "Inventors",
-        "Tag",
-        "Between",
-        "Abilities",
-        "Fault",
-        "Gets",
-        "Macho",
-      ],
-    },
-    {
-      id: 2,
-      title: "Blog 2",
-      desc: "desc of blog 2",
-      date: "2024-08-25",
-      comment_count: 5,
-      author: {
-        id: 22,
-        name: "Admin",
-      },
-      content:
-        "<div> <h1> this is the content</h1> <br/> <p>this is the body</p></div>",
-      images: [],
-      videos: [],
-      quote: "this is the quote of the day",
-      show_image: postNine,
-      comment: [
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-      ],
-      tag: [
-        "Trouble ",
-        "Programmers",
-        "Never",
-        "Tell",
-        "Doing",
-        "Person",
-        "Inventors",
-        "Tag",
-        "Between",
-        "Abilities",
-        "Fault",
-        "Gets",
-        "Macho",
-      ],
-    },
-    {
-      id: 3,
-      title: "Blog 3",
-      desc: "desc of blog 2",
-      date: "2024-08-25",
-      comment_count: 5,
-      author: {
-        id: 22,
-        name: "Admin",
-      },
-      content:
-        "<div> <h1> this is the content</h1> <br/> <p>this is the body</p></div>",
-      images: [],
-      videos: [],
-      quote: "this is the quote of the day",
-      show_image: postNine,
-      comment: [
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-      ],
-      tag: [
-        "Trouble ",
-        "Programmers",
-        "Never",
-        "Tell",
-        "Doing",
-        "Person",
-        "Inventors",
-        "Tag",
-        "Between",
-        "Abilities",
-        "Fault",
-        "Gets",
-        "Macho",
-      ],
-    },
-
-    {
-      id: 4,
-      title: "Blog 4",
-      desc: "desc of blog 2",
-      date: "2024-08-25",
-      comment_count: 5,
-      author: {
-        id: 22,
-        name: "Admin",
-      },
-      content:
-        "<div> <h1> this is the content</h1> <br/> <p>this is the body</p></div>",
-      images: [],
-      videos: [],
-      quote: "this is the quote of the day",
-      show_image: postSix,
-      comment: [
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-      ],
-      tag: [
-        "Trouble ",
-        "Programmers",
-        "Never",
-        "Tell",
-        "Doing",
-        "Person",
-        "Inventors",
-        "Tag",
-        "Between",
-        "Abilities",
-        "Fault",
-        "Gets",
-        "Macho",
-      ],
-    },
-    {
-      id: 5,
-      title: "Blog 5",
-      desc: "desc of blog 2",
-      date: "2024-08-25",
-      comment_count: 5,
-      author: {
-        id: 22,
-        name: "Admin",
-      },
-      content:
-        "<div> <h1> this is the content</h1> <br/> <p>this is the body</p></div>",
-      images: [],
-      videos: [],
-      quote: "this is the quote of the day",
-      show_image: postThree,
-      comment: [
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-        {
-          id: 23,
-          name: "James mick",
-          content: " this is a comment by me the creator",
-          date: "2019-03-06T07:15:00",
-          profile_image: user_img,
-          comment: [],
-        },
-      ],
-      tag: [
-        "Trouble ",
-        "Programmers",
-        "Never",
-        "Tell",
-        "Doing",
-        "Person",
-        "Inventors",
-        "Tag",
-        "Between",
-        "Abilities",
-        "Fault",
-        "Gets",
-        "Macho",
-      ],
-    },
-  ]);
+  const [blogs, setBlogs] = useState([]);
 
   const [projects, setProjects] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [partners, setPartners] = useState([]);
 
   // Function to format the date
   const formatDate = (dateString) => {
@@ -418,6 +60,10 @@ export const DataProvider = ({ children }) => {
     testimonies: false,
     teams: false,
     projects: false,
+    partners: false,
+    blogs: false,
+    tags: false,
+    categories: false,
   });
   useEffect(() => {
     setLoaders({
@@ -425,6 +71,10 @@ export const DataProvider = ({ children }) => {
       testimonies: true,
       teams: true,
       projects: true,
+      partners: true,
+      blogs: true,
+      categories: true,
+      tags: true,
     });
 
     apiRequest
@@ -470,6 +120,34 @@ export const DataProvider = ({ children }) => {
         setProjects(res);
       })
       .finally(() => setLoaders({ projects: false }));
+
+    apiRequest
+      .get("/partners")
+      .then((res) => {
+        setPartners(res);
+      })
+      .finally(() => setLoaders({ partners: false }));
+
+    apiRequest
+      .get("/blogs")
+      .then((res) => {
+        setBlogs(res);
+      })
+      .finally(() => setLoaders({ blogs: false }));
+
+    apiRequest
+      .get("/categories")
+      .then((res) => {
+        setCategories(res);
+      })
+      .finally(() => setLoaders({ categories: false }));
+
+    apiRequest
+      .get("/tags")
+      .then((res) => {
+        setTags(res);
+      })
+      .finally(() => setLoaders({ tags: false }));
   }, []);
 
   // 4. Provide the data and functions
@@ -495,7 +173,13 @@ export const DataProvider = ({ children }) => {
         setTestimonies,
         teams,
         setTeams,
+        partners,
+        setPartners,
+        categories,
+        setCategories,
         loaders,
+        tags,
+        setTags,
       }}
     >
       {children}

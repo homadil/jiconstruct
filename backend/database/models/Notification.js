@@ -5,22 +5,17 @@ const sequelize = require("../index"); // Sequelize instance
 const Notification = sequelize.define(
   "Notification",
   {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    message: {
+    content: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
     },
-    type: {
-      type: DataTypes.ENUM("user", "admin"),
-      allowNull: false,
-      defaultValue: "user",
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: "users",
+        key: "id",
+      },
     },
   },
   {

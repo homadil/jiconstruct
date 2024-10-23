@@ -38,6 +38,16 @@ Comment.belongsToMany(Blog, {
 });
 Blog.belongsToMany(Comment, { through: "BlogComment", foreignKey: "blog_id" });
 
+// Project <-> Comment (Many-to-Many through ProjectComment)
+Comment.belongsToMany(Project, {
+  through: "ProjectComment",
+  foreignKey: "comment_id",
+});
+Project.belongsToMany(Comment, {
+  through: "ProjectComment",
+  foreignKey: "project_id",
+});
+
 // Project <-> Media (Many-to-Many through ProjectMedia)
 Media.belongsToMany(Project, {
   through: "ProjectMedia",
@@ -78,6 +88,18 @@ Blog.belongsToMany(Tag, { through: "BlogTag", foreignKey: "blog_id" });
 Tag.belongsToMany(Project, { through: "ProjectTag", foreignKey: "tag_id" });
 Project.belongsToMany(Tag, { through: "ProjectTag", foreignKey: "project_id" });
 
+// Team <-> Url (Many-to-Many through TeamUrl)
+Team.belongsToMany(Url, {
+  through: "TeamUrl",
+  foreignKey: "team_id",
+  otherKey: "url_id", // explicitly setting the other key
+});
+
+Url.belongsToMany(Team, {
+  through: "TeamUrl",
+  foreignKey: "url_id",
+  otherKey: "team_id", // explicitly setting the other key
+});
 // Blog <-> Url (Many-to-Many through BlogUrl)
 Blog.belongsToMany(Url, { through: "BlogUrl", foreignKey: "blog_id" });
 Url.belongsToMany(Blog, { through: "BlogUrl", foreignKey: "url_id" });

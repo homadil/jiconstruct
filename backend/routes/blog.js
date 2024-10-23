@@ -6,6 +6,7 @@ const isAuth = require("../middleware/auth/isAuth");
 const isAdmin = require("../middleware/auth/isAdmin");
 const { blogValidationRules } = require("../middleware/validations/blog");
 const upload = require("../config/multerConfig");
+const validateComment = require("../middleware/validations/validateComment");
 
 // CREATE - Add a new blog
 router.post(
@@ -44,5 +45,12 @@ router.patch(
 
 // DELETE - Remove a blog by ID
 router.delete("/:id", Blogs.delete);
+
+router.post(
+  "/:id/comments",
+  validateComment,
+  returnValidation,
+  Blogs.saveCommentForBlog
+);
 
 module.exports = router;

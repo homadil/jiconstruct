@@ -1,13 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./stylesheet/homeImageSlider.css";
-export default function HomeImageSlide({ index, item, backend_url }) {
+import { DataContext } from "../store";
+import { Link } from "react-router-dom";
+import CustomSlider from "./CustomSlide";
+export default function HomeImageSlide({ index, item }) {
+  const { backend_url } = useContext(DataContext);
   const [width, setWidth] = useState(window.innerWidth);
   const bg = useRef();
   // Update width on window resize
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
-    console.log(bg);
     bg.current?.classList.add("from_left");
 
     // Cleanup listener on unmount
@@ -16,7 +19,7 @@ export default function HomeImageSlide({ index, item, backend_url }) {
 
   const stylesheet = {
     dummy: {
-      backgroundImage: `url(${backend_url}/${item.path})`,
+      backgroundImage: `url(${backend_url}/${item.show})`,
       backgroundRepeat: "no-repeat",
       backgroundSize: "cover",
       backgroundPosition: "center",
@@ -62,21 +65,6 @@ export default function HomeImageSlide({ index, item, backend_url }) {
     },
   };
 
-  const [animationClass, setAnimationClass] = useState("");
-
-  // Trigger animation when component mounts
-  useEffect(() => {
-    const randomDirection = Math.random() < 0.5 ? "top" : "bottom"; // Randomly choose top or bottom for left children
-    const randomRightDirection = Math.random() < 0.5 ? "left" : "right"; // Randomly choose left or right for right image
-
-    setAnimationClass(
-      `animate-${randomDirection} animate-${randomRightDirection}`
-    );
-
-    // Clean up on unmount
-    return () => setAnimationClass("");
-  }, [item]);
-
   return (
     <div className="slider-item animate" style={stylesheet.bg}>
       <div style={stylesheet.dummy} className="slide_bg" ref={bg}></div>
@@ -90,12 +78,12 @@ export default function HomeImageSlide({ index, item, backend_url }) {
 
           {/* Small Title */}
           <div className="slide_title slide_text_2 slide_text_active ">
-            <span className="text-white">We Make Sure </span>
+            <span className="text-white">{item.title} </span>
           </div>
 
           {/* Large Title */}
           <div className={`slider-large-title slide_text_3 slide_text_active `}>
-            <div className="text-white slide_text">Classic & Modern</div>
+            <div className="text-white slide_text">{item.description}</div>
           </div>
 
           <div
@@ -118,40 +106,29 @@ export default function HomeImageSlide({ index, item, backend_url }) {
               className={`slider-button-line`}
             />
             {/* Button */}
-            <a href="javascript:;" className={`slider-button animate-fade`}>
+            <Link
+              to={`/project?id=${item.id}`}
+              className={`slider-button animate-fade`}
+            >
               More About
-            </a>
+            </Link>
           </div>
         </div>
 
         <div className={`slider-image-right `}>
-          <img
-            src={`${backend_url}/${item.path}`}
-            alt=""
-            className="image-preview"
-          />
+          <CustomSlider mediaItems={item.Media} />
         </div>
       </div>
       <div className="blind">
         <div className="blind_container">
           <ul className="blind_links">
-            <li>
-              <a href="http://" target="black">
-                instagram
-              </a>
-            </li>
-
-            <li>
-              <a href="http://" target="black">
-                twitter
-              </a>
-            </li>
-
-            <li>
-              <a href="http://" target="black">
-                facebook
-              </a>
-            </li>
+            {item?.Urls?.map((url, index) => (
+              <li key={index}>
+                <a href={url.link} target="black">
+                  {url.name}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

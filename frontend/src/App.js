@@ -4,8 +4,9 @@ import Footer from "./pages/Footer";
 import Navigation from "./pages/Navigation";
 import Loader from "./components/Loader.jsx";
 import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
+import { DataContext } from "./store.js";
 
 function ScrollToHashElement() {
   const { hash } = useLocation();
@@ -25,7 +26,11 @@ function ScrollToHashElement() {
 function App() {
   const location = useLocation();
   const isAdminPath = location.pathname.includes("/admin");
-
+  const { loaders } = useContext(DataContext);
+  // If all values are false, set finishedLoading to true, otherwise false
+  const finishedLoading = Object.values(loaders).every(
+    (value) => value === false
+  );
   return (
     <div className="page-wrapper">
       <ToastContainer
@@ -48,11 +53,11 @@ function App() {
         ""
       ) : (
         <>
+          <Loader />
           <Navigation />
         </>
       )}
       <RouterPath />
-      <Loader />
 
       {isAdminPath ? (
         ""

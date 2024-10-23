@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import img_one from "../../assets/images/dummy/download_1.jpg";
 import img_two from "../../assets/images/dummy/download_2.jpg";
 import img_three from "../../assets/images/dummy/download_3.jpg";
 import { Link } from "react-router-dom";
+import { DataContext } from "../../store";
 export default function Footer() {
+  const { blogs, backend_url, truncateContent } = useContext(DataContext);
+  const sortedBlogs = blogs
+    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)) // Sort by createdAt ascending
+    .slice(0, 3); // Get the first four teams
+
   return (
     <footer class="site-footer footer-large  footer-dark">
       <div class="footer-social-section bg-secondry">
@@ -55,60 +61,35 @@ export default function Footer() {
                 <h4 class="widget-title  text-uppercase">Recent Post</h4>
                 <div class="section-content">
                   <div class="widget-post-bx">
-                    <div class="widget-post clearfix">
-                      <div class="wt-post-media">
-                        <img src={img_one} alt="" />
-                      </div>
-                      <div class="wt-post-info">
-                        <div class="wt-post-meta">
-                          <ul>
-                            <li class="post-author">25 Dec</li>
-                            <li class="post-comment"> 20 Comment</li>
-                          </ul>
+                    {sortedBlogs?.map((blog, index) => {
+                      return (
+                        <div key={index} class="widget-post clearfix">
+                          <div class="wt-post-media">
+                            <img
+                              src={`${backend_url}/${blog.show}`}
+                              alt={blog.title}
+                            />
+                          </div>
+                          <div class="wt-post-info">
+                            <div class="wt-post-meta">
+                              <ul>
+                                <li class="post-author">{blog.user.name}</li>
+                                <br />
+                                <li class="post-comment">
+                                  {" "}
+                                  {blog.Comments.length} Comment
+                                </li>
+                              </ul>
+                            </div>
+                            <div class="wt-post-header">
+                              <h6 class="post-title">
+                                {truncateContent(blog.title, 10)}
+                              </h6>
+                            </div>
+                          </div>
                         </div>
-                        <div class="wt-post-header">
-                          <h6 class="post-title">
-                            Planning approved for restoration town hall.
-                          </h6>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="widget-post clearfix">
-                      <div class="wt-post-media">
-                        <img src={img_two} alt="" />
-                      </div>
-                      <div class="wt-post-info">
-                        <div class="wt-post-meta">
-                          <ul>
-                            <li class="post-author">28 Dec</li>
-                            <li class="post-comment"> 15 Comment</li>
-                          </ul>
-                        </div>
-                        <div class="wt-post-header">
-                          <h6 class="post-title">
-                            Planning approved for restoration town hall.
-                          </h6>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="widget-post clearfix">
-                      <div class="wt-post-media">
-                        <img src={img_three} alt="" />
-                      </div>
-                      <div class="wt-post-info">
-                        <div class="wt-post-meta">
-                          <ul>
-                            <li class="post-author">30 Dec</li>
-                            <li class="post-comment"> 11 Comment</li>
-                          </ul>
-                        </div>
-                        <div class="wt-post-header">
-                          <h6 class="post-title">
-                            Planning approved for restoration town hall.
-                          </h6>
-                        </div>
-                      </div>
-                    </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -159,7 +140,7 @@ export default function Footer() {
                     <Link to={"/blog"}>Articles</Link>
                   </li>
                   <li>
-                    <Link to={"/project_grid"}>Gallery</Link>
+                    <Link to={"/project"}>Gallery</Link>
                     <Link to={"/#service"}>Service</Link>
                   </li>
                   <li>

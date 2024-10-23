@@ -1,29 +1,61 @@
 const fs = require("fs");
 const path = require("path");
 const Teams = require("../database/models/Team");
+const Url = require("../database/models/Url");
 
 // CREATE - Add a new Teams (with image upload)
 const create = async (req, res) => {
+  const transaction = await Teams.sequelize.transaction(); // Start transaction
   try {
     // Check if file was uploaded
-    if (!req.files["files"] || req.files["files"].length === 0) {
+    if (!req.files || !req.files["files"] || req.files["files"].length === 0) {
       return res.status(400).json({ msg: "No media files uploaded." });
     }
 
-    // let imagePath = req.files ? `images/${req.files.filename}` : null;
+    // Remove 'public/' from the file path and store the correct path
+    let imagePath = req.files["files"][0].path.replace(/^public[\\/]/, "");
 
-    let imagePath = req.files["files"][0].path.replace(/^public[\\/]/, ""); // Remove 'public/' from the file path
-
+    // Prepare team data
     const teamData = {
       ...req.body,
       image: imagePath, // Store image path in the database
     };
 
-    const team = await Teams.create(teamData);
+    // Create team entry
+    const team = await Teams.create(teamData, { transaction });
+
+    // Handle URLs
+    if (req.body.urls) {
+      let urlArray = Array.isArray(req.body.urls)
+        ? req.body.urls
+        : [req.body.urls]; // Normalize URLs to an array if a single URL is provided
+
+      // Parse URLs and map their IDs
+      const parsedUrls = urlArray.map((url) => JSON.parse(url));
+      const urlIds = parsedUrls.map((url) => url.id);
+
+      // Fetch matching URLs by ID
+      const urls = await Url.findAll({
+        where: {
+          id: urlIds,
+        },
+        transaction,
+      });
+
+      // Associate URLs with the team
+      await team.addUrls(urls, { transaction });
+    }
+
+    // Commit transaction if all operations succeed
+    await transaction.commit();
+
+    // Respond with success
     res
       .status(201)
       .json({ ...team.dataValues, msg: `${team.name} created successfully` });
   } catch (error) {
+    await transaction.rollback(); // Rollback transaction on error
+    console.log(error.message);
     res.status(400).json({ error: error.message });
   }
 };
@@ -31,7 +63,9 @@ const create = async (req, res) => {
 // READ - Get all Testimonys
 const getAll = async (req, res) => {
   try {
-    const teams = await Teams.findAll();
+    const teams = await Teams.findAll({
+      include: [{ model: Url, through: { attributes: [] } }],
+    });
     res.status(200).json(teams);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -51,8 +85,8 @@ const getById = async (req, res) => {
   }
 };
 
-// UPDATE (PUT) - Update an entire Teams by ID with image upload
 const update = async (req, res) => {
+  const transaction = await Teams.sequelize.transaction(); // Start transaction
   try {
     const team = await Teams.findByPk(req.params.id);
 
@@ -69,7 +103,7 @@ const update = async (req, res) => {
         ""
       );
 
-      // If the Teams already has an image, delete the old one
+      // If the team already has an image, delete the old one
       const OldPath = path.join(__dirname, "..", "public", team.image); // Get absolute path
 
       if (fs.existsSync(OldPath)) {
@@ -82,16 +116,43 @@ const update = async (req, res) => {
     const updatedTeamData = {
       ...req.body,
       image: imagePath, // Update image if a new one was uploaded
-      msg: `${team.name} was updated successfully `,
     };
 
-    // Update the team with the new data, and specify the `where` condition
-    await Teams.update(updatedTeamData, {
-      where: { id: req.params.id }, // Specify which team to update
-    });
+    // Update the team with the new data
+    await team.update(updatedTeamData, { transaction });
 
-    res.status(200).json({ ...updatedTeamData, id: team.id });
+    // Handle URLs
+    if (req.body.urls) {
+      let urlArray = Array.isArray(req.body.urls)
+        ? req.body.urls
+        : [req.body.urls]; // Normalize URLs to an array if a single URL is provided
+
+      // Update the URLs
+      if (urlArray && urlArray.length > 0) {
+        const parsedUrls = urlArray.map((url) => JSON.parse(url));
+        const urlIds = parsedUrls.map((url) => url.id);
+
+        // Find the URLs that are associated with the team
+        const urls = await Url.findAll({
+          where: {
+            id: urlIds,
+          },
+          transaction,
+        });
+        // Update the relationship (remove old URLs and add new ones)
+        await team.setUrls(urls, { transaction }); // Replaces old associations with new ones
+      }
+    }
+
+    await transaction.commit(); // Commit the transaction
+
+    res.status(200).json({
+      ...updatedTeamData,
+      id: team.id,
+      msg: `${team.name} was updated successfully`,
+    });
   } catch (error) {
+    await transaction.rollback(); // Rollback the transaction in case of error
     res.status(400).json({ error: error.message });
   }
 };

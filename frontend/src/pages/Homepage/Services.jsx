@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { DataContext } from "../../store";
 
 export default function Services() {
+  const { categories, backend_url } = useContext(DataContext);
+
+  const sortedCategories = categories.sort(
+    (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+  ); // Sort by createdAt ascending
+  const getFirstCharUppercase = (str) => {
+    if (!str) return ""; // Return empty string if input is empty or undefined
+    return str.charAt(0).toUpperCase();
+  };
   return (
     /* <!-- OUR SERVICES START --> */
     <section id="service" class="section-full p-t80 p-b50 bg-gray">
@@ -20,162 +30,36 @@ export default function Services() {
           </div>
         </div>
         <div class="row">
-          <div class="col-lg-4 col-md-6 col-sm-6">
-            <div class="wt-icon-box-wraper m-b30 p-lr30 p-tb25 data-title-large  v-icon-effect block-bg-hover bg-white">
-              <div class="icon-content m-b30">
-                <h4 class="wt-tilte-large m-t0" data-title="A">
-                  Architecture design
-                </h4>
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and type.
-                </p>
-                <Link
-                  to={{
-                    pathname: "/project_detail",
-                    search: "?service=architecture",
-                  }}
-                  className="site-button-link"
-                >
-                  Read More
-                </Link>
+          {sortedCategories.map((categories, index) => {
+            return (
+              <div key={index} class="col-lg-4 col-md-6 col-sm-6">
+                <div class="wt-icon-box-wraper m-b30 p-lr30 p-tb25 data-title-large  v-icon-effect block-bg-hover bg-white">
+                  <div class="icon-content m-b30">
+                    <h4
+                      class="wt-tilte-large m-t0"
+                      data-title={getFirstCharUppercase(categories.name)}
+                    >
+                      {categories.name}
+                    </h4>
+                    <p>{categories.description}</p>
+                    <Link
+                      to={`/project_carousel?service=${encodeURIComponent(
+                        categories.name
+                      )}&id=${categories.id}`}
+                      className="site-button-link"
+                    >
+                      Read More
+                    </Link>
+                  </div>
+                  <div class="icon-xl inline-icon">
+                    <span class="icon-cell">
+                      <i className={`${categories.icon} v-icon`}></i>
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div class="icon-xl inline-icon">
-                <span class="icon-cell">
-                  <i class="flaticon-mansion v-icon"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-sm-6">
-            <div class="wt-icon-box-wraper m-b30 p-lr30 p-tb25 data-title-large  v-icon-effect block-bg-hover bg-white">
-              <div class="icon-content m-b30">
-                <h4 class="wt-tilte-large m-t0" data-title="S">
-                  smart Interior design
-                </h4>
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and type.
-                </p>
-                <Link
-                  to={{
-                    pathname: "/project_detail",
-                    search: "?service=interior",
-                  }}
-                  className="site-button-link"
-                >
-                  Read More
-                </Link>
-              </div>
-              <div class="icon-xl inline-icon">
-                <span class="icon-cell">
-                  <i class="flaticon-stair v-icon"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-sm-6">
-            <div class="wt-icon-box-wraper m-b30 p-lr30 p-tb25 data-title-large  v-icon-effect block-bg-hover bg-white">
-              <div class="icon-content m-b30">
-                <h4 class="wt-tilte-large m-t0" data-title="R">
-                  Residential design
-                </h4>
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and type.
-                </p>
-                <Link
-                  to={{
-                    pathname: "/project_detail",
-                    search: "?service=residential",
-                  }}
-                  className="site-button-link"
-                >
-                  Read More
-                </Link>
-              </div>
-              <div class="icon-xl inline-icon">
-                <span class="icon-cell">
-                  <i class="flaticon-apartment v-icon"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-sm-6">
-            <div class="wt-icon-box-wraper m-b30 p-lr30 p-tb25 data-title-large  v-icon-effect block-bg-hover bg-white">
-              <div class="icon-content m-b30">
-                <h4 class="wt-tilte-large m-t0" data-title="L">
-                  landscape design
-                </h4>
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and type.
-                </p>
-                <Link
-                  to={{
-                    pathname: "/project_detail",
-                    search: "?service=landscape",
-                  }}
-                  className="site-button-link"
-                >
-                  Read More
-                </Link>
-              </div>
-              <div class="icon-xl inline-icon">
-                <span class="icon-cell">
-                  <i class="flaticon-photo v-icon"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-sm-6">
-            <div class="wt-icon-box-wraper m-b30 p-lr30 p-tb25 data-title-large  v-icon-effect block-bg-hover bg-white">
-              <div class="icon-content m-b30">
-                <h4 class="wt-tilte-large m-t0" data-title="P">
-                  Plans and Projects
-                </h4>
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and type.
-                </p>
-                <Link
-                  to={{
-                    pathname: "/project_detail",
-                    search: "?service=plansAndProject",
-                  }}
-                  className="site-button-link"
-                >
-                  Read More
-                </Link>
-              </div>
-              <div class="icon-xl inline-icon">
-                <span class="icon-cell">
-                  <i class="flaticon-sketch v-icon"></i>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6 col-sm-6">
-            <div class="wt-icon-box-wraper m-b30 p-lr30 p-tb25 data-title-large  v-icon-effect block-bg-hover bg-white">
-              <div class="icon-content m-b30">
-                <h4 class="wt-tilte-large m-t0" data-title="K">
-                  Kitchen design{" "}
-                </h4>
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and type.
-                </p>
-                <Link
-                  to={{
-                    pathname: "/project_detail",
-                    search: "?service=kitchen",
-                  }}
-                  className="site-button-link"
-                >
-                  Read More
-                </Link>
-              </div>
-              <div class="icon-xl inline-icon">
-                <span class="icon-cell">
-                  <i class="flaticon-kitchen v-icon"></i>
-                </span>
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -6,31 +6,61 @@ import {
   TextField,
   Grid,
   Typography,
+  InputLabel,
+  Select,
+  Chip,
+  MenuItem,
+  FormControl,
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
-import "bootstrap/dist/css/bootstrap.min.css";
 import apiRequest from "../../../apiRequest";
 import Loader from "../../../components/Loader";
 import { DataContext } from "../../../store";
+
 export default function Team() {
   const [teams, setTeams] = useState([]);
-  const [loader, setLoader] = useState([]);
+
+  const [loader, setLoader] = useState({
+    team: false,
+    url: false,
+  });
   const { backend_url } = useContext(DataContext);
   const [id, setID] = useState(null);
-  const [update, setUpdate] = useState(false);
-  useEffect(() => {
-    apiRequest
-      .get("/teams")
-      .then((res) => setTeams(res))
-      .finally(() => setLoader(false));
-  }, []);
   const [showModal, setShowModal] = useState(false);
   const [newTeam, setNewTeam] = useState({
     name: "",
     position: "",
     image: "",
   });
+  const [update, setUpdate] = useState(false);
+  const [urls, setUrls] = useState([]);
+  const [selectedUrls, setSelectedUrls] = useState(
+    update ? newTeam.Urls.map((u) => u.id) : []
+  );
+  useEffect(() => {
+    setLoader({ team: true, url: true });
+
+    fetchTeams();
+    fetchUrls();
+  }, []);
+
+  const fetchUrls = async () => {
+    // Fetch URLs from the backend
+    apiRequest
+      .get("/urls")
+      .then((res) => {
+        setUrls(res);
+      })
+      .finally(() => setLoader({ ...loader, url: false }));
+  };
+
+  const fetchTeams = async () => {
+    apiRequest
+      .get("/teams")
+      .then((res) => setTeams(res))
+      .finally(() => setLoader({ team: false }));
+  };
 
   // Modal Handlers
   const handleOpenModal = () => setShowModal(true);
@@ -53,6 +83,9 @@ export default function Team() {
         teams.push(res);
         setTeams(teams);
         handleCloseModal();
+      })
+      .finally(() => {
+        fetchTeams();
       });
   };
 
@@ -64,7 +97,9 @@ export default function Team() {
         const updatedTestimonies = teams.filter((Team) => Team.id !== id);
         setTeams(updatedTestimonies);
       })
-      .finally(() => {});
+      .finally(() => {
+        fetchTeams();
+      });
   };
 
   // Update Team (Mock)
@@ -84,9 +119,12 @@ export default function Team() {
         const updatedTestimonies = teams.map((item) =>
           item.id === res.id ? (item = res) : item
         );
-        console.log(res);
+
         setTeams(updatedTestimonies); // Update the teams state with the updated data
         handleCloseModal(); // Close the modal after successful update
+      })
+      .finally(() => {
+        fetchTeams();
       });
   };
 
@@ -99,6 +137,10 @@ export default function Team() {
     formData.append("name", newTeam.name);
     formData.append("position", newTeam.position);
 
+    for (let i = 0; i < urls.length; i++) {
+      formData.append("urls", JSON.stringify(urls[i])); // Stringify the URL objects
+    }
+
     if (update) {
       handleUpdateTeam(id, formData);
     } else {
@@ -106,7 +148,7 @@ export default function Team() {
     }
   }
 
-  if (loader) {
+  if (loader.team || loader.url) {
     return <Loader />;
   }
 
@@ -139,7 +181,11 @@ export default function Team() {
                   <img
                     src={backend_url + "/" + Team.image}
                     alt={Team.name}
-                    style={{ width: "100%", borderRadius: "8px" }}
+                    style={{
+                      width: "100%",
+                      height: "200px",
+                      borderRadius: "8px",
+                    }}
                   />
                 </Grid>
                 <Grid item xs={8}>
@@ -198,6 +244,7 @@ export default function Team() {
             onChange={(e) => setNewTeam({ ...newTeam, name: e.target.value })}
             className="mt-3"
           />
+
           <TextField
             label="Position"
             fullWidth
@@ -209,6 +256,33 @@ export default function Team() {
             }
             className="mt-3"
           />
+
+          <FormControl fullWidth>
+            <InputLabel>URLs</InputLabel>
+            <Select
+              multiple
+              style={{ margin: "6px" }}
+              value={selectedUrls}
+              onChange={(e) => setSelectedUrls(e.target.value)}
+              renderValue={(selected) => (
+                <div>
+                  {selected.map((value) => (
+                    <Chip
+                      key={value}
+                      label={urls.find((url) => url.id === value)?.name}
+                    />
+                  ))}
+                </div>
+              )}
+            >
+              {urls.map((url) => (
+                <MenuItem key={url.id} value={url.id}>
+                  {url.name} {`{ ${url.link}}`}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
           <input
             type="file"
             accept="image/*"
