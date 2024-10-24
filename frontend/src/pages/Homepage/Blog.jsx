@@ -2,22 +2,31 @@ import React, { useContext } from "react";
 import { DataContext } from "../../store";
 import { Link } from "react-router-dom";
 const getLatestPostAndSortedBlogs = (blogs) => {
-  // Step 1: Remove the first blog post (latest) and store it in a separate variable
-  const latest = blogs.splice(0, 1)[0];
+  // Step 1: Create a shallow copy of the blogs array
+  const blogsCopy = blogs.slice();
 
-  // Step 2: Sort the remaining blogs by? date (latest first)
-  blogs.sort((a, b) => new Date(b?.date) - new Date(a?.date));
+  // Step 2: Remove the first blog post (latest) from the copied array
+  const latest = blogsCopy.shift();
 
-  // Step 3: Limit the blogs to 4 posts
-  const limitedBlogs = blogs.slice(0, 4);
+  // Step 3: Sort the remaining blogs by date (latest first) in the copied array
+  const sortedBlogs = blogsCopy.sort(
+    (a, b) => new Date(b?.date) - new Date(a?.date)
+  );
+
+  // Step 4: Limit the sorted blogs to 4 posts
+  const limitedBlogs = sortedBlogs.slice(0, 4);
 
   return { latest, limitedBlogs };
 };
-
 export default function Blog() {
-  const { blogs, formatDate, truncateContent } = useContext(DataContext);
+  const { blogs, formatDate, truncateContent, backend_url } =
+    useContext(DataContext);
   const { latest, limitedBlogs } = getLatestPostAndSortedBlogs(blogs);
-  const { day, month, year } = formatDate(latest?.date);
+  const { day, month, year } = formatDate(latest?.createdAt);
+
+  if (latest == undefined) {
+    return;
+  }
   return (
     /* <!-- OUR BLOG START --> */
     <div class="section-full p-t80 p-b50 bg-white">
@@ -41,7 +50,9 @@ export default function Blog() {
               <div
                 class="blog-post latest-blog-3 overlay-wraper post-overlay  large?-date bg-cover bg-no-repeat bg-top-center"
                 // input url here
-                style={{ backgroundImage: "url(images/dummy/download14.webp)" }}
+                style={{
+                  backgroundImage: `url(${backend_url}/${latest?.show})`,
+                }}
               >
                 <div class="overlay-main opacity-05 bg-black"></div>
                 <div class="wt-post-info p-a30 text-white">
@@ -57,12 +68,12 @@ export default function Blog() {
                           </li>
                           <li class="post-author">
                             <i class="fa fa-user-o"></i>By{" "}
-                            <a href="javascript:;">{latest.author.name}</a>{" "}
+                            <a href="javascript:;">{latest.user.name}</a>{" "}
                           </li>
                           <li class="post-comment">
                             <i class="fa fa-comments-o"></i>{" "}
                             <a href="javascript:;">
-                              {latest.comment_count} comment
+                              {latest.Comments.length} comment
                             </a>{" "}
                           </li>
                         </ul>
@@ -71,8 +82,8 @@ export default function Blog() {
                         <h3 class="post-title">
                           <Link
                             to={{
-                              pathname: "/route",
-                              search: `?type=blog&id=${latest.id}`,
+                              pathname: "/blog_detail",
+                              search: `?id=${latest.id}`,
                             }}
                             class="text-white text-capitalize"
                           >
@@ -83,8 +94,8 @@ export default function Blog() {
                       <div class="wt-post-readmore ">
                         <Link
                           to={{
-                            pathname: "/route",
-                            search: `?type=blog&id=${latest.id}`,
+                            pathname: "/blog_detail",
+                            search: `?id=${latest.id}`,
                           }}
                           class="site-button-link white"
                         >
@@ -94,31 +105,23 @@ export default function Blog() {
                     </div>
                     <div class="blog-social-icon">
                       <ul class="social-tooltips-outer">
-                        <li>
-                          <a href="javascript:void(0);" class="fa fa-google">
-                            <span class="social-tooltips">Google</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);" class="fa fa-rss">
-                            <span class="social-tooltips">Rss</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);" class="fa fa-facebook">
-                            <span class="social-tooltips">Facebook</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);" class="fa fa-twitter">
-                            <span class="social-tooltips">Twitter</span>
-                          </a>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);" class="fa fa-linkedin">
-                            <span class="social-tooltips">Linkedin</span>
-                          </a>
-                        </li>
+                        {latest?.Urls.map((url, index) => {
+                          console.log(url);
+                          return (
+                            <li key={index}>
+                              <a href={url.link} className={`fa ${url.icon}`}>
+                                <span class="social-tooltips">{url.name}</span>
+                                {url.icon == "" && (
+                                  <img
+                                    className="avatar photo rounded-4"
+                                    src={`${backend_url}/${url.image}`}
+                                    alt={url.name}
+                                  />
+                                )}
+                              </a>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   </div>
@@ -129,7 +132,7 @@ export default function Blog() {
           <div class="col-xl-6 col-lg-6 col-md-12">
             <div class="row latest-blog-2-outer m-t30">
               {limitedBlogs.map((item, index) => {
-                const { day, month, year } = formatDate(item?.date);
+                const { day, month, year } = formatDate(item?.createdAt);
                 return (
                   <div key={index} class="col-lg-6 col-md-6 col-sm-6">
                     <div class="blog-post latest-blog-2 mid-size?-date bdr-1 bdr-solid bdr-gray  p-a20">
@@ -145,13 +148,13 @@ export default function Blog() {
                             <li class="post-author">
                               <i class="fa fa-user-o"></i>
                               <a href="javascript:void(0);">
-                                By <span>{item.author.name}</span>
+                                By <span>{item.user.name}</span>
                               </a>{" "}
                             </li>
                             <li class="post-comment">
                               <i class="fa fa-comments-o"></i>{" "}
                               <a href="javascript:void(0);">
-                                {item.comment_count} Comment
+                                {item.Comments.length} Comment
                               </a>{" "}
                             </li>
                           </ul>
@@ -160,8 +163,8 @@ export default function Blog() {
                           <h4 class="post-title">
                             <Link
                               to={{
-                                pathname: "/route",
-                                search: `?type=blog&id=${item.id}`,
+                                pathname: "/blog_detail",
+                                search: `?id=${item.id}`,
                               }}
                               class="text-capitalize"
                             >
@@ -170,7 +173,7 @@ export default function Blog() {
                           </h4>
                         </div>
                         <div class="wt-post-text ">
-                          <p>{truncateContent(item.desc, 20)}</p>
+                          <p>{truncateContent(item.description, 20)}</p>
                         </div>
                       </div>
                     </div>

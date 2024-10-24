@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiRequest from "../../apiRequest";
 import logo from "../../assets/images/ji_construct_logo.png";
-
+import bg from "../../assets/images/dummy/download_12.jpg";
 export default function SignIn() {
   const [isHovered, setIsHovered] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -69,7 +69,7 @@ export default function SignIn() {
           <div
             className=""
             style={{
-              backgroundImage: "url('images/dummy/about.webp')",
+              backgroundImage: `url(${bg})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               zIndex: "1000",

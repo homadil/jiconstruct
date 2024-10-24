@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
 import aboutOne from "../../assets/images/dummy/about1.jpg";
@@ -8,12 +8,26 @@ import aboutThree from "../../assets/images/dummy/about3.webp";
 import TeamOne from "../../assets/images/dummy/team1.jpg";
 import TeamTwo from "../../assets/images/dummy/team2.jpg";
 import TeamThree from "../../assets/images/dummy/team3.jpg";
+import { DataContext } from "../../store";
+import Services from "../Homepage/Services";
+import Team from "../Homepage/Team";
 
 export default function AboutUs() {
   const stylesheet = {
     height: "300px",
     width: "100%",
   };
+
+  const { aboutUsHeader, homeGrid, aboutUsImage, backend_url } =
+    useContext(DataContext);
+
+  const [homeGridFirstIndex, ...remainingHomeGrid] = homeGrid;
+
+  if (!homeGridFirstIndex || remainingHomeGrid.length <= 0) {
+    return;
+  }
+
+  console.log(aboutUsImage);
   return (
     //  <!-- CONTENT START -->
     <div class="page-content">
@@ -21,7 +35,9 @@ export default function AboutUs() {
       <div
         class="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"
         data-stellar-background-ratio="0.5"
-        style={{ backgroundImage: "url(images/dummy/about.webp)" }}
+        style={{
+          backgroundImage: `url(${backend_url}/${aboutUsHeader[0]?.path})`,
+        }}
       >
         <div class="overlay-main bg-black opacity-07"></div>
         <div class="container">
@@ -38,7 +54,7 @@ export default function AboutUs() {
                 <li>
                   <Link to={"/"}>Home</Link>
                 </li>
-                <li>About 1</li>
+                <li>About Us</li>
               </ul>
             </div>
 
@@ -80,7 +96,10 @@ export default function AboutUs() {
                     <div class="col-md-6 col-sm-6 masonry-item">
                       <div class="arc-about-year text-uppercase text-right m-b20">
                         <div class="arc-about-year-pic img-reflection">
-                          <img src="images/about/s-1.jpg" alt="" />
+                          <img
+                            src={backend_url + "/" + homeGridFirstIndex?.path}
+                            alt=""
+                          />
                         </div>
                         <div class="arc-about-year-info">
                           <span class="title-small">
@@ -93,23 +112,15 @@ export default function AboutUs() {
                       </div>
                     </div>
 
-                    <div class="col-md-6 col-sm-6 masonry-item">
-                      <div class="wt-media m-b20 img-reflection">
-                        <img src={aboutOne} alt="" />
-                      </div>
-                    </div>
-
-                    <div class="col-md-6 col-sm-6 masonry-item">
-                      <div class="wt-media m-b20 img-reflection">
-                        <img src={aboutTwo} alt="" />
-                      </div>
-                    </div>
-
-                    <div class="col-md-6 col-sm-6 masonry-item">
-                      <div class="wt-media m-b20 img-reflection">
-                        <img src={aboutThree} alt="" />
-                      </div>
-                    </div>
+                    {remainingHomeGrid.map((item, index) => {
+                      return (
+                        <div key={index} class="col-md-6 col-sm-6 masonry-item">
+                          <div class="wt-media m-b20 img-reflection">
+                            <img src={backend_url + "/" + item?.path} alt="" />
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -120,308 +131,11 @@ export default function AboutUs() {
       {/* <!-- WELCOME  SECTION END -->   */}
 
       {/* <!-- OUR SERVICES START --> */}
-      <div class="section-full p-t80 p-b50 bg-gray">
-        <div class="container">
-          <div class="section-head clearfix">
-            <div class="wt-tilte-main bdr-r-3 bdr-primary bdr-solid">
-              <small class="wt-small-title">Work service</small>
-              <h2 class="m-b5">Our great provided</h2>
-            </div>
-            <div class="title-right-detail">
-              <p>
-                We are uncompetitor in architectural solutions Friendly
-                neighbour there that power. Keep away Architecture who try to
-                Ambitions people do that really great.
-              </p>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-lg-4 col-md-6 col-sm-6">
-              <div class="wt-icon-box-wraper m-b30 p-lr30 p-tb25 data-title-large  v-icon-effect block-bg-hover bg-white">
-                <div class="icon-content m-b30">
-                  <h4 class="wt-tilte-large m-t0" data-title="A">
-                    Architecture design
-                  </h4>
-                  <p>
-                    Lorem Ipsum is simply dummy text of the printing and type.
-                  </p>
-                  <a href="javascript:;" class="site-button-link">
-                    Read More
-                  </a>
-                </div>
-                <div class="icon-xl inline-icon">
-                  <span class="icon-cell">
-                    <i class="flaticon-mansion v-icon"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6">
-              <div class="wt-icon-box-wraper m-b30 p-lr30 p-tb25 data-title-large  v-icon-effect block-bg-hover bg-white">
-                <div class="icon-content m-b30">
-                  <h4 class="wt-tilte-large m-t0" data-title="S">
-                    smart Interior design
-                  </h4>
-                  <p>
-                    Lorem Ipsum is simply dummy text of the printing and type.
-                  </p>
-                  <a href="javascript:;" class="site-button-link">
-                    Read More
-                  </a>
-                </div>
-                <div class="icon-xl inline-icon">
-                  <span class="icon-cell">
-                    <i class="flaticon-stair v-icon"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6">
-              <div class="wt-icon-box-wraper m-b30 p-lr30 p-tb25 data-title-large  v-icon-effect block-bg-hover bg-white">
-                <div class="icon-content m-b30">
-                  <h4 class="wt-tilte-large m-t0" data-title="R">
-                    Residential design
-                  </h4>
-                  <p>
-                    Lorem Ipsum is simply dummy text of the printing and type.
-                  </p>
-                  <a href="javascript:;" class="site-button-link">
-                    Read More
-                  </a>
-                </div>
-                <div class="icon-xl inline-icon">
-                  <span class="icon-cell">
-                    <i class="flaticon-apartment v-icon"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6">
-              <div class="wt-icon-box-wraper m-b30 p-lr30 p-tb25 data-title-large  v-icon-effect block-bg-hover bg-white">
-                <div class="icon-content m-b30">
-                  <h4 class="wt-tilte-large m-t0" data-title="L">
-                    landscape design
-                  </h4>
-                  <p>
-                    Lorem Ipsum is simply dummy text of the printing and type.
-                  </p>
-                  <a href="javascript:;" class="site-button-link">
-                    Read More
-                  </a>
-                </div>
-                <div class="icon-xl inline-icon">
-                  <span class="icon-cell">
-                    <i class="flaticon-photo v-icon"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6">
-              <div class="wt-icon-box-wraper m-b30 p-lr30 p-tb25 data-title-large  v-icon-effect block-bg-hover bg-white">
-                <div class="icon-content m-b30">
-                  <h4 class="wt-tilte-large m-t0" data-title="P">
-                    Plans and Projects
-                  </h4>
-                  <p>
-                    Lorem Ipsum is simply dummy text of the printing and type.
-                  </p>
-                  <a href="javascript:;" class="site-button-link">
-                    Read More
-                  </a>
-                </div>
-                <div class="icon-xl inline-icon">
-                  <span class="icon-cell">
-                    <i class="flaticon-sketch v-icon"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6">
-              <div class="wt-icon-box-wraper m-b30 p-lr30 p-tb25 data-title-large  v-icon-effect block-bg-hover bg-white">
-                <div class="icon-content m-b30">
-                  <h4 class="wt-tilte-large m-t0" data-title="K">
-                    Kitchen design{" "}
-                  </h4>
-                  <p>
-                    Lorem Ipsum is simply dummy text of the printing and type.
-                  </p>
-                  <a href="javascript:;" class="site-button-link">
-                    Read More
-                  </a>
-                </div>
-                <div class="icon-xl inline-icon">
-                  <span class="icon-cell">
-                    <i class="flaticon-kitchen v-icon"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Services />
       {/* <!-- OUR SERVICES END --> */}
 
       {/* <!-- OUR TEAM START --> */}
-      <div class="section-full p-t80 p-b50 bg-white">
-        <div class="container">
-          <div class="section-head clearfix">
-            <div class="wt-tilte-main bdr-r-3 bdr-primary bdr-solid">
-              <small class="wt-small-title">Our Experts</small>
-              <h2 class="m-b5">Our Best Team</h2>
-            </div>
-            <div class="title-right-detail">
-              <p>
-                We are uncompetitor in architectural solutions Friendly
-                neighbour there that power. Keep away Architecture who try to
-                Ambitions people do that really great.
-              </p>
-            </div>
-          </div>
-
-          <div class="section-content">
-            <div class="row justify-content-center">
-              <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="wt-team-arc2">
-                  <div class="wt-media">
-                    <img src={TeamOne} alt="" style={stylesheet} />
-                    <div class="team-social-center">
-                      <ul class="team-social-icon">
-                        <li>
-                          <a
-                            href="javascript:void(0);"
-                            class="fa fa-google"
-                          ></a>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);" class="fa fa-rss"></a>
-                        </li>
-                        <li>
-                          <a
-                            href="javascript:void(0);"
-                            class="fa fa-facebook"
-                          ></a>
-                        </li>
-                        <li>
-                          <a
-                            href="javascript:void(0);"
-                            class="fa fa-twitter"
-                          ></a>
-                        </li>
-                        <li>
-                          <a
-                            href="javascript:void(0);"
-                            class="fa fa-linkedin"
-                          ></a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div class="wt-info bg-white p-a30">
-                    <div class="team-detail  text-center">
-                      <h4 class="m-t0">Taminm Alows</h4>
-                      <p>Architect</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="wt-team-arc2">
-                  <div class="wt-media">
-                    <img src={TeamTwo} alt="" style={stylesheet} />
-                    <div class="team-social-center">
-                      <ul class="team-social-icon">
-                        <li>
-                          <a
-                            href="javascript:void(0);"
-                            class="fa fa-google"
-                          ></a>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);" class="fa fa-rss"></a>
-                        </li>
-                        <li>
-                          <a
-                            href="javascript:void(0);"
-                            class="fa fa-facebook"
-                          ></a>
-                        </li>
-                        <li>
-                          <a
-                            href="javascript:void(0);"
-                            class="fa fa-twitter"
-                          ></a>
-                        </li>
-                        <li>
-                          <a
-                            href="javascript:void(0);"
-                            class="fa fa-linkedin"
-                          ></a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div class="wt-info bg-white p-a30">
-                    <div class="team-detail  text-center">
-                      <h4 class="m-t0">Michael Evens</h4>
-                      <p>Architect</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="wt-team-arc2">
-                  <div class="wt-media">
-                    <img src={TeamThree} alt="" style={stylesheet} />
-                    <div class="team-social-center">
-                      <ul class="team-social-icon">
-                        <li>
-                          <a
-                            href="javascript:void(0);"
-                            class="fa fa-google"
-                          ></a>
-                        </li>
-                        <li>
-                          <a href="javascript:void(0);" class="fa fa-rss"></a>
-                        </li>
-                        <li>
-                          <a
-                            href="javascript:void(0);"
-                            class="fa fa-facebook"
-                          ></a>
-                        </li>
-                        <li>
-                          <a
-                            href="javascript:void(0);"
-                            class="fa fa-twitter"
-                          ></a>
-                        </li>
-                        <li>
-                          <a
-                            href="javascript:void(0);"
-                            class="fa fa-linkedin"
-                          ></a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div class="wt-info bg-white p-a30">
-                    <div class="team-detail  text-center">
-                      <h4 class="m-t0">Pamela Smith</h4>
-                      <p>Architect</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Team />
       {/* <!-- OUR TEAM END -->   */}
 
       {/* <!-- OUR STORY SECTION START --> */}
@@ -430,7 +144,9 @@ export default function AboutUs() {
           <div class="row awards-win-section">
             <div
               class="col-lg-6 col-md-12  awards-win-section-left bg-cover bg-no-repeat bg-center bg-gray"
-              style={{ backgroundImage: "url(images/dummy/skyscrapper.jpg)" }}
+              style={{
+                backgroundImage: `url(${backend_url}/${aboutUsImage[0]?.path})`,
+              }}
             >
               <div class="awards-win-left-content"></div>
             </div>

@@ -1,8 +1,4 @@
 import React, { useContext } from "react";
-import img_one from "../../assets/images/dummy/download_4.avif";
-import img_two from "../../assets/images/dummy/download_5.jpg";
-import img_three from "../../assets/images/dummy/download_6.jpg";
-import img_four from "../../assets/images/dummy/download_7.jpg";
 import { DataContext } from "../../store";
 export default function Welcome() {
   const { homeGrid, backend_url } = useContext(DataContext);

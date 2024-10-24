@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { DataContext } from "../../store";
 export default function ContactUs() {
+  const { contactUsHeader, backend_url } = useContext(DataContext);
+  const [formData, setFormData] = useState({
+    name: null,
+    email: null,
+    message: null,
+  });
+  function handleSubmit(params) {}
   return (
     //  <!-- CONTENT START -->
     <div class="page-content">
@@ -8,7 +16,9 @@ export default function ContactUs() {
       <div
         class="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"
         data-stellar-background-ratio="0.5"
-        style={{ backgroundImage: "url(images/dummy/contact.jpg)" }}
+        style={{
+          backgroundImage: `url(${backend_url}/${contactUsHeader[0]?.path})`,
+        }}
       >
         <div class="overlay-main bg-black opacity-07"></div>
         <div class="container">
@@ -42,11 +52,7 @@ export default function ContactUs() {
           {/* <!-- GOOGLE MAP & CONTACT FORM --> */}
           <div class="section-content">
             <div class="contact-form p-a30 bg-gray">
-              <form
-                class="cons-contact-form"
-                method="post"
-                action="form-handler.php"
-              >
+              <form class="cons-contact-form" onClick={handleSubmit}>
                 <div class="contact-one">
                   {/* <!-- TITLE START --> */}
                   <div class="section-head text-left">
@@ -60,6 +66,13 @@ export default function ContactUs() {
                           name="username"
                           type="text"
                           required
+                          value={formData.name}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              name: e.currentTarget.value,
+                            })
+                          }
                           class="form-control"
                           placeholder="Name"
                         />
@@ -72,6 +85,13 @@ export default function ContactUs() {
                           type="text"
                           class="form-control"
                           required
+                          value={formData.email}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              email: e.currentTarget.value,
+                            })
+                          }
                           placeholder="Email"
                         />
                       </div>
@@ -83,6 +103,13 @@ export default function ContactUs() {
                           rows="4"
                           class="form-control "
                           required
+                          value={formData.message}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              message: e.currentTarget.value,
+                            })
+                          }
                           placeholder="Message"
                         ></textarea>
                       </div>

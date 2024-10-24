@@ -31,7 +31,7 @@ export default function Homepage() {
 
         <Services />
 
-        {/* <Blog /> */}
+        <Blog />
 
         <Testimony />
 
