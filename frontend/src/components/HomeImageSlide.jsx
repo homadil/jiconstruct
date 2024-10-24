@@ -4,7 +4,7 @@ import { DataContext } from "../store";
 import { Link } from "react-router-dom";
 import CustomSlider from "./CustomSlide";
 export default function HomeImageSlide({ index, item }) {
-  const { backend_url } = useContext(DataContext);
+  const { backend_url, truncateContent } = useContext(DataContext);
   const [width, setWidth] = useState(window.innerWidth);
   const bg = useRef();
   // Update width on window resize
@@ -83,7 +83,9 @@ export default function HomeImageSlide({ index, item }) {
 
           {/* Large Title */}
           <div className={`slider-large-title slide_text_3 slide_text_active `}>
-            <div className="text-white slide_text">{item.description}</div>
+            <div className="text-white slide_text">
+              {truncateContent(item.description, 10)}
+            </div>
           </div>
 
           <div

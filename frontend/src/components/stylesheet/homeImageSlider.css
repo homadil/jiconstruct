@@ -108,20 +108,21 @@
   .slide_number {
     font-weight: 200;
     font-size: 5.875rem;
-    line-height: 0px;
+    line-height: 10px;
     width: min-content;
     color: yellow;
-    height: 40px;
+    height: 80px;
   }
   .slide_title {
-    line-height: 3.5rem;
+    line-height: 1.5rem;
     font-weight: 400;
     font-size: 21px;
   }
   .slider-large-title {
     font-weight: 50;
-    font-size: 1.9375rem;
-    line-height: 2.4375rem;
+    font-size: 1.5375rem;
+    line-height: 1.4375rem;
+    margin-right: 10px;
   }
 
   .slider-image-right {
@@ -155,7 +156,7 @@
   .slider-large-title {
     font-weight: 500;
     font-size: 10.8375rem;
-    line-height: 5.4375rem;
+    line-height: 1.9375rem;
     font-weight: bold;
     font-size: x-large;
   }
@@ -194,7 +195,7 @@
   .slider-large-title {
     font-weight: 50;
     font-size: 2.8375rem;
-    line-height: 3.4375rem;
+    line-height: 1.4375rem;
     margin: 10px 0;
     font-weight: 300;
     font-size: x-large;
@@ -232,12 +233,12 @@
   .slide_title {
     line-height: 3.5rem;
     font-weight: 400;
-    font-size: 2.3125rem;
+    font-size: 2.0125rem;
   }
   .slider-large-title {
     font-weight: 50;
     font-size: 2.8375rem;
-    line-height: 3.4375rem;
+    line-height: 2.4375rem;
     font-weight: 400;
     font-size: x-large;
   }
