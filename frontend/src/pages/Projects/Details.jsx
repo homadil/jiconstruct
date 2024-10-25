@@ -50,7 +50,7 @@ export default function Details() {
       setFormData({ content: "", author: "", email: "", website: "" });
     });
   }
-  console.log(project);
+
   return (
     //  <!-- CONTENT START -->
     <div className="page-content">
@@ -82,16 +82,18 @@ export default function Details() {
 
         {/* Your content */}
         <div className="container" style={{ position: "relative", zIndex: 2 }}>
-          <div class="wt-bnr-inr-entry">
-            <div class="banner-title-outer">
-              <div class="banner-title-name">
-                <h2 class="text-white">{project.title.toUpperCase()} Detail</h2>
+          <div className="wt-bnr-inr-entry">
+            <div className="banner-title-outer">
+              <div className="banner-title-name">
+                <h2 className="text-white">
+                  {project.title.toUpperCase()} Detail
+                </h2>
               </div>
             </div>
             {/* <!-- BREADCRUMB ROW -->                             */}
 
             <div>
-              <ul class="wt-breadcrumb breadcrumb-style-2">
+              <ul className="wt-breadcrumb breadcrumb-style-2">
                 <li>
                   <Link to={"/"}>Home</Link>
                 </li>
@@ -106,14 +108,14 @@ export default function Details() {
       {/* <!-- INNER PAGE BANNER END --> */}
 
       {/* <!-- SECTION CONTENT START --> */}
-      <div class="section-full p-tb90">
-        <div class="container-fluid project-detail-pic">
-          <div class="row justify-content-center">
+      <div className="section-full p-tb90">
+        <div className="container-fluid project-detail-pic">
+          <div className="row justify-content-center">
             {project.Media.map((media, index) => {
               return (
-                <div key={index} class="col-lg-4 col-md-6 m-b30">
-                  <div class="project-detail-pic ">
-                    <div class="wt-media">
+                <div key={index} className="col-lg-4 col-md-6 m-b30">
+                  <div className="project-detail-pic ">
+                    <div className="wt-media">
                       {media.exe === "image" ? (
                         <img
                           src={`${backend_url}/${media.path}`}
@@ -133,13 +135,13 @@ export default function Details() {
           </div>
         </div>
 
-        <div class="container">
-          <div class="project-detail-outer">
-            <div class="project-detail-containt">
-              <div class="bg-white text-black">
+        <div className="container">
+          <div className="project-detail-outer">
+            <div className="project-detail-containt">
+              <div className="bg-white text-black">
                 <h3>{project.title}</h3>
                 <p>{project.description}</p>
-                <div class="wt-media m-b30">
+                <div className="wt-media m-b30">
                   <img
                     src={`${backend_url}/${project.show}`}
                     alt={project.name}
@@ -151,57 +153,63 @@ export default function Details() {
                 ></div>
               </div>
             </div>
-            <div class="product-block-detail">
+            <div className="product-block-detail">
               <ul>
                 <li>
-                  <h5 class="m-b10">Date</h5>
+                  <h5 className="m-b10">Date</h5>
                   <p>
                     {month} {day}, {year}
                   </p>
                 </li>
                 <li>
-                  <h5 class="m-b10">Client</h5>
+                  <h5 className="m-b10">Client</h5>
                   <p>{project.client.toUpperCase()}</p>
                 </li>
                 <li>
-                  <h5 class="m-b10">Project type</h5>
-                  {project.Tags.map((tag) => {
-                    return <p>{tag.name}</p>;
+                  <h5 className="m-b10">Project type</h5>
+                  {project.Tags.slice(0, 3).map((tag) => {
+                    return (
+                      <span className="m-b10" key={tag.id}>
+                        {tag.name},{" "}
+                      </span>
+                    );
                   })}
                 </li>
                 <li>
-                  <h5 class="m-b10">Location</h5>
+                  <h5 className="m-b10">Location</h5>
                   <p>
                     {project.location?.address}, {project.location?.city},{" "}
                     {project.location?.state}, {project.location?.country}
                   </p>
                 </li>
                 <li>
-                  <h5 class="m-b10">Creative Director</h5>
+                  <h5 className="m-b10">Creative Director</h5>
                   <p>{project.director.toUpperCase()}</p>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div class="clear p-a30 m-b30 bg-white" id="comment-list">
-            <div class="comments-area" id="comments">
-              <h4 class="comments-title">{project.Comments.length} Comments</h4>
+          <div className="clear p-a30 m-b30 bg-white" id="comment-list">
+            <div className="comments-area" id="comments">
+              <h4 className="comments-title">
+                {project.Comments.length} Comments
+              </h4>
               <div>
                 {/* <!-- COMMENT LIST START --> */}
-                <ol class="comment-list">
-                  <li class="comment">
+                <ol className="comment-list">
+                  <li className="comment">
                     {/* <!-- COMMENT BLOCK --> */}
                     {project.Comments.map((comment, index) => {
                       const date = formatDateTime(comment.createdAt);
                       return (
-                        <div class="comment-body">
-                          <div class="comment-meta">
+                        <div className="comment-body">
+                          <div className="comment-meta">
                             <a href="javascript:void(0);">{date}</a>
                           </div>
-                          <div class="comment-author vcard">
+                          <div className="comment-author vcard">
                             <img
-                              class="avatar photo"
+                              className="avatar photo"
                               src={
                                 comment.user
                                   ? `${backend_url}/${comment?.user.profile_image}`
@@ -209,12 +217,12 @@ export default function Details() {
                               }
                               alt=""
                             />
-                            <cite class="fn">
+                            <cite className="fn">
                               {comment.user
                                 ? comment.user.name
                                 : comment.author}
                             </cite>
-                            <span class="says">says:</span>
+                            <span className="says">says:</span>
                           </div>
 
                           <p>{comment.content}</p>
@@ -226,8 +234,8 @@ export default function Details() {
                 {/* <!-- COMMENT LIST END --> */}
 
                 {/* <!-- LEAVE A REPLY START --> */}
-                <div class="comment-respond m-t30" id="respond">
-                  <h4 class="comment-reply-title" id="reply-title">
+                <div className="comment-respond m-t30" id="respond">
+                  <h4 className="comment-reply-title" id="reply-title">
                     Leave a Comments
                     <small>
                       <a
@@ -242,17 +250,17 @@ export default function Details() {
                   </h4>
 
                   <form
-                    class="comment-form"
+                    className="comment-form"
                     id="commentform"
                     method="post"
                     onSubmit={handleSubmit}
                   >
-                    <p class="comment-form-author">
+                    <p className="comment-form-author">
                       <label for="author">
-                        Name <span class="required">*</span>
+                        Name <span className="required">*</span>
                       </label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         type="text"
                         value={formData.author}
                         name="author"
@@ -268,12 +276,12 @@ export default function Details() {
                       />
                     </p>
 
-                    <p class="comment-form-email">
+                    <p className="comment-form-email">
                       <label for="email">
-                        Email <span class="required">*</span>
+                        Email <span className="required">*</span>
                       </label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         type="text"
                         value={formData.email}
                         name="email"
@@ -288,10 +296,10 @@ export default function Details() {
                       />
                     </p>
 
-                    <p class="comment-form-url">
+                    <p className="comment-form-url">
                       <label for="url">Website</label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         type="text"
                         value={formData.website}
                         onChange={(e) =>
@@ -306,10 +314,10 @@ export default function Details() {
                       />
                     </p>
 
-                    <p class="comment-form-comment">
+                    <p className="comment-form-comment">
                       <label for="comment">Comment</label>
                       <textarea
-                        class="form-control"
+                        className="form-control"
                         rows="8"
                         name="comment"
                         required
@@ -324,9 +332,9 @@ export default function Details() {
                       ></textarea>
                     </p>
 
-                    <p class="form-submit">
+                    <p className="form-submit">
                       <button
-                        class="site-button radius-no text-uppercase font-weight-600"
+                        className="site-button radius-no text-uppercase font-weight-600"
                         type="submit"
                       >
                         Submit

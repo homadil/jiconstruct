@@ -1,49 +1,63 @@
-import React, { useContext } from "react";
-import img_one from "../../assets/images/dummy/download_1.jpg";
-import img_two from "../../assets/images/dummy/download_2.jpg";
-import img_three from "../../assets/images/dummy/download_3.jpg";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { DataContext } from "../../store";
+import apiRequest from "../../apiRequest";
+import { Button, CircularProgress } from "@mui/material";
 export default function Footer() {
   const { blogs, backend_url, truncateContent } = useContext(DataContext);
   const sortedBlogs = blogs
     .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)) // Sort by createdAt ascending
     .slice(0, 3); // Get the first four teams
 
+  const [email, setEmail] = useState("");
+  const [loader, setLoader] = useState(false);
+  function handleSubmit(e) {
+    e.preventDefault();
+    setLoader(true);
+
+    apiRequest
+      .post("/users/newsletter", { email })
+      .then(() => {
+        setLoader(false);
+      })
+      .catch(() => {
+        setLoader(false);
+      });
+  }
   return (
-    <footer class="site-footer footer-large  footer-dark">
-      <div class="footer-social-section bg-secondry">
-        <div class="container">
-          <div class="footer-social-content">
+    <footer className="site-footer footer-large  footer-dark">
+      <div className="footer-social-section bg-secondry">
+        <div className="container">
+          <div className="footer-social-content">
             <ul>
               <li>
                 <a href="javascript:;">
-                  <i class="fa fa-facebook"></i>
+                  <i className="fa fa-facebook"></i>
                 </a>
               </li>
               <li>
                 <a href="javascript:;">
-                  <i class="fa fa-twitter"></i>
+                  <i className="fa fa-twitter"></i>
                 </a>
               </li>
               <li>
                 <a href="javascript:;">
-                  <i class="fa fa-pinterest-p"></i>
+                  <i className="fa fa-pinterest-p"></i>
                 </a>
               </li>
               <li>
                 <a href="javascript:;">
-                  <i class="fa fa-instagram"></i>
+                  <i className="fa fa-instagram"></i>
                 </a>
               </li>
               <li>
                 <a href="javascript:;">
-                  <i class="fa fa-vimeo"></i>
+                  <i className="fa fa-vimeo"></i>
                 </a>
               </li>
               <li>
                 <a href="javascript:;">
-                  <i class="fa fa-youtube"></i>
+                  <i className="fa fa-youtube"></i>
                 </a>
               </li>
             </ul>
@@ -51,38 +65,40 @@ export default function Footer() {
         </div>
       </div>
       {/* <!-- FOOTER BLOCKES START -->   */}
-      <div class="footer-top overlay-wraper">
-        <div class="overlay-main"></div>
-        <div class="container-fluid">
-          <div class="row">
+      <div className="footer-top overlay-wraper">
+        <div className="overlay-main"></div>
+        <div className="container-fluid">
+          <div className="row">
             {/* <!-- RESENT POST --> */}
-            <div class="col-xl-3 col-lg-6 col-md-6">
-              <div class="widget recent-posts-entry">
-                <h4 class="widget-title  text-uppercase">Recent Post</h4>
-                <div class="section-content">
-                  <div class="widget-post-bx">
+            <div className="col-xl-3 col-lg-6 col-md-6">
+              <div className="widget recent-posts-entry">
+                <h4 className="widget-title  text-uppercase">Recent Post</h4>
+                <div className="section-content">
+                  <div className="widget-post-bx">
                     {sortedBlogs?.map((blog, index) => {
                       return (
-                        <div key={index} class="widget-post clearfix">
-                          <div class="wt-post-media">
+                        <div key={index} className="widget-post clearfix">
+                          <div className="wt-post-media">
                             <img
                               src={`${backend_url}/${blog.show}`}
                               alt={blog.title}
                             />
                           </div>
-                          <div class="wt-post-info">
-                            <div class="wt-post-meta">
+                          <div className="wt-post-info">
+                            <div className="wt-post-meta">
                               <ul>
-                                <li class="post-author">{blog.user.name}</li>
+                                <li className="post-author">
+                                  {blog.user.name}
+                                </li>
                                 <br />
-                                <li class="post-comment">
+                                <li className="post-comment">
                                   {" "}
                                   {blog.Comments.length} Comment
                                 </li>
                               </ul>
                             </div>
-                            <div class="wt-post-header">
-                              <h6 class="post-title">
+                            <div className="wt-post-header">
+                              <h6 className="post-title">
                                 {truncateContent(blog.title, 10)}
                               </h6>
                             </div>
@@ -96,9 +112,11 @@ export default function Footer() {
             </div>
 
             {/* <!-- ABOUT COMPANY --> */}
-            <div class="col-xl-3 col-lg-6 col-md-6">
-              <div class="widget widget_about">
-                <h4 class="widget-title  text-uppercase">About Information</h4>
+            <div className="col-xl-3 col-lg-6 col-md-6">
+              <div className="widget widget_about">
+                <h4 className="widget-title  text-uppercase">
+                  About Information
+                </h4>
                 <p>
                   Today we can tell you, thanks to your passion, hard work
                   creativity, and expertise, you delivered us the most beautiful
@@ -106,22 +124,41 @@ export default function Footer() {
                 </p>
               </div>
 
-              <div class="widget widget_newsletter">
-                <h4 class="widget-title  text-uppercase">
+              <div className="widget widget_newsletter">
+                <h4 className="widget-title  text-uppercase">
                   Subscribe to our newsletter!
                 </h4>
-                <div class="newsletter-bx">
-                  <form role="search" method="post">
-                    <div class="input-group">
+                <div className="newsletter-bx">
+                  <form onSubmit={handleSubmit}>
+                    <div className="input-group">
                       <input
                         name="news-letter"
-                        class="form-control"
+                        className="form-control"
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.currentTarget.value);
+                        }}
                         placeholder="ENTER YOUR EMAIL"
                         type="text"
                       />
-                      <span class="input-group-btn">
-                        <button type="submit" class="site-button">
-                          <i class="fa fa-paper-plane-o"></i>
+                      <span className="input-group-btn">
+                        <button
+                          variant="contained"
+                          color="primary"
+                          className="site-button"
+                          sx={{ mt: 3 }}
+                          type="submit"
+                          disabled={loader} // Disable button when loading
+                        >
+                          {loader ? (
+                            <CircularProgress
+                              size={24}
+                              color="inherit"
+                              sx={{ mr: 1 }}
+                            /> // Spinner when loading
+                          ) : (
+                            <i className="fa fa-paper-plane-o"></i>
+                          )}
                         </button>
                       </span>
                     </div>
@@ -131,9 +168,9 @@ export default function Footer() {
             </div>
 
             {/* <!-- USEFUL LINKS --> */}
-            <div class="col-xl-3 col-lg-6 col-md-6">
-              <div class="widget widget_services inline-links">
-                <h4 class="widget-title">Useful links</h4>
+            <div className="col-xl-3 col-lg-6 col-md-6">
+              <div className="widget widget_services inline-links">
+                <h4 className="widget-title">Useful links</h4>
                 <ul>
                   <li>
                     <Link to={"/page_about_us"}>About</Link>
@@ -168,10 +205,10 @@ export default function Footer() {
             </div>
 
             {/* <!-- TAGS --> */}
-            <div class="col-xl-3 col-lg-6 col-md-6">
-              <div class="widget widget_address_outer m-b20">
-                <h4 class="widget-title">Contact Us</h4>
-                <ul class="widget_address">
+            <div className="col-xl-3 col-lg-6 col-md-6">
+              <div className="widget widget_address_outer m-b20">
+                <h4 className="widget-title">Contact Us</h4>
+                <ul className="widget_address">
                   <li>
                     No 35, Lord Lugard Street, Area 11, Garki Junction, Abuja
                   </li>
@@ -186,13 +223,13 @@ export default function Footer() {
         </div>
       </div>
       {/* <!-- FOOTER COPYRIGHT --> */}
-      <div class="footer-bottom">
-        <div class="container">
-          <div class="footer-logo-bar">
+      <div className="footer-bottom">
+        <div className="container">
+          <div className="footer-logo-bar">
             <a href="index.html">
               <img src="ji_construct_logo.png" width={200} alt="" />
             </a>
-            <span class="copyrights-text">© 2024 JI Construct </span>
+            <span className="copyrights-text">© 2024 JI Construct </span>
           </div>
         </div>
       </div>

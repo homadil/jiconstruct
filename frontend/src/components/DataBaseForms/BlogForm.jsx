@@ -11,13 +11,14 @@ import {
   FormControlLabel,
   Switch,
   Chip,
+  CircularProgress,
 } from "@mui/material";
 import QuillEditor from "../QuillEditor";
 import apiRequest from "../../apiRequest";
 import Loader from "../Loader";
 import { useDropzone } from "react-dropzone";
 
-export default function BlogForm({ blog, update }) {
+export default function BlogForm({ blog, update, handleCloseModal }) {
   const [formData, setFormData] = useState({
     title: update ? blog?.title : "",
     description: update ? blog?.description : "",
@@ -41,6 +42,7 @@ export default function BlogForm({ blog, update }) {
 
   const [files, setFiles] = useState([]);
   const [value, setValue] = useState(formData.content);
+  const [loader, setLoader] = useState(false);
   const [loading, setLoading] = useState({
     category: false,
     url: false,
@@ -110,9 +112,11 @@ export default function BlogForm({ blog, update }) {
     apiRequest
       .post("/blogs", formData)
       .then((response) => {
-        console.log("Blog created successfully:", response.data);
+        setLoader(false);
+        handleCloseModal();
       })
       .catch((error) => {
+        setLoader(false);
         console.error("Error creating blog:", error);
       });
   }
@@ -121,16 +125,18 @@ export default function BlogForm({ blog, update }) {
     apiRequest
       .put(`/blogs/${id}`, formData)
       .then((response) => {
-        console.log("Blog created successfully:", response.data);
+        setLoader(false);
+        handleCloseModal();
       })
       .catch((error) => {
+        setLoader(false);
         console.error("Error creating blog:", error);
       });
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    setLoader(true);
     const newFormData = new FormData();
 
     // Append file objects
@@ -363,8 +369,15 @@ export default function BlogForm({ blog, update }) {
           color="primary"
           sx={{ mt: 3 }}
           type="submit"
+          disabled={loader} // Disable button when loading
         >
-          {!update ? "Submit" : "Update"}
+          {loader ? (
+            <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} /> // Spinner when loading
+          ) : !update ? (
+            "Submit"
+          ) : (
+            "Update"
+          )}
         </Button>
       </Box>
     </form>

@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/images/ji_construct_logo.png";
-
+import bg from "../../assets/images/dummy/download_5.jpg";
 export default function ForgetPasswordConfirm() {
   const [isHovered, setIsHovered] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -93,7 +93,7 @@ export default function ForgetPasswordConfirm() {
           <div
             className=""
             style={{
-              backgroundImage: "url('images/dummy/about.webp')",
+              backgroundImage: `url(${bg})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               zIndex: "1000",

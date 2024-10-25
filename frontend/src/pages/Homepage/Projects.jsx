@@ -11,14 +11,14 @@ export default function Projects() {
   };
   return (
     /* <!-- OUR PROJECTS SECTION START --> */
-    <div class="section-full  p-t80 p-b80 bg-secondry">
-      <div class="container">
-        <div class="section-head clearfix">
-          <div class="wt-tilte-main bdr-r-3 bdr-primary bdr-solid text-white">
-            <small class="wt-small-title">All Projects</small>
-            <h2 class="m-b5">Our Latest Projects</h2>
+    <div className="section-full  p-t80 p-b80 bg-secondry">
+      <div className="container">
+        <div className="section-head clearfix">
+          <div className="wt-tilte-main bdr-r-3 bdr-primary bdr-solid text-white">
+            <small className="wt-small-title">All Projects</small>
+            <h2 className="m-b5">Our Latest Projects</h2>
           </div>
-          <div class="title-right-detail text-white">
+          <div className="title-right-detail text-white">
             <p>
               We are uncompetitor in architectural solutions Friendly neighbour
               there that power. Keep away Architecture who try to Ambitions
@@ -28,15 +28,15 @@ export default function Projects() {
         </div>
       </div>
 
-      <div class="section-content">
-        <div class="container-fluid">
-          <div class="projects-slider-two">
-            <div class="owl-carousel projects-carousel-two owl-btn-vertical-center">
+      <div className="section-content">
+        <div className="container-fluid">
+          <div className="projects-slider-two">
+            <div className="owl-carousel projects-carousel-two owl-btn-vertical-center">
               {/* <!-- COLUMNS 1 --> */}
-              <div class="item">
-                <div class="projects-two-info text-white">
-                  <h4 class="wt-tilte m-t0" data-title="01">
-                    <a href="javascript:;" class="text-white">
+              <div className="item">
+                <div className="projects-two-info text-white">
+                  <h4 className="wt-tilte m-t0" data-title="01">
+                    <a href="javascript:;" className="text-white">
                       Architecture design
                     </a>
                   </h4>
@@ -44,17 +44,17 @@ export default function Projects() {
                     We are uncompetitor in architectural solutions Friendly
                     neighbour there that power. Keep away Architecture.
                   </p>
-                  <div class="wt-media img-reflection">
+                  <div className="wt-media img-reflection">
                     <img src={arc_img} alt="" style={stylesheet} />
                   </div>
                 </div>
               </div>
               {/* <!-- COLUMNS 2 --> */}
 
-              <div class="item">
-                <div class="projects-two-info text-white">
-                  <h4 class="wt-tilte m-t0" data-title="02">
-                    <a href="javascript:;" class="text-white">
+              <div className="item">
+                <div className="projects-two-info text-white">
+                  <h4 className="wt-tilte m-t0" data-title="02">
+                    <a href="javascript:;" className="text-white">
                       Interior design
                     </a>
                   </h4>
@@ -62,17 +62,17 @@ export default function Projects() {
                     We are uncompetitor in architectural solutions Friendly
                     neighbour there that power. Keep away Architecture.
                   </p>
-                  <div class="wt-media img-reflection">
+                  <div className="wt-media img-reflection">
                     <img src={int_img} alt="" style={stylesheet} />
                   </div>
                 </div>
               </div>
 
               {/* <!-- COLUMNS 3 --> */}
-              <div class="item">
-                <div class="projects-two-info text-white">
-                  <h4 class="wt-tilte m-t0" data-title="03">
-                    <a href="javascript:;" class="text-white">
+              <div className="item">
+                <div className="projects-two-info text-white">
+                  <h4 className="wt-tilte m-t0" data-title="03">
+                    <a href="javascript:;" className="text-white">
                       Landscap design
                     </a>
                   </h4>
@@ -80,17 +80,17 @@ export default function Projects() {
                     We are uncompetitor in architectural solutions Friendly
                     neighbour there that power. Keep away Architecture.
                   </p>
-                  <div class="wt-media img-reflection">
+                  <div className="wt-media img-reflection">
                     <img src={land_img} alt="" style={stylesheet} />
                   </div>
                 </div>
               </div>
 
               {/* <!-- COLUMNS 4 --> */}
-              <div class="item">
-                <div class="projects-two-info text-white">
-                  <h4 class="wt-tilte m-t0" data-title="04">
-                    <a href="javascript:;" class="text-white">
+              <div className="item">
+                <div className="projects-two-info text-white">
+                  <h4 className="wt-tilte m-t0" data-title="04">
+                    <a href="javascript:;" className="text-white">
                       Floor design
                     </a>
                   </h4>
@@ -98,17 +98,17 @@ export default function Projects() {
                     We are uncompetitor in architectural solutions Friendly
                     neighbour there that power. Keep away Architecture.
                   </p>
-                  <div class="wt-media img-reflection">
+                  <div className="wt-media img-reflection">
                     <img src={floor_img} alt="" style={stylesheet} />
                   </div>
                 </div>
               </div>
 
               {/* <!-- COLUMNS 5 --> */}
-              <div class="item">
-                <div class="projects-two-info text-white">
-                  <h4 class="wt-tilte m-t0" data-title="05">
-                    <a href="javascript:;" class="text-white">
+              <div className="item">
+                <div className="projects-two-info text-white">
+                  <h4 className="wt-tilte m-t0" data-title="05">
+                    <a href="javascript:;" className="text-white">
                       Roof top design
                     </a>
                   </h4>
@@ -116,17 +116,17 @@ export default function Projects() {
                     We are uncompetitor in architectural solutions Friendly
                     neighbour there that power. Keep away Architecture.
                   </p>
-                  <div class="wt-media img-reflection">
+                  <div className="wt-media img-reflection">
                     <img src={roof_img} alt="" style={stylesheet} />
                   </div>
                 </div>
               </div>
 
               {/* <!-- COLUMNS 6 --> */}
-              <div class="item">
-                <div class="projects-two-info text-white">
-                  <h4 class="wt-tilte m-t0" data-title="06">
-                    <a href="javascript:;" class="text-white">
+              <div className="item">
+                <div className="projects-two-info text-white">
+                  <h4 className="wt-tilte m-t0" data-title="06">
+                    <a href="javascript:;" className="text-white">
                       Decorations
                     </a>
                   </h4>
@@ -134,7 +134,7 @@ export default function Projects() {
                     We are uncompetitor in architectural solutions Friendly
                     neighbour there that power. Keep away Architecture.
                   </p>
-                  <div class="wt-media img-reflection">
+                  <div className="wt-media img-reflection">
                     <img src={decor} alt="" style={stylesheet} />
                   </div>
                 </div>

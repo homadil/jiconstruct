@@ -87,7 +87,7 @@ export default function Testimony() {
         const updatedTestimonies = testimonies.map((item) =>
           item.id === res.id ? (item = res) : item
         );
-        console.log(res);
+
         setTestimonies(updatedTestimonies); // Update the testimonies state with the updated data
         handleCloseModal(); // Close the modal after successful update
       });

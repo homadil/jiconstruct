@@ -66,7 +66,6 @@ exports.register = async (req, res) => {
   try {
     // Check if user exists
     let user = await Users.findOne({ where: { email } });
-    console.log(user, email);
     if (user) {
       return res.status(400).json({ msg: "Users already exists" });
     }

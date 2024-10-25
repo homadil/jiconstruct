@@ -11,17 +11,17 @@ export default function Welcome() {
 
   return (
     /* <!-- WELCOME SECTION START --> */
-    <div class="section-full p-t80 p-b80 bg-gray overflow-hide">
-      <div class="container">
-        <div class="section-content">
-          <div class="row">
-            <div class="col-lg-6 col-md-12">
-              <div class="arc-home-about-left">
-                <div class="arc-home-left-content  bg-gray">
-                  <h3 class="m-t0 wt-tilte-light">
+    <div className="section-full p-t80 p-b80 bg-gray overflow-hide">
+      <div className="container">
+        <div className="section-content">
+          <div className="row">
+            <div className="col-lg-6 col-md-12">
+              <div className="arc-home-about-left">
+                <div className="arc-home-left-content  bg-gray">
+                  <h3 className="m-t0 wt-tilte-light">
                     Design, followed by Form & Function.
                   </h3>
-                  <h2 class="m-t0 wt-title">
+                  <h2 className="m-t0 wt-title">
                     Exploring the Quality Ways through Design.
                   </h2>
                   <p>
@@ -29,38 +29,38 @@ export default function Welcome() {
                     neighbour there that power.Keep away Architecture who try to
                     Ambitions people do that really{" "}
                   </p>
-                  <a href="javascript:;" class="site-button-link">
+                  <a href="javascript:;" className="site-button-link">
                     Read More
                   </a>
                 </div>
               </div>
             </div>
 
-            <div class="col-lg-6 col-md-12">
-              <div class="arc-home-about-right portfolio-wrap">
-                <div class="row">
-                  <div class="col-md-6 col-sm-6 masonry-item">
-                    <div class="arc-about-year text-uppercase text-right m-b20">
-                      <div class="arc-about-year-pic">
+            <div className="col-lg-6 col-md-12">
+              <div className="arc-home-about-right portfolio-wrap">
+                <div className="row">
+                  <div className="col-md-6 col-sm-6 masonry-item">
+                    <div className="arc-about-year text-uppercase text-right m-b20">
+                      <div className="arc-about-year-pic">
                         <img
                           src={backend_url + "/" + homeGridFirstIndex.path}
                           alt=""
                         />
                       </div>
-                      <div class="arc-about-year-info">
-                        <span class="title-small">
+                      <div className="arc-about-year-info">
+                        <span className="title-small">
                           working <br />
                           experience
                         </span>
-                        <h2 class="wt-title m-tb0">Year</h2>
-                        <span class="text-outline">12</span>
+                        <h2 className="wt-title m-tb0">Year</h2>
+                        <span className="text-outline">12</span>
                       </div>
                     </div>
                   </div>
 
                   {remainingHomeGrid.map((item, index) => (
-                    <div key={index} class="col-md-6 col-sm-6 masonry-item">
-                      <div class="wt-media m-b20  img-reflection">
+                    <div key={index} className="col-md-6 col-sm-6 masonry-item">
+                      <div className="wt-media m-b20  img-reflection">
                         <img
                           src={backend_url + "/" + item?.path}
                           alt=""

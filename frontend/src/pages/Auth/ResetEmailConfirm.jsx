@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/images/ji_construct_logo.png";
 import { useLocation } from "react-router-dom";
-
+import bg from "../../assets/images/dummy/download_9.webp";
 export default function ResetEmailConfirm() {
   const [isHovered, setIsHovered] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -78,7 +78,7 @@ export default function ResetEmailConfirm() {
           <div
             className=""
             style={{
-              backgroundImage: "url('images/dummy/about.webp')",
+              backgroundImage: `url(${bg})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               zIndex: "1000",

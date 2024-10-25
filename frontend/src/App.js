@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { DataContext } from "./store.js";
+import ScrollToTop from "./ScrollToTop.js";
 
 function ScrollToHashElement() {
   const { hash } = useLocation();
@@ -33,6 +34,7 @@ function App() {
   );
   return (
     <div className="page-wrapper">
+      <ScrollToTop />
       <ToastContainer
         position="top-right"
         autoClose={5000}

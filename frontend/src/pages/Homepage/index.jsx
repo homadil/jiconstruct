@@ -22,7 +22,7 @@ export default function Homepage() {
   return (
     <div>
       {/* <!-- CONTENT START --> */}
-      <div class="page-content">
+      <div className="page-content">
         <Slider />
 
         <Welcome />

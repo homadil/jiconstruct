@@ -14,14 +14,14 @@ export default function Services() {
   };
   return (
     /* <!-- OUR SERVICES START --> */
-    <section id="service" class="section-full p-t80 p-b50 bg-gray">
-      <div class="container">
-        <div class="section-head clearfix">
-          <div class="wt-tilte-main bdr-r-3 bdr-primary bdr-solid">
-            <small class="wt-small-title">Work service</small>
-            <h2 class="m-b5">Our great provided</h2>
+    <section id="service" className="section-full p-t80 p-b50 bg-gray">
+      <div className="container">
+        <div className="section-head clearfix">
+          <div className="wt-tilte-main bdr-r-3 bdr-primary bdr-solid">
+            <small className="wt-small-title">Work service</small>
+            <h2 className="m-b5">Our great provided</h2>
           </div>
-          <div class="title-right-detail">
+          <div className="title-right-detail">
             <p>
               We are uncompetitor in architectural solutions Friendly neighbour
               there that power. Keep away Architecture who try to Ambitions
@@ -29,14 +29,14 @@ export default function Services() {
             </p>
           </div>
         </div>
-        <div class="row">
+        <div className="row">
           {sortedCategories.map((categories, index) => {
             return (
-              <div key={index} class="col-lg-4 col-md-6 col-sm-6">
-                <div class="wt-icon-box-wraper m-b30 p-lr30 p-tb25 data-title-large  v-icon-effect block-bg-hover bg-white">
-                  <div class="icon-content m-b30">
+              <div key={index} className="col-lg-4 col-md-6 col-sm-6">
+                <div className="wt-icon-box-wraper m-b30 p-lr30 p-tb25 data-title-large  v-icon-effect block-bg-hover bg-white">
+                  <div className="icon-content m-b30">
                     <h4
-                      class="wt-tilte-large m-t0"
+                      className="wt-tilte-large m-t0"
                       data-title={getFirstCharUppercase(categories.name)}
                     >
                       {categories.name}
@@ -51,8 +51,8 @@ export default function Services() {
                       Read More
                     </Link>
                   </div>
-                  <div class="icon-xl inline-icon">
-                    <span class="icon-cell">
+                  <div className="icon-xl inline-icon">
+                    <span className="icon-cell">
                       <i className={`${categories.icon} v-icon`}></i>
                     </span>
                   </div>

@@ -31,14 +31,14 @@ syncDatabase();
 
 // all routes
 app.use("/auth", require("./routes/auth"));
-// app.use("/users", require("./routes/users"));
+app.use("/users", require("./routes/users"));
 app.use("/urls", require("./routes/urls"));
 app.use("/teams", require("./routes/teams"));
 app.use("/tags", require("./routes/tags"));
 app.use("/testimonies", require("./routes/testimonies"));
 app.use("/projects", require("./routes/projects"));
 app.use("/partners", require("./routes/partners"));
-// app.use("/notifications", require("./routes/notifications"));
+app.use("/notifications", require("./routes/notifications"));
 app.use("/medias", require("./routes/medias"));
 // app.use("/locations", require("./routes/locations"));
 app.use("/comments", require("./routes/comments"));

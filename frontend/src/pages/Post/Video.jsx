@@ -45,27 +45,27 @@ export default function Video() {
   }
   return (
     // <!-- CONTENT START -->
-    <div class="page-content ">
+    <div className="page-content ">
       {/* <!-- INNER PAGE BANNER --> */}
       <div
-        class="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"
+        className="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"
         data-stellar-background-ratio="0.5"
         style={{
           backgroundImage: `url(${backend_url}/${blog.show})`, // Corrected syntax
         }}
       >
-        <div class="overlay-main bg-black opacity-07"></div>
-        <div class="container">
-          <div class="wt-bnr-inr-entry">
-            <div class="banner-title-outer">
-              <div class="banner-title-name">
-                <h2 class="text-white">{blog.title}</h2>
+        <div className="overlay-main bg-black opacity-07"></div>
+        <div className="container">
+          <div className="wt-bnr-inr-entry">
+            <div className="banner-title-outer">
+              <div className="banner-title-name">
+                <h2 className="text-white">{blog.title}</h2>
               </div>
             </div>
             {/* <!-- BREADCRUMB ROW -->                             */}
 
             <div>
-              <ul class="wt-breadcrumb breadcrumb-style-2">
+              <ul className="wt-breadcrumb breadcrumb-style-2">
                 <li>
                   <Link to={"/"}>Home</Link>
                 </li>
@@ -80,16 +80,16 @@ export default function Video() {
       {/* <!-- INNER PAGE BANNER END --> */}
 
       {/* <!-- SECTION CONTENT START --> */}
-      <div class="section-full p-t80 p-b50 bg-gray">
-        <div class="container">
+      <div className="section-full p-t80 p-b50 bg-gray">
+        <div className="container">
           {/* <!-- BLOG START --> */}
-          <div class="blog-post date-style-1 blog-detail text-black bg-white">
-            <div class="wt-post-media clearfix">
-              <div class="grid-post row">
+          <div className="blog-post date-style-1 blog-detail text-black bg-white">
+            <div className="wt-post-media clearfix">
+              <div className="grid-post row">
                 {blog.Media.map((media, index) => {
                   return (
-                    <div key={index} class="col-md-6">
-                      <div class="portfolio-item wt-img-effect zoom-slow m-b30">
+                    <div key={index} className="col-md-6">
+                      <div className="portfolio-item wt-img-effect zoom-slow m-b30">
                         {media.exe === "image" ? (
                           <img
                             src={`${backend_url}/${media.path}`}
@@ -108,17 +108,17 @@ export default function Video() {
               </div>
             </div>
 
-            <div class="wt-post-info p-a30 p-t0">
-              <div class="wt-post-meta ">
+            <div className="wt-post-info p-a30 p-t0">
+              <div className="wt-post-meta ">
                 <ul>
-                  <li class="post-date">
+                  <li className="post-date">
                     <strong>{day} </strong>{" "}
                     <span>
                       {month} {year}
                     </span>{" "}
                   </li>
-                  <li class="post-author">
-                    <i class="fa fa-user"></i>
+                  <li className="post-author">
+                    <i className="fa fa-user"></i>
                     <a href="javascript:void(0);">
                       By{" "}
                       <span>
@@ -126,28 +126,28 @@ export default function Video() {
                       </span>
                     </a>{" "}
                   </li>
-                  <li class="post-comment">
-                    <i class="fa fa fa-comments"></i>
+                  <li className="post-comment">
+                    <i className="fa fa fa-comments"></i>
                     <a href="javascript:void(0);">
                       {blog?.Comments.length} <span>Comment</span>
                     </a>{" "}
                   </li>
                 </ul>
               </div>
-              <div class="wt-post-title ">
-                <h3 class="post-title">
-                  <a href="javascript:void(0);" class=" m-t0">
+              <div className="wt-post-title ">
+                <h3 className="post-title">
+                  <a href="javascript:void(0);" className=" m-t0">
                     {blog?.title}
                   </a>
                 </h3>
               </div>
-              <div class="wt-post-text">
+              <div className="wt-post-text">
                 <p>{blog?.description}</p>
               </div>
 
               {blog.quote && (
-                <blockquote class="bg-gray">
-                  <i class="fa fa-quote-left"></i>
+                <blockquote className="bg-gray">
+                  <i className="fa fa-quote-left"></i>
                   <span>{blog.quote}</span>
                 </blockquote>
               )}
@@ -159,24 +159,26 @@ export default function Video() {
             </div>
           </div>
 
-          <div class="clear p-a30 m-b30 bg-white" id="comment-list">
-            <div class="comments-area" id="comments">
-              <h4 class="comments-title">{blog.Comments.length} Comments</h4>
+          <div className="clear p-a30 m-b30 bg-white" id="comment-list">
+            <div className="comments-area" id="comments">
+              <h4 className="comments-title">
+                {blog.Comments.length} Comments
+              </h4>
               <div>
                 {/* <!-- COMMENT LIST START --> */}
-                <ol class="comment-list">
-                  <li class="comment">
+                <ol className="comment-list">
+                  <li className="comment">
                     {/* <!-- COMMENT BLOCK --> */}
                     {blog.Comments.map((comment, index) => {
                       const date = formatDateTime(comment.createdAt);
                       return (
-                        <div class="comment-body">
-                          <div class="comment-meta">
+                        <div className="comment-body">
+                          <div className="comment-meta">
                             <a href="javascript:void(0);">{date}</a>
                           </div>
-                          <div class="comment-author vcard">
+                          <div className="comment-author vcard">
                             <img
-                              class="avatar photo"
+                              className="avatar photo"
                               src={
                                 comment.user
                                   ? `${backend_url}/${comment?.user.profile_image}`
@@ -184,12 +186,12 @@ export default function Video() {
                               }
                               alt=""
                             />
-                            <cite class="fn">
+                            <cite className="fn">
                               {comment.user
                                 ? comment.user.name
                                 : comment.author}
                             </cite>
-                            <span class="says">says:</span>
+                            <span className="says">says:</span>
                           </div>
 
                           <p>{comment.content}</p>
@@ -201,8 +203,8 @@ export default function Video() {
                 {/* <!-- COMMENT LIST END --> */}
 
                 {/* <!-- LEAVE A REPLY START --> */}
-                <div class="comment-respond m-t30" id="respond">
-                  <h4 class="comment-reply-title" id="reply-title">
+                <div className="comment-respond m-t30" id="respond">
+                  <h4 className="comment-reply-title" id="reply-title">
                     Leave a Comments
                     <small>
                       <a
@@ -217,17 +219,17 @@ export default function Video() {
                   </h4>
 
                   <form
-                    class="comment-form"
+                    className="comment-form"
                     id="commentform"
                     method="post"
                     onSubmit={handleSubmit}
                   >
-                    <p class="comment-form-author">
-                      <label for="author">
-                        Name <span class="required">*</span>
+                    <p className="comment-form-author">
+                      <label htmlFor="author">
+                        Name <span className="required">*</span>
                       </label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         type="text"
                         value={formData.author}
                         name="author"
@@ -243,12 +245,12 @@ export default function Video() {
                       />
                     </p>
 
-                    <p class="comment-form-email">
-                      <label for="email">
-                        Email <span class="required">*</span>
+                    <p className="comment-form-email">
+                      <label htmlFor="email">
+                        Email <span className="required">*</span>
                       </label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         type="text"
                         value={formData.email}
                         name="email"
@@ -263,10 +265,10 @@ export default function Video() {
                       />
                     </p>
 
-                    <p class="comment-form-url">
-                      <label for="url">Website</label>
+                    <p className="comment-form-url">
+                      <label htmlFor="url">Website</label>
                       <input
-                        class="form-control"
+                        className="form-control"
                         type="text"
                         value={formData.website}
                         onChange={(e) =>
@@ -281,10 +283,10 @@ export default function Video() {
                       />
                     </p>
 
-                    <p class="comment-form-comment">
-                      <label for="comment">Comment</label>
+                    <p className="comment-form-comment">
+                      <label htmlFor="comment">Comment</label>
                       <textarea
-                        class="form-control"
+                        className="form-control"
                         rows="8"
                         name="comment"
                         required
@@ -299,9 +301,9 @@ export default function Video() {
                       ></textarea>
                     </p>
 
-                    <p class="form-submit">
+                    <p className="form-submit">
                       <button
-                        class="site-button radius-no text-uppercase font-weight-600"
+                        className="site-button radius-no text-uppercase font-weight-600"
                         type="submit"
                       >
                         Submit

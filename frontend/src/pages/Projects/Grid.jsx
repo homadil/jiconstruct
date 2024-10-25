@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { DataContext } from "../../store";
 
 export default function Grid() {
-  const { projects, backend_url } = useContext(DataContext);
+  const { projects, backend_url, truncateContent } = useContext(DataContext);
   const [filteredProjects, setFilteredProjects] = useState([]);
 
   const sortedProjects = projects.sort(
@@ -44,8 +44,9 @@ export default function Grid() {
   };
 
   const stylesheet = {
-    height: "200px",
+    height: "250px",
     width: "100%",
+    position: "relative",
   };
 
   return (
@@ -114,13 +115,17 @@ export default function Grid() {
             </ul>
           </div>
 
-          <div className="portfolio-wrap mfp-gallery work-grid row clearfix">
+          <div
+            className="portfolio-wrap mfp-gallery work-grid row clearfix"
+            style={{ position: "relative" }}
+          >
             {filteredProjects.map((item, index) => (
               <div
                 key={index}
                 className={`masonry - item cat-${
                   index + 1
                 } col-lg-4 col-md-6 col-sm-12 m-b30`}
+                style={{ position: "relative" }}
               >
                 <div className="project-img-effect-1">
                   <img
@@ -130,9 +135,9 @@ export default function Grid() {
                   />
                   <div className="wt-info">
                     <h4 className="wt-tilte text-white m-b10 m-t0">
-                      {item.title}
+                      {truncateContent(item.title, 4)}
                     </h4>
-                    <p>{item.description}</p>
+                    <p>{truncateContent(item.description, 20)}</p>
                   </div>
                   <Link
                     to={{

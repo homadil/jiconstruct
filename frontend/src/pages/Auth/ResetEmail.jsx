@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/images/ji_construct_logo.png";
 import apiRequest from "../../apiRequest";
-
+import bg from "../../assets/images/dummy/download_3.jpg";
 export default function ResetEmail() {
   const [isHovered, setIsHovered] = useState(false);
   const handleHover = () => setIsHovered(!isHovered);
@@ -66,7 +66,7 @@ export default function ResetEmail() {
           <div
             className=""
             style={{
-              backgroundImage: "url('images/dummy/about.webp')",
+              backgroundImage: `url(${bg})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               zIndex: "1000",

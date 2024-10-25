@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Chip,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   InputLabel,
@@ -33,6 +34,7 @@ export default function ProjectForm({
   files,
   handleCloseModal,
   handleSaveProject,
+  loader,
 }) {
   const styleSheet = {
     addGap: { margin: "6px" },
@@ -345,12 +347,20 @@ export default function ProjectForm({
           )}
 
           <Button
-            style={styleSheet.addGap}
             variant="contained"
+            style={styleSheet.addGap}
             color="primary"
+            sx={{ mt: 3 }}
             type="submit"
+            disabled={loader} // Disable button when loading
           >
-            {update ? "Update" : "Add"} Project
+            {loader ? (
+              <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} /> // Spinner when loading
+            ) : !update ? (
+              "Add"
+            ) : (
+              "Update"
+            )}
           </Button>
         </form>
       </div>

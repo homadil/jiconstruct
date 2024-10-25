@@ -136,7 +136,6 @@ const deletePartner = async (req, res) => {
       .status(204)
       .json({ msg: `${deletedPartners.name} was deleted successfully ` });
   } catch (error) {
-    console.log(error.message);
     res.status(500).json({ error: error.message });
   }
 };

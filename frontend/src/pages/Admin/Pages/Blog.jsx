@@ -113,7 +113,11 @@ export default function Blog() {
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box sx={modalStyle}>
           {/* Form or Content for Add Modal */}
-          <BlogForm blog={blog} update={update} />
+          <BlogForm
+            blog={blog}
+            update={update}
+            handleCloseModal={handleCloseModal}
+          />
           <Button
             onClick={handleCloseModal}
             color="danger"

@@ -87,27 +87,27 @@ export default function Blog() {
   return (
     <div>
       {/* <!-- CONTENT START --> */}
-      <div class="page-content">
+      <div className="page-content">
         {/* <!-- INNER PAGE BANNER --> */}
         <div
-          class="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"
+          className="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"
           data-stellar-background-ratio="0.5"
           style={{
             backgroundImage: `url(${backend_url}/${newsHeader[0]?.path})`, // Corrected syntax
           }}
         >
-          <div class="overlay-main bg-black opacity-07"></div>
-          <div class="container">
-            <div class="wt-bnr-inr-entry">
-              <div class="banner-title-outer">
-                <div class="banner-title-name">
-                  <h2 class="text-white">News Listing</h2>
+          <div className="overlay-main bg-black opacity-07"></div>
+          <div className="container">
+            <div className="wt-bnr-inr-entry">
+              <div className="banner-title-outer">
+                <div className="banner-title-name">
+                  <h2 className="text-white">News Listing</h2>
                 </div>
               </div>
               {/* <!-- BREADCRUMB ROW -->                             */}
 
               <div>
-                <ul class="wt-breadcrumb breadcrumb-style-2">
+                <ul className="wt-breadcrumb breadcrumb-style-2">
                   <li>
                     <Link to={"/"}>Home</Link>
                   </li>
@@ -122,10 +122,10 @@ export default function Blog() {
         {/* <!-- INNER PAGE BANNER END --> */}
 
         {/* <!-- SECTION CONTENT START --> */}
-        <div class="section-full p-t80 p-b50 bg-gray">
+        <div className="section-full p-t80 p-b50 bg-gray">
           {/* <!-- GALLERY CONTENT START --> */}
-          <div class="container">
-            <div class="row">
+          <div className="container">
+            <div className="row">
               <div className="col-lg-8 col-md-12 col-sm-12">
                 <div className="news-listing m-t20">
                   {paginatedBlogs.length ? (
@@ -210,12 +210,12 @@ export default function Blog() {
               </div>
 
               {/* <!-- SIDE BAR START --> */}
-              <div class="col-lg-4 col-md-12 col-sm-12 rightSidebar">
-                <aside class="side-bar">
+              <div className="col-lg-4 col-md-12 col-sm-12 rightSidebar">
+                <aside className="side-bar">
                   {/* <!-- SEARCH --> */}
-                  <div class="widget p-a30 bg-white">
-                    <h4 class="widget-title">Search</h4>
-                    <div class="search-bx">
+                  <div className="widget p-a30 bg-white">
+                    <h4 className="widget-title">Search</h4>
+                    <div className="search-bx">
                       <form
                         role="search"
                         method="post"
@@ -241,12 +241,12 @@ export default function Blog() {
                   </div>
 
                   {/* <!-- Categories -->                                         */}
-                  <div class="widget bg-white  widget_services p-a30 bg-white">
-                    <h4 class="widget-title">Categories</h4>
+                  <div className="widget bg-white  widget_services p-a30 bg-white">
+                    <h4 className="widget-title">Categories</h4>
                     <ul>
-                      {categories?.map((cat) => {
+                      {categories?.map((cat, i) => {
                         return (
-                          <li>
+                          <li key={i}>
                             <a href="javascript:void(0);">{cat.name}</a>
                             <span> ({cat.amount})</span>
                           </li>
@@ -256,9 +256,9 @@ export default function Blog() {
                   </div>
 
                   {/* <!-- OUR GALLERY  --> */}
-                  <div class="widget widget_gallery mfp-gallery p-a30 bg-white">
-                    <h4 class="widget-title">Our Gallery</h4>
-                    <div class="row no-gutters justify-content-center">
+                  <div className="widget widget_gallery mfp-gallery p-a30 bg-white">
+                    <h4 className="widget-title">Our Gallery</h4>
+                    <div className="row no-gutters justify-content-center">
                       {allMediaPaths.map((item, index) => {
                         return (
                           <div className="col-6 col-sm-4" key={index}>
@@ -274,8 +274,8 @@ export default function Blog() {
                   </div>
 
                   {/* <!-- ABOUT AUTHOR --> */}
-                  <div class="widget widget-team p-a30 bg-white">
-                    <h4 class="widget-title">About Author</h4>
+                  <div className="widget widget-team p-a30 bg-white">
+                    <h4 className="widget-title">About Author</h4>
 
                     <Swiper
                       modules={[Navigation, Scrollbar, A11y, Autoplay]}
@@ -289,7 +289,7 @@ export default function Blog() {
                     >
                       {users.map((item, index) => (
                         <SwiperSlide key={index}>
-                          <div class="widget-post m-b15">
+                          <div className="widget-post m-b15">
                             <img
                               src={
                                 item.profile_image == null
@@ -297,11 +297,11 @@ export default function Blog() {
                                   : `${backend_url}/${item.profile_image}`
                               }
                               alt=""
-                              class="img-responsive"
+                              className="img-responsive"
                             />
                           </div>
-                          <div class="team-detail  text-center">
-                            <h4 class="m-t0">{item.name}</h4>
+                          <div className="team-detail  text-center">
+                            <h4 className="m-t0">{item.name}</h4>
                           </div>
                         </SwiperSlide>
                       ))}
@@ -309,33 +309,33 @@ export default function Blog() {
                   </div>
 
                   {/* <!-- RECENT POSTS --> */}
-                  <div class="widget  recent-posts-entry p-a30 bg-white">
-                    <h4 class="widget-title">Recent Posts</h4>
-                    <div class="section-content">
-                      <div class="widget-post-bx">
+                  <div className="widget  recent-posts-entry p-a30 bg-white">
+                    <h4 className="widget-title">Recent Posts</h4>
+                    <div className="section-content">
+                      <div className="widget-post-bx">
                         {recentBlogs?.map((blog, index) => {
                           const { day, month, year } = formatDate(
                             blog.createdAt
                           );
                           return (
-                            <div class="widget-post clearfix" key={index}>
-                              <div class="wt-post-media">
+                            <div className="widget-post clearfix" key={index}>
+                              <div className="wt-post-media">
                                 <img
                                   src={`${backend_url}/${blog?.show}`}
                                   alt=""
-                                  class="img-responsive"
+                                  className="img-responsive"
                                 />
                               </div>
-                              <div class="wt-post-info">
-                                <div class="wt-post-meta">
+                              <div className="wt-post-info">
+                                <div className="wt-post-meta">
                                   <ul>
-                                    <li class="post-author">
+                                    <li className="post-author">
                                       {month} {day}, {year}
                                     </li>
                                   </ul>
                                 </div>
-                                <div class="wt-post-header">
-                                  <h5 class="post-title">{blog.title}</h5>
+                                <div className="wt-post-header">
+                                  <h5 className="post-title">{blog.title}</h5>
                                 </div>
                               </div>
                             </div>
@@ -346,8 +346,8 @@ export default function Blog() {
                   </div>
 
                   {/* <!-- OUR CLIENT --> */}
-                  <div class="widget p-a30 bg-white">
-                    <h4 class="widget-title">Our Partners</h4>
+                  <div className="widget p-a30 bg-white">
+                    <h4 className="widget-title">Our Partners</h4>
                     <Swiper
                       modules={[Navigation, Scrollbar, A11y, Autoplay]}
                       spaceBetween={0}
@@ -360,14 +360,14 @@ export default function Blog() {
                       {partners?.map((partner, index) => {
                         return (
                           <SwiperSlide key={index}>
-                            <div class="item" key={index}>
-                              <div class="ow-client-logo">
-                                <div class="client-logo wt-img-effect on-color">
+                            <div className="item" key={index}>
+                              <div className="ow-client-logo">
+                                <div className="client-logo wt-img-effect on-color">
                                   <a href="#">
                                     <img
                                       src={`${backend_url}/${partner?.image}`}
                                       alt=""
-                                      class="img-responsive"
+                                      className="img-responsive"
                                     />
                                   </a>
                                 </div>
@@ -380,9 +380,9 @@ export default function Blog() {
                   </div>
 
                   {/* <!-- TAGS --> */}
-                  <div class="widget widget_tag_cloud p-a30 bg-white">
-                    <h4 class="widget-title">Tags</h4>
-                    <div class="tagcloud">
+                  <div className="widget widget_tag_cloud p-a30 bg-white">
+                    <h4 className="widget-title">Tags</h4>
+                    <div className="tagcloud">
                       {tags.map((tag, index) => {
                         return (
                           <a key={index} href="javascript:void(0);">

@@ -129,7 +129,7 @@ const handleError = (error) => {
         });
       });
     }
-    console.log(error.response);
+
     if (error.response.data?.error) {
       return toast.error(error.response.data?.error);
     }

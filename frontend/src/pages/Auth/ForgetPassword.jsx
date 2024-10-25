@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/images/ji_construct_logo.png";
 import apiRequest from "../../apiRequest";
-
+import bg from "../../assets/images/dummy/download_8.jpg";
 export default function ForgetPassword() {
   const [isHovered, setIsHovered] = useState(false);
   const handleHover = () => setIsHovered(!isHovered);
@@ -66,13 +66,13 @@ export default function ForgetPassword() {
           <div
             className=""
             style={{
-              backgroundImage: "url('images/dummy/about.webp')",
+              backgroundImage: `url(${bg})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               zIndex: "1000",
-              height: "60vh",
+              height: "100vh",
               width: "maxContent",
-              border: "3px solid #000000",
+
               borderRadius: "10px",
             }}
           ></div>

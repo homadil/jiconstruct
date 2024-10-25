@@ -5,6 +5,7 @@ import {
   InputLabel,
   Select,
   FormControl,
+  CircularProgress,
 } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import "bootstrap/dist/css/bootstrap.min.css"; // Ensure Bootstrap is imported
@@ -18,7 +19,7 @@ const MediaForm = ({
   media,
   handlePushCreate,
   handlePutCreate,
-  handleOpenModal,
+  handleCloseModal,
 }) => {
   const [formData, setFormData] = useState({
     parent_id: media?.parent_id || null,
@@ -31,6 +32,7 @@ const MediaForm = ({
   const [projects, setProjects] = useState([]);
   const [loadingBlogs, setLoadingBlogs] = useState(false);
   const [loadingProjects, setLoadingProjects] = useState(true);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -82,7 +84,6 @@ const MediaForm = ({
     formData.append("type", datas.type);
     formData.append("exe", datas.exe);
 
-    console.log(datas);
     apiRequest
       .post(
         `/medias`,
@@ -96,7 +97,8 @@ const MediaForm = ({
       )
       .then((res) => {
         handlePushCreate(res.media);
-        handleOpenModal();
+        setLoader(false);
+        handleCloseModal();
       });
   }
 
@@ -122,18 +124,20 @@ const MediaForm = ({
       )
       .then((res) => {
         handlePutCreate(res.media);
-        handleOpenModal();
+        setLoader(false);
+        handleCloseModal();
       });
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Form submission logic here (e.g., upload files, send formData to API)
-
+    setLoader(true);
     const datas = { ...formData, files };
     datas.type = datas.type.toLowerCase();
     if (datas.type == "project" || datas.type == "blog") {
       if (datas.parent_id == "" || datas.parent_id == null) {
+        setLoader(false);
         return toast.error("Select Option First");
       }
     }
@@ -256,8 +260,16 @@ const MediaForm = ({
           type="submit"
           fullWidth
           className="mt-3"
+          disabled={loader} // Disable button when loading
         >
-          {usageToggle ? "Submit" : "Update"} Media
+          {loader ? (
+            <CircularProgress size={24} color="inherit" /> // Spinner when loading
+          ) : usageToggle ? (
+            "Submit"
+          ) : (
+            "Update"
+          )}
+          Media
         </Button>
       </form>
     </div>

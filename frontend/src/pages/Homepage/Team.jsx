@@ -9,14 +9,17 @@ export default function Team() {
 
   return (
     /* <!-- OUR TEAM START --> */
-    <section id="team" class="section-full p-t80 p-b50 bg-white our-team-two">
-      <div class="container">
-        <div class="section-head clearfix">
-          <div class="wt-tilte-main bdr-r-3 bdr-primary bdr-solid">
-            <small class="wt-small-title">Our Experts</small>
-            <h2 class="m-b5">Our Best Team</h2>
+    <section
+      id="team"
+      className="section-full p-t80 p-b50 bg-white our-team-two"
+    >
+      <div className="container">
+        <div className="section-head clearfix">
+          <div className="wt-tilte-main bdr-r-3 bdr-primary bdr-solid">
+            <small className="wt-small-title">Our Experts</small>
+            <h2 className="m-b5">Our Best Team</h2>
           </div>
-          <div class="title-right-detail">
+          <div className="title-right-detail">
             <p>
               We are uncompetitor in architectural solutions Friendly neighbour
               there that power. Keep away Architecture who try to Ambitions
@@ -25,26 +28,26 @@ export default function Team() {
           </div>
         </div>
 
-        <div class="section-content">
-          <div class="row justify-content-center">
-            {sortedTeams.map((team) => {
+        <div className="section-content">
+          <div className="row justify-content-center">
+            {sortedTeams.map((team, index) => {
               return (
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                  <div class="wt-team-arc2">
-                    <div class="wt-media">
+                <div key={index} className="col-lg-4 col-md-6 col-sm-12">
+                  <div className="wt-team-arc2">
+                    <div className="wt-media">
                       <img
                         src={backend_url + "/" + team.image}
                         alt={team.name}
                         style={stylesheet}
                       />
-                      <div class="team-social-center">
-                        <ul class="team-social-icon">
+                      <div className="team-social-center">
+                        <ul className="team-social-icon">
                           {team?.Urls.map((url) => {
                             return (
                               <li>
                                 <a
                                   href={url.link}
-                                  class={`fa  ${url.image ? "" : url.icon}`}
+                                  className={`fa  ${url.image ? "" : url.icon}`}
                                 >
                                   {url.image && (
                                     <img
@@ -61,9 +64,9 @@ export default function Team() {
                       </div>
                     </div>
 
-                    <div class="wt-info bg-white p-a30">
-                      <div class="team-detail  text-center">
-                        <h4 class="m-t0">{team.name}</h4>
+                    <div className="wt-info bg-white p-a30">
+                      <div className="team-detail  text-center">
+                        <h4 className="m-t0">{team.name}</h4>
                         <p>{team.position}</p>
                       </div>
                     </div>

@@ -1,4 +1,6 @@
+const Blog = require("../database/models/Blog");
 const Comments = require("../database/models/Comment");
+const Project = require("../database/models/Project");
 const User = require("../database/models/User");
 
 // CREATE - Add a new comment
@@ -21,25 +23,21 @@ const getAll = async (req, res) => {
     const comments = await Comments.findAll({
       include: [
         {
-          model: User, // Assuming Comments belongs to User
-          attributes: ["name"], // Select only the 'name' field from the User model
+          model: User,
+          as: "user", // Ensure the alias matches what is defined in your association
+        },
+        {
+          model: Project,
+          through: { attributes: [] },
+        },
+        {
+          model: Blog,
+          through: { attributes: [] },
         },
       ],
     });
 
-    // Format response data to include the user_name
-    const formattedComments = comments.map((comment) => ({
-      id: comment.id,
-      content: comment.content,
-      type: comment.type,
-      user_id: comment.user_id,
-      user_name: comment.User.name, // Assuming User model has 'name' field
-      parent_id: comment.parent_id,
-      createdAt: comment.createdAt,
-      updatedAt: comment.updatedAt,
-    }));
-
-    res.status(200).json(formattedComments);
+    res.status(200).json(comments);
   } catch (error) {
     res
       .status(500)

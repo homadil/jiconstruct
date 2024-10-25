@@ -196,7 +196,7 @@ export default function ImageTemplate({
             media={media}
             handlePushCreate={handleCreate}
             handlePutCreate={handlePut}
-            handleOpenModal={handleOpenModal}
+            handleCloseModal={handleCloseModal}
           />
           <Button onClick={handleCloseModal} variant="danger">
             Close

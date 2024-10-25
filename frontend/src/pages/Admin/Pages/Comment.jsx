@@ -44,15 +44,16 @@ const CommentTable = () => {
   // Filter comments based on search term (username or content)
   const filteredComments = comments.filter((comment) => {
     return (
-      comment.user_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      comment.content.toLowerCase().includes(searchTerm.toLowerCase())
+      comment.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      comment.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      comment.type.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
   if (loading) {
     <Loader />;
   }
-
+  console.log(comments);
   return (
     <div>
       <TextField
@@ -78,7 +79,9 @@ const CommentTable = () => {
             {filteredComments.length > 0 ? (
               filteredComments.map((comment) => (
                 <TableRow key={comment.id}>
-                  <TableCell>{comment.user_name}</TableCell>
+                  <TableCell>
+                    {comment.user ? comment.user.name : "Guest User"}
+                  </TableCell>
                   <TableCell>{comment.content}</TableCell>
                   <TableCell>{comment.type}</TableCell>
                   <TableCell>

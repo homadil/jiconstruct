@@ -30,6 +30,7 @@ const Project = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedUrls, setSelectedUrls] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [loader, setLoader] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -123,7 +124,6 @@ const Project = () => {
     if (project) {
       setUpdate(true);
       setCurrentProjectId(project.id);
-      console.log(project);
       setFormData({
         title: project.title,
         description: project.description,
@@ -173,6 +173,7 @@ const Project = () => {
   };
   const handleSaveProject = (e) => {
     e.preventDefault();
+    setLoader(true);
 
     const newFormData = new FormData();
 
@@ -218,15 +219,19 @@ const Project = () => {
         apiRequest
           .put(`/projects/${currentProjectId}`, newFormData)
           .then((res) => {
-            console.log(res);
+            setLoader(false);
+            handleCloseModal();
+            fetchProjects();
           });
       } else {
-        apiRequest.post(`/projects`, newFormData);
+        apiRequest.post(`/projects`, newFormData).then(() => {
+          setLoader(false);
+          handleCloseModal();
+          fetchProjects();
+        });
       }
-      fetchProjects(); // Refresh project list
-      handleCloseModal();
+      // Refresh project list
     } catch (error) {
-      console.log(error);
       toast.error("Failed to save project");
     }
   };
@@ -309,6 +314,7 @@ const Project = () => {
           files={files}
           handleCloseModal={handleCloseModal}
           handleSaveProject={handleSaveProject}
+          loader={loader}
         />
       </Modal>
     </div>

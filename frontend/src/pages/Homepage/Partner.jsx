@@ -10,13 +10,13 @@ export default function Partner() {
 
   return (
     /* <!-- OUR PARTNER START --> */
-    <div class="section-full p-t80 p-b50 bg-white">
-      <div class="container">
-        <div class="section-content client-logo ">
-          <div class="row justify-content-center">
+    <div className="section-full p-t80 p-b50 bg-white">
+      <div className="container">
+        <div className="section-content client-logo ">
+          <div className="row justify-content-center">
             {sortedPartners?.map((partner, index) => (
-              <div class="col-6 col-sm-4 col-md-3">
-                <a href="#" class="wt-img-effect client-logo-media shadow">
+              <div key={index} className="col-6 col-sm-4 col-md-3">
+                <a href="#" className="wt-img-effect client-logo-media shadow">
                   <img src={`${backend_url}/${partner.image}`} alt="" />
                 </a>
               </div>

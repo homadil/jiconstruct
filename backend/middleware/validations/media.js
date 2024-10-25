@@ -8,9 +8,6 @@ exports.mediaValidationRules = [
     } else {
       value = parseInt(value); // Convert the value to an integer
     }
-
-    console.log(typeof value, value); // Log the type and value for debugging
-
     // Allow null or a positive integer
     if (value === null || (Number.isInteger(value) && value > 0)) {
       return true; // Valid case

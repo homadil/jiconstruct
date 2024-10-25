@@ -1,6 +1,7 @@
 const sequelize = require("./index"); // Your sequelize instance
 const Location = require("./models/Location");
 const User = require("./models/User");
+const Email = require("./models/Email");
 const Blog = require("./models/Blog");
 const Project = require("./models/Project");
 const Category = require("./models/Category");

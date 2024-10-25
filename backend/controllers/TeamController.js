@@ -55,7 +55,6 @@ const create = async (req, res) => {
       .json({ ...team.dataValues, msg: `${team.name} created successfully` });
   } catch (error) {
     await transaction.rollback(); // Rollback transaction on error
-    console.log(error.message);
     res.status(400).json({ error: error.message });
   }
 };

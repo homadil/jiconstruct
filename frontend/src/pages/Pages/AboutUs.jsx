@@ -27,30 +27,29 @@ export default function AboutUs() {
     return;
   }
 
-  console.log(aboutUsImage);
   return (
     //  <!-- CONTENT START -->
-    <div class="page-content">
+    <div className="page-content">
       {/* <!-- INNER PAGE BANNER --> */}
       <div
-        class="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"
+        className="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"
         data-stellar-background-ratio="0.5"
         style={{
           backgroundImage: `url(${backend_url}/${aboutUsHeader[0]?.path})`,
         }}
       >
-        <div class="overlay-main bg-black opacity-07"></div>
-        <div class="container">
-          <div class="wt-bnr-inr-entry">
-            <div class="banner-title-outer">
-              <div class="banner-title-name">
-                <h2 class="text-white">About Us</h2>
+        <div className="overlay-main bg-black opacity-07"></div>
+        <div className="container">
+          <div className="wt-bnr-inr-entry">
+            <div className="banner-title-outer">
+              <div className="banner-title-name">
+                <h2 className="text-white">About Us</h2>
               </div>
             </div>
             {/* <!-- BREADCRUMB ROW -->                             */}
 
             <div>
-              <ul class="wt-breadcrumb breadcrumb-style-2">
+              <ul className="wt-breadcrumb breadcrumb-style-2">
                 <li>
                   <Link to={"/"}>Home</Link>
                 </li>
@@ -65,17 +64,17 @@ export default function AboutUs() {
       {/* <!-- INNER PAGE BANNER END --> */}
 
       {/* <!-- WELCOME SECTION START --> */}
-      <div class="section-full p-t80 p-b80 bg-white overflow-hide">
-        <div class="container">
-          <div class="section-content">
-            <div class="row">
-              <div class="col-lg-6 col-md-12">
-                <div class="arc-home-about-left">
-                  <div class="arc-home-left-content  bg-gray">
-                    <h3 class="m-t0 wt-tilte-light">
+      <div className="section-full p-t80 p-b80 bg-white overflow-hide">
+        <div className="container">
+          <div className="section-content">
+            <div className="row">
+              <div className="col-lg-6 col-md-12">
+                <div className="arc-home-about-left">
+                  <div className="arc-home-left-content  bg-gray">
+                    <h3 className="m-t0 wt-tilte-light">
                       Design, followed by Form & Function.
                     </h3>
-                    <h2 class="m-t0 wt-title">
+                    <h2 className="m-t0 wt-title">
                       Exploring the Quality Ways through Design.
                     </h2>
                     <p>
@@ -83,39 +82,42 @@ export default function AboutUs() {
                       neighbour there that power.Keep away Architecture who try
                       to Ambitions people do that really{" "}
                     </p>
-                    <a href="javascript:;" class="site-button-link">
+                    <a href="javascript:;" className="site-button-link">
                       Read More
                     </a>
                   </div>
                 </div>
               </div>
 
-              <div class="col-lg-6 col-md-12">
-                <div class="arc-home-about-right portfolio-wrap">
-                  <div class="row">
-                    <div class="col-md-6 col-sm-6 masonry-item">
-                      <div class="arc-about-year text-uppercase text-right m-b20">
-                        <div class="arc-about-year-pic img-reflection">
+              <div className="col-lg-6 col-md-12">
+                <div className="arc-home-about-right portfolio-wrap">
+                  <div className="row">
+                    <div className="col-md-6 col-sm-6 masonry-item">
+                      <div className="arc-about-year text-uppercase text-right m-b20">
+                        <div className="arc-about-year-pic img-reflection">
                           <img
                             src={backend_url + "/" + homeGridFirstIndex?.path}
                             alt=""
                           />
                         </div>
-                        <div class="arc-about-year-info">
-                          <span class="title-small">
+                        <div className="arc-about-year-info">
+                          <span className="title-small">
                             working <br />
                             experience
                           </span>
-                          <h2 class="wt-title m-tb0">Year</h2>
-                          <span class="text-outline">12</span>
+                          <h2 className="wt-title m-tb0">Year</h2>
+                          <span className="text-outline">12</span>
                         </div>
                       </div>
                     </div>
 
                     {remainingHomeGrid.map((item, index) => {
                       return (
-                        <div key={index} class="col-md-6 col-sm-6 masonry-item">
-                          <div class="wt-media m-b20 img-reflection">
+                        <div
+                          key={index}
+                          className="col-md-6 col-sm-6 masonry-item"
+                        >
+                          <div className="wt-media m-b20 img-reflection">
                             <img src={backend_url + "/" + item?.path} alt="" />
                           </div>
                         </div>
@@ -139,25 +141,25 @@ export default function AboutUs() {
       {/* <!-- OUR TEAM END -->   */}
 
       {/* <!-- OUR STORY SECTION START --> */}
-      <div class="bg-white">
-        <div class="section-content">
-          <div class="row awards-win-section">
+      <div className="bg-white">
+        <div className="section-content">
+          <div className="row awards-win-section">
             <div
-              class="col-lg-6 col-md-12  awards-win-section-left bg-cover bg-no-repeat bg-center bg-gray"
+              className="col-lg-6 col-md-12  awards-win-section-left bg-cover bg-no-repeat bg-center bg-gray"
               style={{
                 backgroundImage: `url(${backend_url}/${aboutUsImage[0]?.path})`,
               }}
             >
-              <div class="awards-win-left-content"></div>
+              <div className="awards-win-left-content"></div>
             </div>
-            <div class="col-lg-6 col-md-12 awards-win-section-right bg-gray">
-              <div class="awards-win-right-content">
-                <div class="awards-win">
+            <div className="col-lg-6 col-md-12 awards-win-section-right bg-gray">
+              <div className="awards-win-right-content">
+                <div className="awards-win">
                   <ul>
                     {/* <!-- COLUMNS 2 --> */}
                     <li>
-                      <h2 class="title-year">2016</h2>
-                      <h4 class=" m-b10">
+                      <h2 className="title-year">2016</h2>
+                      <h4 className=" m-b10">
                         Business Council Architectural Award - Healthcare
                       </h4>
                       <p>
@@ -167,8 +169,8 @@ export default function AboutUs() {
                     </li>
                     {/* <!-- COLUMNS 3 --> */}
                     <li>
-                      <h2 class="title-year">2017</h2>
-                      <h4 class=" m-b10">
+                      <h2 className="title-year">2017</h2>
+                      <h4 className=" m-b10">
                         DBIA Western Pacific Region Project of the Year
                       </h4>
                       <p>
@@ -178,8 +180,8 @@ export default function AboutUs() {
                     </li>
                     {/* <!-- COLUMNS 4 --> */}
                     <li>
-                      <h2 class="title-year">2018</h2>
-                      <h4 class=" m-b10">
+                      <h2 className="title-year">2018</h2>
+                      <h4 className=" m-b10">
                         ENR New York Higher Education Award
                       </h4>
                       <p>
@@ -189,8 +191,8 @@ export default function AboutUs() {
                     </li>
                     {/* <!-- COLUMNS 5 --> */}
                     <li>
-                      <h2 class="title-year">2019</h2>
-                      <h4 class=" m-b10">AIA Healthcare Design Awards</h4>
+                      <h2 className="title-year">2019</h2>
+                      <h4 className=" m-b10">AIA Healthcare Design Awards</h4>
                       <p>
                         Vitae adipiscing turpis. Aenean ligula nibh, molestie id
                         viverra a, dapibus at dolor. In iaculis viverra neque.{" "}

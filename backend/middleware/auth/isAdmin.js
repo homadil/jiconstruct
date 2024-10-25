@@ -17,7 +17,7 @@ module.exports = function (req, res, next) {
     const decoded = jwt.verify(token.split(" ")[1], keys.secretOrKey); // Split Bearer token
 
     // Check if the user's role is admin
-    console.log(decoded.user);
+
     if (decoded.user.role !== "admin") {
       return res.status(403).json({ msg: "Access denied: Admins only" });
     }
