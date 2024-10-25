@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import apiRequest from "../../../apiRequest";
 import QuillEditor from "../../../components/QuillEditor";
 import NotificationContent from "../../../components/DataBaseForms/NotificationContent";
+import { Helmet } from "react-helmet-async";
 
 export default function Notification() {
   const [users, setUsers] = useState([]);
@@ -103,6 +104,9 @@ export default function Notification() {
 
   return (
     <form onSubmit={sendNotification}>
+      <Helmet>
+        <title>Ji Construct | Admin | Notification</title>
+      </Helmet>
       <h2>Send Notification</h2>
       <FormControl fullWidth>
         <InputLabel>Select Users</InputLabel>

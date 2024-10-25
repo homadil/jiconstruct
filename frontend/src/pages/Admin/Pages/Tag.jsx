@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import apiRequest from "../../../apiRequest";
 import Loader from "../../../components/Loader";
+import { Helmet } from "react-helmet-async";
 
 export default function Tag() {
   const [tags, setTags] = useState([]);
@@ -106,6 +107,10 @@ export default function Tag() {
 
   return (
     <div className="container">
+      <Helmet>
+        <title>Ji Construct | Admin | Tag</title>
+      </Helmet>
+
       <h3>Tags </h3>
       <Button
         variant="contained"

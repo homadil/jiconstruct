@@ -15,6 +15,7 @@ import apiRequest from "../../../apiRequest";
 import { Container } from "react-bootstrap";
 import BlogForm from "../../../components/DataBaseForms/BlogForm";
 import { DataContext } from "../../../store";
+import { Helmet } from "react-helmet-async";
 
 const modalStyle = {
   position: "absolute",
@@ -59,6 +60,9 @@ export default function Blog() {
 
   return (
     <Container>
+      <Helmet>
+        <title>Ji Construct | Admin | Blog</title>
+      </Helmet>
       <Button
         variant="contained"
         color="primary"

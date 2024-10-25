@@ -17,6 +17,7 @@ import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import apiRequest from "../../../apiRequest";
 import Loader from "../../../components/Loader";
 import { DataContext } from "../../../store";
+import { Helmet } from "react-helmet-async";
 
 export default function Team() {
   const [teams, setTeams] = useState([]);
@@ -154,6 +155,9 @@ export default function Team() {
 
   return (
     <div className="container">
+      <Helmet>
+        <title>Ji Construct | Admin | Team</title>
+      </Helmet>
       <h3>Teams </h3>
       <Button
         variant="contained"

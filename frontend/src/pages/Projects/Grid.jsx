@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import bg from "../../assets/videos/dummy/project.mp4";
 import { Link } from "react-router-dom";
 import { DataContext } from "../../store";
+import { Helmet } from "react-helmet-async";
 
 export default function Grid() {
   const { projects, backend_url, truncateContent } = useContext(DataContext);
@@ -51,6 +52,9 @@ export default function Grid() {
 
   return (
     <div className="page-content">
+      <Helmet>
+        <title>Ji Construct | Projects</title>
+      </Helmet>
       <div
         className="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"
         data-stellar-background-ratio="0.5"

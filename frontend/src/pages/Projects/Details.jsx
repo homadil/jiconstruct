@@ -8,6 +8,7 @@ import postFive from "../../assets/images/dummy/download_7.jpg";
 import { useNavigate } from "react-router-dom";
 import apiRequest from "../../apiRequest";
 import { DataContext } from "../../store";
+import { Helmet } from "react-helmet-async";
 // Utility function to parse query string
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -24,7 +25,7 @@ export default function Details() {
   const navigate = useNavigate();
   const { projects, backend_url, formatDate, formatDateTime, setProjects } =
     useContext(DataContext);
-  const project = projects.filter((blog) => blog.id === parseInt(id))[0];
+  const project = projects.filter((project) => project.id === parseInt(id))[0];
   if (!project) {
     return navigate("/project");
   }
@@ -54,6 +55,10 @@ export default function Details() {
   return (
     //  <!-- CONTENT START -->
     <div className="page-content">
+      <Helmet>
+        <title>Ji Construct | Project | {project?.title || "Details"}</title>
+      </Helmet>
+
       {/* INNER PAGE BANNER */}
       <div
         className="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"

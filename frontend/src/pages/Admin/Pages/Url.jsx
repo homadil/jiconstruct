@@ -14,6 +14,7 @@ import apiRequest from "../../../apiRequest";
 import Loader from "../../../components/Loader";
 import { DataContext } from "../../../store";
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet-async";
 export default function Url() {
   const [urls, setUrls] = useState([]);
   const [loader, setLoader] = useState([]);
@@ -117,6 +118,9 @@ export default function Url() {
 
   return (
     <div className="container">
+      <Helmet>
+        <title>Ji Construct | Admin | URL</title>
+      </Helmet>
       <h3>URL </h3>
       <Button
         variant="contained"

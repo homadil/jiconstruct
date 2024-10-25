@@ -21,6 +21,7 @@ import { toast } from "react-toastify"; // Assuming you use react-toastify for n
 import apiRequest from "../../../apiRequest";
 import Loader from "../../../components/Loader";
 import ProjectForm from "../../../components/DataBaseForms/ProjectForm";
+import { Helmet } from "react-helmet-async";
 
 const Project = () => {
   const [projects, setProjects] = useState([]);
@@ -251,6 +252,10 @@ const Project = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>Ji Construct | Admin | Project</title>
+      </Helmet>
+
       <Button
         variant="contained"
         color="primary"

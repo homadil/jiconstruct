@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Pagination from "react-js-pagination"; // Example pagination library
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Scrollbar, A11y, Autoplay } from "swiper/modules";
+import { Helmet } from "react-helmet-async";
 
 export default function Blog() {
   const {
@@ -88,6 +89,10 @@ export default function Blog() {
     <div>
       {/* <!-- CONTENT START --> */}
       <div className="page-content">
+        <Helmet>
+          <title>Ji Construct | News</title>
+        </Helmet>
+
         {/* <!-- INNER PAGE BANNER --> */}
         <div
           className="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"

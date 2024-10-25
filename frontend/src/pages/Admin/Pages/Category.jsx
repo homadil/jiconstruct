@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import apiRequest from "../../../apiRequest";
 import Loader from "../../../components/Loader";
+import { Helmet } from "react-helmet-async";
 
 export default function Category() {
   const [Categories, setCategories] = useState([]);
@@ -112,6 +113,9 @@ export default function Category() {
 
   return (
     <div className="container">
+      <Helmet>
+        <title>Ji Construct | Admin | Category</title>
+      </Helmet>
       <h3>Categories </h3>
       <Button
         variant="contained"

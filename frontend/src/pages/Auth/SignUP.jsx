@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/images/ji_construct_logo.png";
 import bg from "../../assets/images/dummy/download_11.webp";
+import { Helmet } from "react-helmet-async";
 export default function SignUp() {
   const [isHovered, setIsHovered] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -78,6 +79,9 @@ export default function SignUp() {
   }
   return (
     <Container fluid className="p-0">
+      <Helmet>
+        <title>Ji Construct | Auth | Register</title>
+      </Helmet>
       <Row className="min-vh-100 align-items-center">
         {/* Image Section - hidden on mobile */}
         <Col md={6} className="d-none d-md-block">

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import apiRequest from "../../../apiRequest";
 import Loader from "../../../components/Loader";
 import ImageTemplate from "../../../components/ImageTemplate";
+import { Helmet } from "react-helmet-async";
 
 export default function UploadMedia() {
   const [medias, setMedias] = useState([]);
@@ -46,6 +47,9 @@ export default function UploadMedia() {
 
   return (
     <div>
+      <Helmet>
+        <title>Ji Construct | Admin | Media Upload</title>
+      </Helmet>
       <ul style={{ listStyle: "none" }}>
         <li>
           <ImageTemplate

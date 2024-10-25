@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "../../assets/images/ji_construct_logo.png";
 import { useLocation } from "react-router-dom";
 import bg from "../../assets/images/dummy/download_9.webp";
+import { Helmet } from "react-helmet-async";
 export default function ResetEmailConfirm() {
   const [isHovered, setIsHovered] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -72,6 +73,10 @@ export default function ResetEmailConfirm() {
   }
   return (
     <Container fluid className="p-0">
+      <Helmet>
+        <title>Ji Construct | Auth | Reset Email Confirm</title>
+      </Helmet>
+
       <Row className="min-vh-100 align-items-center">
         {/* Image Section - hidden on mobile */}
         <Col md={6} className="d-none d-md-block">

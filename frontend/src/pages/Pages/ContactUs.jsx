@@ -4,6 +4,7 @@ import { DataContext } from "../../store";
 import apiRequest from "../../apiRequest";
 import { Button, CircularProgress } from "@mui/material";
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet-async";
 export default function ContactUs() {
   const { contactUsHeader, backend_url } = useContext(DataContext);
   const [loader, setLoader] = useState(false);
@@ -29,6 +30,10 @@ export default function ContactUs() {
   return (
     //  <!-- CONTENT START -->
     <div className="page-content">
+      <Helmet>
+        <title>Ji Construct | Contact Us</title>
+      </Helmet>
+
       {/* <!-- INNER PAGE BANNER --> */}
       <div
         className="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"

@@ -16,6 +16,7 @@ import axios from "axios"; // Assuming you use axios to make API requests
 import { toast } from "react-toastify"; // For notifications
 import apiRequest from "../../../apiRequest";
 import Loader from "../../../components/Loader";
+import { Helmet } from "react-helmet-async";
 const CommentTable = () => {
   const [comments, setComments] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -53,9 +54,13 @@ const CommentTable = () => {
   if (loading) {
     <Loader />;
   }
-  console.log(comments);
+
   return (
     <div>
+      <Helmet>
+        <title>Ji Construct | Admin | Comment</title>
+      </Helmet>
+
       <TextField
         label="Search by User Name or Content"
         variant="outlined"

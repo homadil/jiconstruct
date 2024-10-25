@@ -20,6 +20,7 @@ import ForgetPassword from "./pages/Auth/ForgetPassword";
 import ForgetPasswordConfirm from "./pages/Auth/ForgetPasswordConfirm";
 import ResetEmail from "./pages/Auth/ResetEmail";
 import ResetEmailConfirm from "./pages/Auth/ResetEmailConfirm";
+import NotFound from "./pages/NotFound";
 
 export default function RouterPath() {
   return (
@@ -56,6 +57,9 @@ export default function RouterPath() {
       />
       <Route path="/reset_email" element={<ResetEmail />} />
       <Route path="/reset_email_Confirm" element={<ResetEmailConfirm />} />
+
+      {/* Fallback 404 route */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

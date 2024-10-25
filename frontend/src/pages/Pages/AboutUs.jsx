@@ -11,6 +11,7 @@ import TeamThree from "../../assets/images/dummy/team3.jpg";
 import { DataContext } from "../../store";
 import Services from "../Homepage/Services";
 import Team from "../Homepage/Team";
+import { Helmet } from "react-helmet-async";
 
 export default function AboutUs() {
   const stylesheet = {
@@ -30,6 +31,9 @@ export default function AboutUs() {
   return (
     //  <!-- CONTENT START -->
     <div className="page-content">
+      <Helmet>
+        <title>Ji Construct | About Us</title>
+      </Helmet>
       {/* <!-- INNER PAGE BANNER --> */}
       <div
         className="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"

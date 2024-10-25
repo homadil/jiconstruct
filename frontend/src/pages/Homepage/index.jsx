@@ -8,6 +8,7 @@ import Testimony from "./Testimony";
 import Team from "./Team";
 import Partner from "./Partner";
 import { useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 export default function Homepage() {
   const { hash } = useLocation();
 
@@ -23,6 +24,10 @@ export default function Homepage() {
     <div>
       {/* <!-- CONTENT START --> */}
       <div className="page-content">
+        <Helmet>
+          <title>Ji Construct | Homepage </title>
+        </Helmet>
+
         <Slider />
 
         <Welcome />

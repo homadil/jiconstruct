@@ -13,6 +13,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import apiRequest from "../../../apiRequest";
 import Loader from "../../../components/Loader";
 import { DataContext } from "../../../store";
+import { Helmet } from "react-helmet-async";
 export default function Testimony() {
   const [testimonies, setTestimonies] = useState([]);
   const [loader, setLoader] = useState([]);
@@ -115,6 +116,9 @@ export default function Testimony() {
 
   return (
     <div className="container">
+      <Helmet>
+        <title>Ji Construct | Admin | Testimony</title>
+      </Helmet>
       <h3>Testimonies </h3>
       <Button
         variant="contained"

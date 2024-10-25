@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { DataContext } from "../../store";
 import apiRequest from "../../apiRequest";
+import { Helmet } from "react-helmet-async";
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -46,6 +47,9 @@ export default function Video() {
   return (
     // <!-- CONTENT START -->
     <div className="page-content ">
+      <Helmet>
+        <title>Ji Construct | Blog | {blog?.title || "Details"} </title>
+      </Helmet>
       {/* <!-- INNER PAGE BANNER --> */}
       <div
         className="wt-bnr-inr overlay-wraper bg-parallax bg-top-center"

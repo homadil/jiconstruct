@@ -13,6 +13,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import apiRequest from "../../../apiRequest";
 import Loader from "../../../components/Loader";
 import { DataContext } from "../../../store";
+import { Helmet } from "react-helmet-async";
 export default function Partner() {
   const [partner, setPartner] = useState([]);
   const [loader, setLoader] = useState([]);
@@ -110,6 +111,9 @@ export default function Partner() {
 
   return (
     <div className="container">
+      <Helmet>
+        <title>Ji Construct | Admin | Partner</title>
+      </Helmet>
       <h3>Partners </h3>
       <Button
         variant="contained"
