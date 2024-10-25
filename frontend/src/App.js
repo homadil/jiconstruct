@@ -24,6 +24,19 @@ function ScrollToHashElement() {
   return null; // This component doesn't render anything
 }
 
+function pageLoader() {
+  const loadingArea = document.querySelector(".loading-area");
+  if (loadingArea) {
+    loadingArea.style.transition = "opacity 1s ease";
+    loadingArea.style.opacity = 0;
+
+    // Remove the element after the transition
+    setTimeout(() => {
+      loadingArea.style.display = "none";
+    }, 1000); // Match the duration with CSS transition time
+  }
+}
+
 function App() {
   const location = useLocation();
   const isAdminPath = location.pathname.includes("/admin");
@@ -32,6 +45,10 @@ function App() {
   const finishedLoading = Object.values(loaders).every(
     (value) => value === false
   );
+
+  useEffect(() => {
+    pageLoader();
+  }, []);
   return (
     <div className="page-wrapper">
       <ScrollToTop />

@@ -45,6 +45,7 @@ All JavaScript fuctions Start
 /*--------------------------------------------------------------------------------------------
 	Window Resize ALL FUNCTION START
 ---------------------------------------------------------------------------------------------*/
+import jQuery from "jquery"; // Import jQuery
 
 (function ($) {
   // 'use strict';
@@ -654,64 +655,64 @@ All JavaScript fuctions Start
   /*--------------------------------------------------------------------------------------------
 	document.ready ALL FUNCTION START
 ---------------------------------------------------------------------------------------------*/
-  jQuery(document).ready(function () {
-    // > Top Search bar Show Hide function by = custom.js
-    site_search(),
-      // > Video responsive function by = custom.js
-      video_responsive(),
-      // > magnificPopup function	by = magnific-popup.js
-      magnific_popup(),
-      // > magnificPopup for video function	by = magnific-popup.js
-      magnific_video(),
-      // > Vertically center Bootstrap modal popup function by = custom.js
-      popup_vertical_center(),
-      // > Sidebar sticky  when scroll down function by = custom.js ========== //
-      sticky_sidebar(),
-      // > page scroll top on button click function by = custom.js
-      scroll_top(),
-      // > input type file function by = custom.js
-      input_type_file_form(),
-      // > input Placeholder in IE9 function by = custom.js
-      placeholderSupport(),
-      // > footer fixed on bottom function by = custom.js
-      footer_fixed(),
-      // > Header fixed on bottom function by = custom.js ======================== //
-      header_fixed(),
-      // > accordion active calss function by = custom.js ========================= //
-      accordion_active(),
-      // > Nav submenu on off function by = custome.js ===================//
-      mobile_nav(),
-      //  widget-client-carousel function by = owl.carousel.js ========================== //
-      widget_client(),
-      // Fade slider function by = owl.carousel.js ========================== //
-      owl_fade_slider(),
-      //  CounterUp function by = counterup-min.js ========================== //
-      counter_count(),
-      // > Sync slider  function ========================== //
-      sync_slider(),
-      mobile_side_drawer(),
-      verticalslider();
-  });
+  // jQuery(document).ready(function () {
+  //   // > Top Search bar Show Hide function by = custom.js
+  //   site_search(),
+  //     // > Video responsive function by = custom.js
+  //     video_responsive(),
+  //     // > magnificPopup function	by = magnific-popup.js
+  //     magnific_popup(),
+  //     // > magnificPopup for video function	by = magnific-popup.js
+  //     magnific_video(),
+  //     // > Vertically center Bootstrap modal popup function by = custom.js
+  //     popup_vertical_center(),
+  //     // > Sidebar sticky  when scroll down function by = custom.js ========== //
+  //     sticky_sidebar(),
+  //     // > page scroll top on button click function by = custom.js
+  //     scroll_top(),
+  //     // > input type file function by = custom.js
+  //     input_type_file_form(),
+  //     // > input Placeholder in IE9 function by = custom.js
+  //     placeholderSupport(),
+  //     // > footer fixed on bottom function by = custom.js
+  //     footer_fixed(),
+  //     // > Header fixed on bottom function by = custom.js ======================== //
+  //     header_fixed(),
+  //     // > accordion active calss function by = custom.js ========================= //
+  //     accordion_active(),
+  //     // > Nav submenu on off function by = custome.js ===================//
+  //     mobile_nav(),
+  //     //  widget-client-carousel function by = owl.carousel.js ========================== //
+  //     widget_client(),
+  //     // Fade slider function by = owl.carousel.js ========================== //
+  //     owl_fade_slider(),
+  //     //  CounterUp function by = counterup-min.js ========================== //
+  //     counter_count(),
+  //     // > Sync slider  function ========================== //
+  //     sync_slider(),
+  //     mobile_side_drawer(),
+  //     verticalslider();
+  // });
 
   /*--------------------------------------------------------------------------------------------
 	Window Load START
 ---------------------------------------------------------------------------------------------*/
-  jQuery(window).on("load", function () {
-    // > equal each box function by  = custom.js
-    equalheight(".equal-wraper .equal-col"),
-      // > masonry function function by = isotope.pkgd.min.js
-      masonryBox(),
-      // > page loader function by = custom.js
-      page_loader(),
-      // > work carousel  function by = owl.carousel.js
-      work_carousel(),
-      // > Testimonial carousel  function by = owl.carousel.js
-      testimonial_carousel_two(),
-      // > work carousel  function by = owl.carousel.js
-      projects_carousel2(),
-      home_2_about(),
-      social_tooltips();
-  });
+  // jQuery(window).on("load", function () {
+  //   // > equal each box function by  = custom.js
+  //   equalheight(".equal-wraper .equal-col"),
+  //     // > masonry function function by = isotope.pkgd.min.js
+  //     masonryBox(),
+  //     // > page loader function by = custom.js
+  //     page_loader(),
+  //     // > work carousel  function by = owl.carousel.js
+  //     work_carousel(),
+  //     // > Testimonial carousel  function by = owl.carousel.js
+  //     testimonial_carousel_two(),
+  //     // > work carousel  function by = owl.carousel.js
+  //     projects_carousel2(),
+  //     home_2_about(),
+  //     social_tooltips();
+  // });
 
   /*===========================
 	Window Scroll ALL FUNCTION START
@@ -726,10 +727,10 @@ All JavaScript fuctions Start
 	Window Resize ALL FUNCTION START
 ===========================*/
 
-  jQuery(window).on("resize", function () {
-    // > footer fixed on bottom function by = custom.js
-    footer_fixed(), header_fixed(), equalheight(".equal-wraper .equal-col");
-  });
+  // jQuery(window).on("resize", function () {
+  //   // > footer fixed on bottom function by = custom.js
+  //   footer_fixed(), header_fixed(), equalheight(".equal-wraper .equal-col");
+  // });
 
   /*===========================
 	Document on  Submit FUNCTION START

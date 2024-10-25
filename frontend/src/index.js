@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-// import "./assets/css/style.css";
+// import "./assets/css/style.css"; // Uncomment if you want to include this
 import { DataProvider } from "./store";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
@@ -16,6 +16,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import "swiper/css/autoplay";
+import "./assets/javascript/custom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

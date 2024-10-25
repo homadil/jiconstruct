@@ -280,6 +280,15 @@
   .blind {
     width: 15%;
   }
+
+  .blind_links {
+    gap: 100px;
+    margin: 0 10px;
+  }
+
+  .blind_links > li > a {
+    max-width: 30px !important;
+  }
 }
 
 /* Delay each text to start sliding one after the other */
