@@ -9,7 +9,6 @@ const Comment = require("../database/models/Comment");
 
 exports.create = async (req, res) => {
   const transaction = await Project.sequelize.transaction(); // Start a transaction
-
   try {
     const data = req.body; // Retrieve data from the request body
 
@@ -69,69 +68,75 @@ exports.create = async (req, res) => {
     }
 
     // Step 4: Associate categories (ProjectCategories)
-    if (data.categories && data.categories.length > 0) {
-      if (!Array.isArray(data.categories)) {
-        data.categories = [data.categories];
-      }
-      // Parse JSON strings back to objects
+    if (data.categories) {
+      const categories = Array.isArray(data.categories)
+        ? data.categories
+        : [data.categories];
 
-      const parsedCategories = data.categories.map((category) =>
-        JSON.parse(category)
-      );
+      const parsedCategories = categories.map((category) => {
+        try {
+          return JSON.parse(category);
+        } catch (e) {
+          throw new Error(`Invalid category format: ${category}`);
+        }
+      });
 
-      // Extract IDs from parsed category objects
       const categoryIds = parsedCategories.map((category) => category.id);
 
-      const categories = await Category.findAll({
-        where: {
-          id: categoryIds,
-        },
+      const selectedCategories = await Category.findAll({
+        where: { id: categoryIds },
         transaction,
       });
 
-      await project.addCategories(categories, { transaction });
+      await project.addCategories(selectedCategories, { transaction });
     }
 
     // Step 5: Associate tags (ProjectTags)
-    if (data.tags && data.tags.length > 0) {
-      if (!Array.isArray(data.tags)) {
-        data.tags = [data.tags];
-      }
-      // Parse JSON strings back to objects
-      const parsedTags = data.tags.map((tag) => JSON.parse(tag));
+    if (data.tags) {
+      const tags = Array.isArray(data.tags) ? data.tags : [data.tags];
 
-      // Extract IDs from parsed tag objects
+      const parsedTags = tags.map((tag) => {
+        try {
+          return JSON.parse(tag);
+        } catch (e) {
+          throw new Error(`Invalid tag format: ${tag}`);
+        }
+      });
+
       const tagIds = parsedTags.map((tag) => tag.id);
 
-      const tags = await Tag.findAll({
-        where: {
-          id: tagIds,
-        },
+      const selectedTags = await Tag.findAll({
+        where: { id: tagIds },
         transaction,
       });
 
-      await project.addTags(tags, { transaction });
+      await project.addTags(selectedTags, { transaction });
     }
 
     // Step 6: Associate URLs (ProjectUrl)
-    if (data.urls && data.urls.length > 0) {
-      if (!Array.isArray(data.urls)) {
-        data.urls = [data.urls];
-      }
+    if (data.urls) {
+      const urls = Array.isArray(data.urls) ? data.urls : [data.urls];
+
       // Parse JSON strings back to objects
-      const parsedUrls = data.urls.map((url) => JSON.parse(url));
+      const parsedUrls = urls.map((url) => {
+        try {
+          return JSON.parse(url);
+        } catch (e) {
+          throw new Error(`Invalid tag format: ${tag}`);
+        }
+      });
 
       // Extract IDs from parsed URL objects
       const urlIds = parsedUrls.map((url) => url.id);
 
-      const urls = await Url.findAll({
+      const selectedUrls = await Url.findAll({
         where: {
           id: urlIds,
         },
         transaction,
       });
 
-      await project.addUrls(urls, { transaction });
+      await project.addUrls(selectedUrls, { transaction });
     }
 
     // Commit transaction
@@ -225,6 +230,14 @@ exports.update = async (req, res) => {
       }
     }
 
+    // If req.deletePrevMedia is true, delete all previous media associated with the project
+    if (req.body.deletePrevMedia) {
+      await Media.destroy({
+        where: { id: project.id, type: "project" },
+        transaction,
+      });
+    }
+
     // Step 2: Update project details
     await project.update(
       {
@@ -245,22 +258,6 @@ exports.update = async (req, res) => {
     );
 
     // Step 3: Handle media deletion based on conditions
-
-    // If req.deletePrevMedia is true, delete all previous media associated with the project
-    if (req.body.deletePrevMedia) {
-      await Media.destroy({
-        where: { parent_id: project.id, type: "project" },
-        transaction,
-      });
-    }
-
-    // If req.files["show"] is provided, delete the existing media related to 'show' and replace it
-    if (req.files["show"]) {
-      await Media.destroy({
-        where: { parent_id: project.id, type: "project", exe: "image" },
-        transaction,
-      });
-    }
 
     // Step 4: Upload new media files if provided
     if (req.files["files"] && req.files["files"].length > 0) {

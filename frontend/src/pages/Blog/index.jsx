@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import author from "../../assets/images/dummy/team2.jpg";
+import author from "../../assets/images/dummy.jpg";
 import { DataContext } from "../../store";
 import { Link } from "react-router-dom";
 import Pagination from "react-js-pagination"; // Example pagination library

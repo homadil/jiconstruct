@@ -184,17 +184,17 @@ const Project = () => {
     }
 
     // Append URL objects as JSON strings
-    for (let i = 0; i < urls.length; i++) {
+    for (let i = 0; i < selectedUrls.length; i++) {
       newFormData.append("urls", JSON.stringify(urls[i])); // Stringify the URL objects
     }
 
     // Append category objects as JSON strings
-    for (let i = 0; i < categories.length; i++) {
+    for (let i = 0; i < selectedCategories.length; i++) {
       newFormData.append("categories", JSON.stringify(categories[i])); // Stringify the category objects
     }
 
     // Append tag objects as JSON strings
-    for (let i = 0; i < tags.length; i++) {
+    for (let i = 0; i < selectedTags.length; i++) {
       newFormData.append("tags", JSON.stringify(tags[i])); // Stringify the tag objects
     }
 
@@ -233,6 +233,7 @@ const Project = () => {
       }
       // Refresh project list
     } catch (error) {
+      setLoader(false);
       toast.error("Failed to save project");
     }
   };
@@ -250,6 +251,7 @@ const Project = () => {
     <Loader />;
   }
 
+  console.log(categories);
   return (
     <div>
       <Helmet>

@@ -109,7 +109,7 @@ export default function HomeImageSlide({ index, item }) {
             />
             {/* Button */}
             <Link
-              to={`/project?id=${item.id}`}
+              to={`/project_detail?id=${item.id}`}
               className={`slider-button animate-fade`}
             >
               More About
