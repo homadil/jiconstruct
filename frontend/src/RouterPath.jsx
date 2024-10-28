@@ -21,6 +21,7 @@ import ForgetPasswordConfirm from "./pages/Auth/ForgetPasswordConfirm";
 import ResetEmail from "./pages/Auth/ResetEmail";
 import ResetEmailConfirm from "./pages/Auth/ResetEmailConfirm";
 import NotFound from "./pages/NotFound";
+import UserEdit from "./pages/Auth/UserEdit";
 
 export default function RouterPath() {
   return (
@@ -50,6 +51,7 @@ export default function RouterPath() {
       {/* auth path  */}
       <Route path="/sign_up" element={<SignUP />} />
       <Route path="/sign_in" element={<SignIn />} />
+      <Route path="/user_edit" element={<UserEdit />} />
       <Route path="/forget_password" element={<ForgetPassword />} />
       <Route
         path="/forget_password_confirm"

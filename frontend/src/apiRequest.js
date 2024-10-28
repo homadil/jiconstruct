@@ -49,7 +49,7 @@ const apiRequest = {
       return response.data;
     } catch (error) {
       handleError(error);
-      throw error;
+      // throw error;
     }
   },
 
@@ -61,16 +61,10 @@ const apiRequest = {
         headers,
       });
 
-      // Success toast
-      // toast.success("Request successful", {
-      //   position: "top-right",
-      //   autoClose: 3000,
-      // });
-
       return response.data;
     } catch (error) {
       handleError(error);
-      throw error;
+      // throw error;
     }
   },
 
@@ -91,7 +85,7 @@ const apiRequest = {
       return response.data;
     } catch (error) {
       handleError(error);
-      throw error;
+      // throw error;
     }
   },
 
@@ -112,7 +106,7 @@ const apiRequest = {
       return response.data;
     } catch (error) {
       handleError(error);
-      throw error;
+      // throw error;
     }
   },
 };
@@ -133,8 +127,17 @@ const handleError = (error) => {
     if (error.response.data?.error) {
       return toast.error(error.response.data?.error);
     }
+    if (error.response.data?.msg) {
+      return toast.error(
+        `Error: ${error.response.data.msg || "Something went wrong"}`,
+        {
+          position: "top-right",
+          autoClose: 5000,
+        }
+      );
+    }
     // Server responded with a status code that falls out of the range of 2xx
-    toast.error(`Error: ${error.response.data.msg || "Something went wrong"}`, {
+    toast.error(`Error: Something went wrong`, {
       position: "top-right",
       autoClose: 5000,
     });
@@ -146,6 +149,7 @@ const handleError = (error) => {
     });
   } else {
     // Something else happened
+    console.log(error);
     toast.error(`Error: ${error.message}`, {
       position: "top-right",
       autoClose: 5000,

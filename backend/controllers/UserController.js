@@ -35,14 +35,35 @@ exports.newsLetter = async (req, res) => {
   }
 };
 
+// User Controller
+exports.delete = async (req, res) => {
+  const userId = req.params.id; // Retrieve user ID from the request parameters
+
+  try {
+    const user = await User.findByPk(userId); // Find the user by ID
+    if (!user) {
+      return res.status(404).json({ error: "User not found" }); // If user does not exist
+    }
+
+    // Optionally, you can also delete related Location data if needed
+    await Location.destroy({ where: { id: user.location_id } }); // Delete the related location
+
+    await user.destroy(); // Delete the user
+    return res.json({ msg: "User deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Failed to delete user" });
+  }
+};
+
 exports.update = async (req, res) => {
-  const { email, name, role } = req.body; // Retrieve fields from request body
+  const { name, role, country, state, city, address } = req.body; // Retrieve fields from request body
   const userId = req.params.id; // Assuming user ID is passed as a URL parameter
 
   try {
-    const user = await User.findByPk(userId);
+    let user = await User.findByPk(userId);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ msg: "User not found" });
     }
 
     // Update user fields except email and password
@@ -51,13 +72,14 @@ exports.update = async (req, res) => {
 
     // Handle profile_image update
     if (req.files["files"] && req.files["files"].length > 0) {
-      user.profile_image = req.files["files"][0].path; // Save the uploaded file path
+      user.profile_image = req.files["files"][0].path.replace(
+        /^public[\\/]/,
+        ""
+      ); // Save the uploaded file path
     }
 
     // Update or create location
-    const { country, state, city, address } = req.body;
-
-    let location = await Location.findOne({ where: { userId } }); // Check if location exists
+    let location = await Location.findOne({ where: { id: user.location_id } }); // Check if location exists
     if (!location) {
       // Create new location if it doesn't exist
       location = await Location.create({
@@ -81,30 +103,41 @@ exports.update = async (req, res) => {
     // Save user changes
     await user.save();
 
+    user = { ...user.dataValues, location };
+
     return res.json({ msg: "User updated successfully", user });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "User update failed" });
+    return res.status(500).json({ msg: "User update failed" });
   }
 };
 
-// User Controller
-exports.delete = async (req, res) => {
-  const userId = req.params.id; // Retrieve user ID from the request parameters
-
+exports.isLoggedIn = async (req, res) => {
   try {
-    const user = await User.findByPk(userId); // Find the user by ID
-    if (!user) {
-      return res.status(404).json({ error: "User not found" }); // If user does not exist
+    const user = req.user.user;
+    console.log(user);
+    if (user) {
+      const getUser = await User.findByPk(user.id, {
+        include: [
+          {
+            model: Location,
+            as: "location",
+          },
+        ],
+      });
+
+      if (!getUser) {
+        return res.status(404).json({ status: false });
+      }
+
+      return res
+        .status(200)
+        .json({ msg: "User is logged in", status: true, user: getUser });
     }
 
-    // Optionally, you can also delete related Location data if needed
-    await Location.destroy({ where: { id: user.location_id } }); // Delete the related location
-
-    await user.destroy(); // Delete the user
-    return res.json({ msg: "User deleted successfully" });
+    return res.status(401).json({ status: false });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Failed to delete user" });
+    return res.status(500).json({ msg: "Server error", status: false });
   }
 };

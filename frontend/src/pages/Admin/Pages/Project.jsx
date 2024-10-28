@@ -172,6 +172,14 @@ const Project = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  function refresh() {
+    setFiles([]);
+    setSelectedCategories([]);
+    setSelectedTags([]);
+    setSelectedUrls([]);
+    setLoader(false);
+  }
   const handleSaveProject = (e) => {
     e.preventDefault();
     setLoader(true);
@@ -220,22 +228,20 @@ const Project = () => {
         apiRequest
           .put(`/projects/${currentProjectId}`, newFormData)
           .then((res) => {
-            setLoader(false);
-            setFiles([]);
+            refresh();
             handleCloseModal();
             fetchProjects();
           });
       } else {
         apiRequest.post(`/projects`, newFormData).then(() => {
-          setLoader(false);
-          setFiles([]);
+          refresh();
           handleCloseModal();
           fetchProjects();
         });
       }
       // Refresh project list
     } catch (error) {
-      setLoader(false);
+      refresh();
       toast.error("Failed to save project");
     }
   };

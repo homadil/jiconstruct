@@ -113,36 +113,40 @@ export default function BlogForm({
     multiple: true,
   });
 
+  function refresh() {
+    setFiles([]);
+    setSelectedCategories([]);
+    setSelectedTags([]);
+    setSelectedUrls([]);
+    setLoader(false);
+  }
+
   function create(formData) {
     apiRequest
       .post("/blogs", formData)
-      .then((response) => {
-        setLoader(false);
-        setFiles([]);
-        handleCloseModal();
-      })
+      .then(() => {})
       .catch((error) => {
-        setFiles([]);
-        setLoader(false);
         console.error("Error creating blog:", error);
       })
-      .finally(() => fetchBlogs());
+      .finally(() => {
+        refresh();
+        handleCloseModal();
+        fetchBlogs();
+      });
   }
 
   function put(formData, id) {
     apiRequest
       .put(`/blogs/${id}`, formData)
-      .then((response) => {
-        setLoader(false);
-        setFiles([]);
-        handleCloseModal();
-      })
+      .then(() => {})
       .catch((error) => {
-        setLoader(false);
-        setFiles([]);
         console.error("Error creating blog:", error);
       })
-      .finally(() => fetchBlogs());
+      .finally(() => {
+        refresh();
+        handleCloseModal();
+        fetchBlogs();
+      });
   }
 
   const handleSubmit = (e) => {
