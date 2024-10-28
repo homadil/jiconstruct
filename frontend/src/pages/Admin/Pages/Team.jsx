@@ -40,6 +40,7 @@ export default function Team() {
   const [selectedUrls, setSelectedUrls] = useState(
     update ? newTeam.Urls.map((u) => u.id) : []
   );
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoader({ team: true, url: true });
 
@@ -61,7 +62,7 @@ export default function Team() {
     apiRequest
       .get("/teams")
       .then((res) => setTeams(res))
-      .finally(() => setLoader({ team: false }));
+      .finally(() => setLoader({ ...loader, team: false }));
   };
 
   // Modal Handlers
@@ -84,6 +85,7 @@ export default function Team() {
       .then((res) => {
         teams.push(res);
         setTeams(teams);
+        setLoading(false);
         handleCloseModal();
       })
       .finally(() => {
@@ -121,7 +123,7 @@ export default function Team() {
         const updatedTestimonies = teams.map((item) =>
           item.id === res.id ? (item = res) : item
         );
-
+        setLoading(false);
         setTeams(updatedTestimonies); // Update the teams state with the updated data
         handleCloseModal(); // Close the modal after successful update
       })
@@ -132,6 +134,7 @@ export default function Team() {
 
   function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
     const formData = new FormData();
 
     formData.append("files", newTeam.image);
@@ -139,8 +142,8 @@ export default function Team() {
     formData.append("name", newTeam.name);
     formData.append("position", newTeam.position);
 
-    for (let i = 0; i < urls.length; i++) {
-      formData.append("urls", JSON.stringify(urls[i])); // Stringify the URL objects
+    for (let i = 0; i < selectedUrls.length; i++) {
+      formData.append("urls", JSON.stringify(selectedUrls[i])); // Stringify the URL objects
     }
 
     if (update) {
@@ -304,9 +307,9 @@ export default function Team() {
             sx={{ mt: 3 }}
             type="submit"
             className="mt-4"
-            disabled={loader} // Disable button when loading
+            disabled={loading} // Disable button when loading
           >
-            {loader ? (
+            {loading ? (
               <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} /> // Spinner when loading
             ) : !update ? (
               "Submit"
