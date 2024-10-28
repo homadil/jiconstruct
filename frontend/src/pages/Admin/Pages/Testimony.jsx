@@ -6,6 +6,7 @@ import {
   TextField,
   Grid,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -247,13 +248,20 @@ export default function Testimony() {
           />
 
           <Button
-            type="submit"
             variant="contained"
             color="primary"
-            fullWidth
             className="mt-4"
+            sx={{ mt: 3 }}
+            type="submit"
+            disabled={loader} // Disable button when loading
           >
-            {update ? "Update" : "Add"} Testimony
+            {loader ? (
+              <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} /> // Spinner when loading
+            ) : !update ? (
+              "Submit"
+            ) : (
+              "Update"
+            )}
           </Button>
         </form>
       </Modal>

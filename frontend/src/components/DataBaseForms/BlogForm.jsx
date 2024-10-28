@@ -18,7 +18,12 @@ import apiRequest from "../../apiRequest";
 import Loader from "../Loader";
 import { useDropzone } from "react-dropzone";
 
-export default function BlogForm({ blog, update, handleCloseModal }) {
+export default function BlogForm({
+  fetchBlogs,
+  blog,
+  update,
+  handleCloseModal,
+}) {
   const [formData, setFormData] = useState({
     title: update ? blog?.title : "",
     description: update ? blog?.description : "",
@@ -113,12 +118,15 @@ export default function BlogForm({ blog, update, handleCloseModal }) {
       .post("/blogs", formData)
       .then((response) => {
         setLoader(false);
+        setFiles([]);
         handleCloseModal();
       })
       .catch((error) => {
+        setFiles([]);
         setLoader(false);
         console.error("Error creating blog:", error);
-      });
+      })
+      .finally(() => fetchBlogs());
   }
 
   function put(formData, id) {
@@ -126,12 +134,15 @@ export default function BlogForm({ blog, update, handleCloseModal }) {
       .put(`/blogs/${id}`, formData)
       .then((response) => {
         setLoader(false);
+        setFiles([]);
         handleCloseModal();
       })
       .catch((error) => {
         setLoader(false);
+        setFiles([]);
         console.error("Error creating blog:", error);
-      });
+      })
+      .finally(() => fetchBlogs());
   }
 
   const handleSubmit = (e) => {

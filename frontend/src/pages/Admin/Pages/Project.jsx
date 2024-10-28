@@ -221,12 +221,14 @@ const Project = () => {
           .put(`/projects/${currentProjectId}`, newFormData)
           .then((res) => {
             setLoader(false);
+            setFiles([]);
             handleCloseModal();
             fetchProjects();
           });
       } else {
         apiRequest.post(`/projects`, newFormData).then(() => {
           setLoader(false);
+          setFiles([]);
           handleCloseModal();
           fetchProjects();
         });
@@ -251,7 +253,6 @@ const Project = () => {
     <Loader />;
   }
 
-  console.log(categories);
   return (
     <div>
       <Helmet>

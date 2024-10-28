@@ -11,6 +11,7 @@ import {
   Chip,
   MenuItem,
   FormControl,
+  CircularProgress,
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -298,13 +299,20 @@ export default function Team() {
           />
 
           <Button
-            type="submit"
             variant="contained"
             color="primary"
-            fullWidth
+            sx={{ mt: 3 }}
+            type="submit"
             className="mt-4"
+            disabled={loader} // Disable button when loading
           >
-            {update ? "Update" : "Add"} Team
+            {loader ? (
+              <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} /> // Spinner when loading
+            ) : !update ? (
+              "Submit"
+            ) : (
+              "Update"
+            )}
           </Button>
         </form>
       </Modal>

@@ -37,10 +37,7 @@ export default function Blog() {
   const { backend_url } = useContext(DataContext);
   const [update, setUpdate] = useState(false);
   useEffect(() => {
-    apiRequest.get("/blogs").then((res) => {
-      const blogs = res;
-      setBlogs(blogs);
-    });
+    fetchBlogs();
   }, []);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
@@ -57,7 +54,12 @@ export default function Blog() {
       setBlogs(blogs.filter((blog) => blog.id !== id));
     });
   };
-
+  function fetchBlogs() {
+    apiRequest.get("/blogs").then((res) => {
+      const blogs = res;
+      setBlogs(blogs);
+    });
+  }
   return (
     <Container>
       <Helmet>
@@ -81,7 +83,11 @@ export default function Blog() {
           <Grid item xs={12} sm={6} md={4} key={blog.id}>
             <Card>
               <CardContent>
-                <img src={backend_url + "/" + blog.show} alt="" />
+                <img
+                  style={{ height: "260px" }}
+                  src={backend_url + "/" + blog.show}
+                  alt=""
+                />
                 <Typography variant="h5" component="div">
                   {blog.title}
                 </Typography>
@@ -121,6 +127,7 @@ export default function Blog() {
             blog={blog}
             update={update}
             handleCloseModal={handleCloseModal}
+            fetchBlogs={fetchBlogs}
           />
           <Button
             onClick={handleCloseModal}
