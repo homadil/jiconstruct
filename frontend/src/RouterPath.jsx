@@ -36,8 +36,8 @@ export default function RouterPath() {
       <Route path="/project_carousel" element={<Carousel />} />
 
       {/* page paths */}
-      <Route path="/page_about_us" element={<AboutUs />} />
-      <Route path="/page_contact_us" element={<ContactUs />} />
+      <Route path="/about_us" element={<AboutUs />} />
+      <Route path="/contact_us" element={<ContactUs />} />
 
       {/* blog path */}
       <Route path="/post_image" element={<Image />} />

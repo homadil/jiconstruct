@@ -72,7 +72,7 @@ export default function HomeImageSlide({ index, item }) {
         {/* left side */}
         <div className="left">
           {/* Slide Number */}
-          <div className="slide_number slide_text_1 slide_text_active ">
+          <div className="text-outline slide_number slide_text_1 slide_text_active ">
             0{index + 1}
           </div>
 

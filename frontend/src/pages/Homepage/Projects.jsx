@@ -15,14 +15,16 @@ export default function Projects() {
       <div className="container">
         <div className="section-head clearfix">
           <div className="wt-tilte-main bdr-r-3 bdr-primary bdr-solid text-white">
-            <small className="wt-small-title">All Projects</small>
-            <h2 className="m-b5">Our Latest Projects</h2>
+            <small className="wt-small-title">Our Creation</small>
+            {/* <h2 className="m-b5">Our Latest Projects</h2> */}
           </div>
           <div className="title-right-detail text-white">
             <p>
-              We are uncompetitor in architectural solutions Friendly neighbour
-              there that power. Keep away Architecture who try to Ambitions
-              people do that really great.
+              Ji Construct Limited transforms visions into impactful,
+              sustainable spaces. Each creation is crafted with precision to
+              elevate communities, foster connections, and inspire. Explore how
+              we build more than structures—we build possibilities for a
+              brighter future.
             </p>
           </div>
         </div>

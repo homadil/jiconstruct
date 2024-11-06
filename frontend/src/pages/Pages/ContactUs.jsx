@@ -73,6 +73,22 @@ export default function ContactUs() {
         <div className="container">
           {/* <!-- GOOGLE MAP & CONTACT FORM --> */}
           <div className="section-content">
+            <div className="section-head clearfix">
+              <div className="wt-tilte-main bdr-r-3 bdr-primary bdr-solid">
+                <small className="wt-small-title">Contact Us</small>
+                <h2 className="m-b5"> Reply Within 24 Hours</h2>
+              </div>
+              <div className="title-right-detail">
+                <p>
+                  Connect with Ji Construct Limited and let’s discuss how we can
+                  bring your vision to life. Whether you’re looking for
+                  sustainable infrastructure solutions, innovative construction,
+                  or partnership opportunities, our team is here to assist.
+                  Reach out to us, and together, we’ll build possibilities for a
+                  brighter future.
+                </p>
+              </div>
+            </div>
             <div className="contact-form p-a30 bg-gray">
               <div className="cons-contact-form">
                 <div className="contact-one">
@@ -172,7 +188,12 @@ export default function ContactUs() {
                     </div>
                     <div className="icon-content">
                       <h5 className="m-t0 font-weight-500">Phone number</h5>
-                      <p>+1 (456) 789 10 12</p>
+                      <p>
+                        <a href="tel:+2347010298890"> (+234) 701-029-8890</a>
+                      </p>
+                      <p>
+                        <a href="tel:+2348133310871">(+234) 813-331-0871</a>
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -183,7 +204,11 @@ export default function ContactUs() {
                     </div>
                     <div className="icon-content">
                       <h5 className="m-t0 font-weight-500">Email address</h5>
-                      <p>demo@gmail.com</p>
+                      <p>
+                        <a href="mailto:support@jiconstruct.com">
+                          support@jiconstruct.com
+                        </a>
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -194,7 +219,7 @@ export default function ContactUs() {
                     </div>
                     <div className="icon-content">
                       <h5 className="m-t0 font-weight-500">Address info</h5>
-                      <p>55/11 Land Street, Modern New Yourk City, USA</p>
+                      <p>35B Lord Lugard Street, Area 11, Garki, Abuja, FCT</p>
                     </div>
                   </div>
                 </div>

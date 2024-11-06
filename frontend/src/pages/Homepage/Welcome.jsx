@@ -19,19 +19,22 @@ export default function Welcome() {
               <div className="arc-home-about-left">
                 <div className="arc-home-left-content  bg-gray">
                   <h3 className="m-t0 wt-tilte-light">
-                    Design, followed by Form & Function.
+                    Building Tomorrow, Today
                   </h3>
                   <h2 className="m-t0 wt-title">
-                    Exploring the Quality Ways through Design.
+                    Innovative Infrastructure and Sustainable Development
                   </h2>
                   <p>
-                    We are uncompetitor in architectural solutions Friendly
-                    neighbour there that power.Keep away Architecture who try to
-                    Ambitions people do that really{" "}
+                    Ji Construct Limited combines innovative engineering and
+                    sustainability to shape the future of infrastructure.
+                    Specializing in highways, eco-friendly agricultural
+                    development, real estate, renewable energy, and construction
+                    software solutions, we create projects that meet today’s
+                    needs while preserving resources for tomorrow. More than
+                    just building structures, Ji Construct is dedicated to
+                    crafting spaces and solutions that inspire growth and exceed
+                    expectations.
                   </p>
-                  <a href="javascript:;" className="site-button-link">
-                    Read More
-                  </a>
                 </div>
               </div>
             </div>
@@ -48,12 +51,12 @@ export default function Welcome() {
                         />
                       </div>
                       <div className="arc-about-year-info">
-                        <span className="title-small">
-                          working <br />
-                          experience
+                        <span className="title-small fs-5">
+                          A legacy of <br />
+                          innovation
                         </span>
-                        <h2 className="wt-title m-tb0">Year</h2>
-                        <span className="text-outline">12</span>
+                        <h2 className="wt-title m-tb0">and</h2>
+                        <span className="title-small fs-5">expertise</span>
                       </div>
                     </div>
                   </div>

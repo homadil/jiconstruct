@@ -108,10 +108,10 @@ export default function Navigation() {
                    */}
 
                   <li>
-                    <Link to={"/page_about_us"}>About us</Link>
+                    <Link to={"/about_us"}>About us</Link>
                   </li>
                   <li>
-                    <Link to={"/page_contact_us"}>Contact us</Link>
+                    <Link to={"/contact_us"}>Contact us</Link>
                   </li>
 
                   {false && (

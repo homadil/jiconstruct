@@ -173,7 +173,7 @@ export default function Footer() {
                 <h4 className="widget-title">Useful links</h4>
                 <ul>
                   <li>
-                    <Link to={"/page_about_us"}>About</Link>
+                    <Link to={"/about_us"}>About</Link>
                     <Link to={"/blog"}>Articles</Link>
                   </li>
                   <li>
@@ -189,7 +189,7 @@ export default function Footer() {
                     <Link to={""}>Approach</Link>
                   </li>
                   <li>
-                    <Link to={"/page_contact_us"}>Contact Us</Link>
+                    <Link to={"/contact_us"}>Contact Us</Link>
                     <Link to={""}>Case Studies</Link>
                   </li>
                   <li>
@@ -209,12 +209,19 @@ export default function Footer() {
               <div className="widget widget_address_outer m-b20">
                 <h4 className="widget-title">Contact Us</h4>
                 <ul className="widget_address">
+                  <li>35B Lord Lugard Street, Area 11, Garki, Abuja, FCT</li>
                   <li>
-                    No 35, Lord Lugard Street, Area 11, Garki Junction, Abuja
+                    <a href="mailto:support@jiconstruct.com">
+                      support@jiconstruct.com
+                    </a>
                   </li>
-                  <li>info@jiconstruct.com</li>
-                  <li>(+0091) 912-3456-073</li>
-                  <li>(+0091) 912-3456-084</li>
+                  <li>
+                    <a href="tel:+2347010298890"> (+234) 701-029-8890</a>
+                  </li>
+                  <li>
+                    {" "}
+                    <a href="tel:+2348133310871">(+234) 813-331-0871</a>
+                  </li>
                 </ul>
               </div>
             </div>

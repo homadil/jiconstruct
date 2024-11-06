@@ -30,14 +30,16 @@ export default function Testimony() {
       <div className="container">
         <div className="section-head clearfix">
           <div className="wt-tilte-main bdr-r-3 bdr-primary bdr-solid">
-            <small className="wt-small-title">Best Clients</small>
-            <h2 className="m-b5">Our Client says</h2>
+            <small className="wt-small-title">Client Testimonials</small>
+            <h2 className="m-b5"> Trusted and Proven Excellence</h2>
           </div>
           <div className="title-right-detail">
             <p>
-              We are uncompetitive in architectural solutions Friendly neighbors
-              there that power. Keep away Architecture who try to Ambitions
-              people do that really great.
+              Hear from our clients as they share their experiences with Ji
+              Construct Limited. These testimonials showcase the trust,
+              satisfaction, and success that define our partnerships, reflecting
+              our commitment to transforming visions into reality. Discover why
+              Ji Construct is a name clients rely on
             </p>
           </div>
         </div>

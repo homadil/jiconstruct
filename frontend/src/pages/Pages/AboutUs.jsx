@@ -1,13 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-
-import aboutOne from "../../assets/images/dummy/about1.jpg";
-import aboutTwo from "../../assets/images/dummy/about2.jpg";
-import aboutThree from "../../assets/images/dummy/about3.webp";
-
-import TeamOne from "../../assets/images/dummy/team1.jpg";
-import TeamTwo from "../../assets/images/dummy/team2.jpg";
-import TeamThree from "../../assets/images/dummy/team3.jpg";
+import Welcome from "../Homepage/Welcome";
 import { DataContext } from "../../store";
 import Services from "../Homepage/Services";
 import Team from "../Homepage/Team";
@@ -75,61 +68,50 @@ export default function AboutUs() {
               <div className="col-lg-6 col-md-12">
                 <div className="arc-home-about-left">
                   <div className="arc-home-left-content  bg-gray">
-                    <h3 className="m-t0 wt-tilte-light">
-                      Design, followed by Form & Function.
-                    </h3>
+                    <h3 className="m-t0 wt-tilte-light">About Us</h3>
                     <h2 className="m-t0 wt-title">
-                      Exploring the Quality Ways through Design.
+                      Transforming Vision into Reality
                     </h2>
                     <p>
-                      We are uncompetitor in architectural solutions Friendly
-                      neighbour there that power.Keep away Architecture who try
-                      to Ambitions people do that really{" "}
-                    </p>
-                    <a href="javascript:;" className="site-button-link">
-                      Read More
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-lg-6 col-md-12">
-                <div className="arc-home-about-right portfolio-wrap">
-                  <div className="row">
-                    <div className="col-md-6 col-sm-6 masonry-item">
-                      <div className="arc-about-year text-uppercase text-right m-b20">
-                        <div className="arc-about-year-pic img-reflection">
-                          <img
-                            src={backend_url + "/" + homeGridFirstIndex?.path}
-                            alt=""
-                          />
-                        </div>
-                        <div className="arc-about-year-info">
-                          <span className="title-small">
-                            working <br />
-                            experience
-                          </span>
-                          <h2 className="wt-title m-tb0">Year</h2>
-                          <span className="text-outline">12</span>
-                        </div>
+                      Ji Construct Limited is at the forefront of modern
+                      construction, specializing in sustainable infrastructure,
+                      advanced engineering, and innovative solutions that meet
+                      the diverse needs of today’s world. Founded on the
+                      principles of quality, integrity, and forward-thinking, we
+                      approach every project as an opportunity to create spaces
+                      that empower, connect, and inspire.
+                      <div className="p-4">
+                        Our expertise spans highway engineering, real estate
+                        development, agricultural infrastructure, renewable
+                        energy solutions, and software tailored for the
+                        construction sector. We don’t just build; we bring
+                        together sustainable practices, cutting-edge technology,
+                        and a commitment to excellence in everything we do. Our
+                        projects are designed to leave a positive, lasting
+                        impact on the communities and industries we serve.
                       </div>
-                    </div>
-
-                    {remainingHomeGrid.map((item, index) => {
-                      return (
-                        <div
-                          key={index}
-                          className="col-md-6 col-sm-6 masonry-item"
-                        >
-                          <div className="wt-media m-b20 img-reflection">
-                            <img src={backend_url + "/" + item?.path} alt="" />
-                          </div>
-                        </div>
-                      );
-                    })}
+                      <div className="p-3">
+                        At Ji Construct, our team is our driving force. With
+                        professionals who are passionate and highly skilled, we
+                        collaborate closely with our clients and partners to
+                        understand their visions and exceed their expectations.
+                        Our trusted partnerships amplify our impact, enabling us
+                        to deliver comprehensive solutions with reliability and
+                        innovation. Together, we’re shaping the future of
+                        infrastructure, one project at a time, with a focus on
+                        resilience and sustainability for a brighter tomorrow.
+                      </div>
+                      <div>
+                        Explore our journey, values, and expertise, and see how
+                        Ji Construct Limited is committed to building not just
+                        structures, but possibilities for generations to come.
+                      </div>
+                    </p>
                   </div>
                 </div>
               </div>
+
+              <Welcome />
             </div>
           </div>
         </div>

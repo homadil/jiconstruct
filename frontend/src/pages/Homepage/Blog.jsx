@@ -33,14 +33,15 @@ export default function Blog() {
       <div className="container">
         <div className="section-head clearfix">
           <div className="wt-tilte-main bdr-r-3 bdr-primary bdr-solid">
-            <small className="wt-small-title">Blog Section</small>
-            <h2 className="m-b5">Our Latest Blog</h2>
+            <small className="wt-small-title">Latest News</small>
+            <h2 className="m-b5"> Building the Future Together</h2>
           </div>
           <div className="title-right-detail">
             <p>
-              We are uncompetitor in architectural solutions Friendly neighbour
-              there that power. Keep away Architecture who try to Ambitions
-              people do that really great.
+              Discover Ji Construct’s latest achievements, project milestones,
+              and industry insights. Stay informed on our journey as we
+              innovate, progress, and make a lasting impact in communities. Join
+              us in exploring the future, one story at a time
             </p>
           </div>
         </div>

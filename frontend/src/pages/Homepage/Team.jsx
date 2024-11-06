@@ -16,14 +16,15 @@ export default function Team() {
       <div className="container">
         <div className="section-head clearfix">
           <div className="wt-tilte-main bdr-r-3 bdr-primary bdr-solid">
-            <small className="wt-small-title">Our Experts</small>
-            <h2 className="m-b5">Our Best Team</h2>
+            <small className="wt-small-title">Our Team</small>
+            <h2 className="m-b5">Expertise and Innovation at Work</h2>
           </div>
           <div className="title-right-detail">
             <p>
-              We are uncompetitor in architectural solutions Friendly neighbour
-              there that power. Keep away Architecture who try to Ambitions
-              people do that really great.
+              At Ji Construct, our dedicated team brings ideas to life with
+              passion and precision, leading the way in sustainable, impactful
+              construction. Meet the professionals driving our success and
+              shaping a better future.
             </p>
           </div>
         </div>
@@ -42,9 +43,9 @@ export default function Team() {
                       />
                       <div className="team-social-center">
                         <ul className="team-social-icon">
-                          {team?.Urls.map((url) => {
+                          {team?.Urls.map((url, index) => {
                             return (
-                              <li>
+                              <li key={index}>
                                 <a
                                   href={url.link}
                                   className={`fa  ${url.image ? "" : url.icon}`}

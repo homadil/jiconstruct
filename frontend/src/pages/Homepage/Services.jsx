@@ -18,7 +18,7 @@ export default function Services() {
       <div className="container">
         <div className="section-head clearfix">
           <div className="wt-tilte-main bdr-r-3 bdr-primary bdr-solid">
-            <small className="wt-small-title">Work service</small>
+            <small className="wt-small-title">Services we provide:</small>
             <h2 className="m-b5">Our great provided</h2>
           </div>
           <div className="title-right-detail">
