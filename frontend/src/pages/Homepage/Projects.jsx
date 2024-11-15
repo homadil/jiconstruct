@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import arc_img from "../../assets/images/dummy/download_8.jpg";
 import int_img from "../../assets/images/dummy/download_9.webp";
 import land_img from "../../assets/images/dummy/download_10.jpg";
 import floor_img from "../../assets/images/dummy/download_11.webp";
 import roof_img from "../../assets/images/dummy/download_12.jpg";
 import decor from "../../assets/images/dummy/download_13.webp";
+import { DataContext } from "../../store";
 export default function Projects() {
   const stylesheet = {
     height: "250px",
   };
+
+  const { categories } = useContext(DataContext);
   return (
     /* <!-- OUR PROJECTS SECTION START --> */
     <div className="section-full  p-t80 p-b80 bg-secondry">

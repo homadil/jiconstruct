@@ -43,7 +43,7 @@ export default function RouterPath() {
       <Route path="/post_image" element={<Image />} />
       <Route path="/blog_detail" element={<Video />} />
       <Route path="/post_gallery" element={<Gallery />} />
-      <Route path="/blog" element={<Blog />} />
+      <Route path="/news" element={<Blog />} />
 
       {/* admin path */}
       <Route path="/admin" element={<Admin />} />

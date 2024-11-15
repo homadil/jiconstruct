@@ -30,10 +30,7 @@ export default function Welcome() {
                     Specializing in highways, eco-friendly agricultural
                     development, real estate, renewable energy, and construction
                     software solutions, we create projects that meet today’s
-                    needs while preserving resources for tomorrow. More than
-                    just building structures, Ji Construct is dedicated to
-                    crafting spaces and solutions that inspire growth and exceed
-                    expectations.
+                    needs while preserving resources for tomorrow.
                   </p>
                 </div>
               </div>
@@ -47,7 +44,8 @@ export default function Welcome() {
                       <div className="arc-about-year-pic">
                         <img
                           src={backend_url + "/" + homeGridFirstIndex.path}
-                          alt=""
+                          style={{ height: "200px", width: "100%" }}
+                          alt="homeGridFirstIndex.path"
                         />
                       </div>
                       <div className="arc-about-year-info">
@@ -66,8 +64,7 @@ export default function Welcome() {
                       <div className="wt-media m-b20  img-reflection">
                         <img
                           src={backend_url + "/" + item?.path}
-                          alt=""
-                          height={200}
+                          alt={item?.path}
                           style={{ height: "200px", width: "100%" }}
                         />
                       </div>

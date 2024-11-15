@@ -16,17 +16,11 @@ import Loader from "../../../components/Loader";
 import { DataContext } from "../../../store";
 import { Helmet } from "react-helmet-async";
 export default function Testimony() {
-  const [testimonies, setTestimonies] = useState([]);
   const [loader, setLoader] = useState([]);
-  const { backend_url } = useContext(DataContext);
+  const { backend_url, testimonies, setTestimonies } = useContext(DataContext);
   const [id, setID] = useState(null);
   const [update, setUpdate] = useState(false);
-  useEffect(() => {
-    apiRequest
-      .get("/testimonies")
-      .then((res) => setTestimonies(res))
-      .finally(() => setLoader(false));
-  }, []);
+
   const [showModal, setShowModal] = useState(false);
   const [newTestimony, setNewTestimony] = useState({
     comment: "",
@@ -53,6 +47,7 @@ export default function Testimony() {
         }
       )
       .then((res) => {
+        setLoader(false);
         testimonies.push(res);
         setTestimonies(testimonies);
         handleCloseModal();
@@ -89,14 +84,16 @@ export default function Testimony() {
         const updatedTestimonies = testimonies.map((item) =>
           item.id === res.id ? (item = res) : item
         );
-
+        setLoader(false);
         setTestimonies(updatedTestimonies); // Update the testimonies state with the updated data
         handleCloseModal(); // Close the modal after successful update
-      });
+      })
+      .catch(() => {});
   };
 
   function handleSubmit(e) {
     e.preventDefault();
+    setLoader(true);
     const formData = new FormData();
 
     formData.append("files", newTestimony.image);
@@ -109,10 +106,6 @@ export default function Testimony() {
     } else {
       handleAddTestimony(formData);
     }
-  }
-
-  if (loader) {
-    return <Loader />;
   }
 
   return (

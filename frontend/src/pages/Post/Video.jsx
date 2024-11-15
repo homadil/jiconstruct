@@ -20,7 +20,7 @@ export default function Video() {
     useContext(DataContext);
   const blog = blogs.filter((blog) => blog.id === parseInt(id))[0];
   if (!blog) {
-    return navigate("/blog");
+    return navigate("/news");
   }
 
   const { day, month, year } = formatDate(blog.createdAt);

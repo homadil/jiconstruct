@@ -42,7 +42,7 @@ export default function Image() {
           <div className="blog-post date-style-1 blog-detail text-black">
             <div className="wt-post-media wt-img-effect zoom-slow">
               <a href="javascript:void(0);">
-                <img src="images/blog/default/thum2.jpg" alt="" />
+                <img src="images/news/default/thum2.jpg" alt="" />
               </a>
             </div>
             <div className="wt-post-info p-a30 bg-white">

@@ -174,14 +174,14 @@ export default function Footer() {
                 <ul>
                   <li>
                     <Link to={"/about_us"}>About</Link>
-                    <Link to={"/blog"}>Articles</Link>
+                    <Link to={"/news"}>Articles</Link>
                   </li>
                   <li>
                     <Link to={"/project"}>Gallery</Link>
                     <Link to={"/#service"}>Service</Link>
                   </li>
                   <li>
-                    <Link to={"/blog"}>News</Link>
+                    <Link to={"/news"}>News</Link>
                     <Link to={"/team"}>Our team</Link>
                   </li>
                   <li>

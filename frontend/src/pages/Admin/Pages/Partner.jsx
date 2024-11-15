@@ -18,9 +18,11 @@ import { Helmet } from "react-helmet-async";
 export default function Partner() {
   const [partner, setPartner] = useState([]);
   const [loader, setLoader] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { backend_url } = useContext(DataContext);
   const [id, setID] = useState(null);
   const [update, setUpdate] = useState(false);
+
   useEffect(() => {
     apiRequest
       .get("/partners")
@@ -52,10 +54,12 @@ export default function Partner() {
         }
       )
       .then((res) => {
+        setLoading(false);
         partner.push(res);
         setPartner(partner);
         handleCloseModal();
-      });
+      })
+      .catch((error) => {});
   };
 
   // Delete Partner
@@ -83,16 +87,20 @@ export default function Partner() {
         }
       )
       .then((res) => {
+        setLoading(false);
         const updatedPartner = partner.map((item) =>
           item.id === res.id ? (item = res) : item
         );
         setPartner(updatedPartner); // Update the partner state with the updated data
         handleCloseModal(); // Close the modal after successful update
-      });
+      })
+      .catch((error) => {});
   };
 
   function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
+    console.log(newPartner);
     const formData = new FormData();
 
     formData.append("files", newPartner.image);
@@ -232,9 +240,9 @@ export default function Partner() {
             className="mt-4"
             sx={{ mt: 3 }}
             type="submit"
-            disabled={loader} // Disable button when loading
+            disabled={loading} // Disable button when loading
           >
-            {loader ? (
+            {loading ? (
               <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} /> // Spinner when loading
             ) : !update ? (
               "Submit"

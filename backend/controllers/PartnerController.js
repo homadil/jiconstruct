@@ -65,7 +65,7 @@ const update = async (req, res) => {
 
     if (req.files["files"] && req.files["files"].length > 0) {
       // Get the new image path
-      const newImagePath = req.files[0]["files"].path.replace(
+      const newImagePath = req.files["files"][0].path.replace(
         /^public[\\/]/,
         ""
       );
@@ -88,7 +88,7 @@ const update = async (req, res) => {
 
     // Update the partner with the new data, and specify the `where` condition
     await Partners.update(updatedPartnerData, {
-      where: { id: req.params.id }, // Specify which partner to update
+      where: { id: parseInt(req.params.id) }, // Specify which partner to update
     });
 
     res.status(200).json({ ...updatedPartnerData, id: partner.id });

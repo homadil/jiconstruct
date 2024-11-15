@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Modal,
@@ -15,20 +15,15 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import apiRequest from "../../../apiRequest";
-import Loader from "../../../components/Loader";
 import { Helmet } from "react-helmet-async";
+import { DataContext } from "../../../store";
+import Loader from "../../../components/Loader";
 
 export default function Category() {
-  const [Categories, setCategories] = useState([]);
-  const [loader, setLoader] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [id, setID] = useState(null);
   const [update, setUpdate] = useState(false);
-  useEffect(() => {
-    apiRequest
-      .get("/categories")
-      .then((res) => setCategories(res))
-      .finally(() => setLoader(false));
-  }, []);
+  const { categories, setCategories } = useContext(DataContext);
   const [showModal, setShowModal] = useState(false);
   const [newCategory, setNewCategory] = useState({
     name: "",
@@ -54,10 +49,12 @@ export default function Category() {
         }
       )
       .then((res) => {
-        Categories.push(res);
-        setCategories(Categories);
+        setLoading(false);
+        categories.push(res);
+        setCategories(categories);
         handleCloseModal();
-      });
+      })
+      .catch(() => {});
   };
 
   // Delete Tag
@@ -65,7 +62,7 @@ export default function Category() {
     apiRequest
       .delete(`/categories/${id}`)
       .then((res) => {
-        const updatedTags = Categories.filter((Tag) => Tag.id !== id);
+        const updatedTags = categories.filter((Tag) => Tag.id !== id);
         setCategories(updatedTags);
       })
       .finally(() => {});
@@ -85,16 +82,19 @@ export default function Category() {
         }
       )
       .then((res) => {
-        const updatedTags = Categories.map((item) =>
+        const updatedTags = categories.map((item) =>
           item.id === res.id ? (item = res) : item
         );
+        setLoading(false);
         setCategories(updatedTags); // Update the Categories state with the updated data
         handleCloseModal(); // Close the modal after successful update
-      });
+      })
+      .catch(() => {});
   };
 
   function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
     const formData = {
       name: newCategory.name,
       description: newCategory.description,
@@ -106,10 +106,6 @@ export default function Category() {
     } else {
       handleAddCategory(formData);
     }
-  }
-
-  if (loader) {
-    return <Loader />;
   }
 
   return (
@@ -144,11 +140,15 @@ export default function Category() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Categories.map((Tag) => (
+            {categories.map((Tag) => (
               <TableRow key={Tag.id}>
                 <TableCell>
                   <Typography variant="h6">{Tag.name}</Typography>
+                </TableCell>
+                <TableCell>
                   <Typography variant="h6">{Tag.description}</Typography>
+                </TableCell>
+                <TableCell>
                   <Typography variant="h6">{Tag.icon}</Typography>
                 </TableCell>
                 <TableCell>
@@ -241,9 +241,9 @@ export default function Category() {
             sx={{ mt: 3 }}
             className="mt-4"
             type="submit"
-            disabled={loader} // Disable button when loading
+            disabled={loading} // Disable button when loading
           >
-            {loader ? (
+            {loading ? (
               <CircularProgress size={24} color="inherit" sx={{ mr: 1 }} /> // Spinner when loading
             ) : !update ? (
               "Submit"
